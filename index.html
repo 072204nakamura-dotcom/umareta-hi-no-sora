@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>生まれた日の空｜宿曜×占星術×エドガー・ケイシー</title>
+<meta name="description" content="生年月日から、実際の星の位置で宿曜の宿・星座・アセンダント・ケイシーの惑星の読み方を出します。入力した内容はどこにも送られません。">
+<meta property="og:title" content="生まれた日の空">
+<meta property="og:description" content="実際の星の位置で読む、宿曜×占星術×エドガー・ケイシー">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
+<style>
+:root{
+  --bg:#e8ecf4; --panel:#f4f6fb; --ink:#1c2342; --muted:#5b6382; --line:#c9cfe0;
+  --gold:#8f6d22; --gold-soft:#e7d7a8; --moon:#4d5b86; --wheel:#dfe4ef;
+  --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131a33; --panel:#1b2342; --ink:#ece4cf; --muted:#a3a9c2; --line:#323c63;
+    --gold:#d8b76c; --gold-soft:#4a3f22; --moon:#b9c3e0; --wheel:#1f2848;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131a33; --panel:#1b2342; --ink:#ece4cf; --muted:#a3a9c2; --line:#323c63;
+  --gold:#d8b76c; --gold-soft:#4a3f22; --moon:#b9c3e0; --wheel:#1f2848;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:1.8}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+h1{font-family:var(--mincho);font-weight:700;font-size:2.1rem;letter-spacing:.12em;margin:0 0 4px;line-height:1.3}
+.sub{color:var(--muted);font-size:.9rem;margin:0 0 24px}
+h2{font-family:var(--mincho);font-weight:700;font-size:1.3rem;letter-spacing:.06em;margin:40px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:0 0 12px}
+.note{color:var(--muted);font-size:.85rem}
+form{display:grid;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}
+select,input[type=number],input[type=date],input[type=time]{font:inherit;font-size:1.05rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+.check{display:flex;align-items:center;gap:8px;color:var(--ink)}
+.check input{width:20px;height:20px}
+button{font:inherit;font-weight:700;letter-spacing:.1em;background:var(--ink);color:var(--bg);border:0;border-radius:4px;padding:12px;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#result{display:none}
+.wheelwrap{margin:28px auto 8px;max-width:360px}
+.wheelwrap svg{width:100%;height:auto;display:block}
+.honmei{text-align:center;margin:8px 0 4px}
+.honmei .big{font-family:var(--mincho);font-weight:700;font-size:3.2rem;letter-spacing:.15em;color:var(--gold);line-height:1.2}
+.honmei .what{color:var(--muted);font-size:.9rem}
+.compare{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:420px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.82rem}
+td.k{font-family:var(--mincho);font-weight:700;white-space:nowrap}
+td.e{color:var(--muted);font-size:.85rem}
+textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px;line-height:1.8}
+.saved{font-size:.8rem;color:var(--muted);height:1.4em}
+.err{color:#c0392b;font-weight:500}
+.jintai{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:8px auto 14px}
+.jintai .cell{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;background:var(--panel)}
+.jintai .cell.center{border-color:var(--gold);background:var(--gold-soft)}
+.jintai .dir{font-size:.72rem;color:var(--muted)}
+.jintai .st{font-family:var(--mincho);font-weight:700;font-size:1.05rem}
+.pillars td,.pillars th{text-align:center}
+.pillars td:first-child{text-align:left;white-space:nowrap}
+.big2{font-size:1.3rem}
+.gogyo div{display:flex;align-items:center;gap:8px;margin:4px 0}
+.gogyo span{font-family:var(--mincho);font-weight:700;width:1.5em}
+.gogyo i{display:block;height:12px;background:var(--gold);border-radius:3px;min-width:2px}
+.gogyo b{font-weight:500;color:var(--muted);font-size:.85rem}
+.glossary dl{margin:0}
+.glossary h3{font-family:var(--mincho);font-size:1.15rem;margin:32px 0 8px;padding-left:10px;border-left:3px solid var(--gold)}
+.glossary dt{font-weight:700;margin-top:14px}
+.glossary dd{margin:4px 0 0;line-height:1.85}
+.glossary table{min-width:360px;margin-top:8px;font-size:.85rem}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.toc a{font-size:.82rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:var(--panel)}
+a{color:var(--gold)}
+a.q{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--gold);font-size:.75rem;text-decoration:none;vertical-align:middle;font-family:var(--gothic)}
+.cycle{display:flex;gap:4px;margin:4px 0 8px}
+.cycle span{flex:1;text-align:center;padding:6px 0;border:1px solid var(--line);border-radius:4px;font-family:var(--mincho);color:var(--muted)}
+.cycle span.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+details.help{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:0 0 20px;font-size:.92rem}
+details.help summary{cursor:pointer;font-weight:500;color:var(--gold)}
+details.help p{margin:10px 0 0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+footer p{margin:0 0 8px}
+.pull{display:flex;gap:12px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.pull input{width:20px;height:20px;margin-top:4px;flex:none}
+.pull .pn{font-family:var(--mincho);font-weight:700;min-width:3.5em}
+.pull .pt{flex:1}
+.pull .pp{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.pull:has(input:checked) .pn{color:var(--gold)}
+#pullText{margin-top:12px}
+@media (prefers-reduced-motion:no-preference){
+  #result.show .wheelwrap{animation:rise 1.2s ease-out}
+  @keyframes rise{from{opacity:0;transform:rotate(-12deg)}to{opacity:1;transform:none}}
+}
+</style>
+</head>
+<body>
+<main>
+  <h1>生まれた日の空</h1>
+  <p class="sub">生まれた瞬間の、実際の星の位置から、宿曜の宿・星座・ケイシーの惑星の読み方を出します。数秘術と算命学も、あわせて見られます。</p>
+  <p class="note" id="top"><a href="#glossary">用語集</a>で、宿・アセンダント・干支などの言葉を詳しく説明しています。結果の見出しの横の「？」からも飛べます。</p>
+
+  <form id="f">
+    <label>生年月日
+      <input type="date" id="date" required>
+    </label>
+    <label>生まれた時刻（日本時間）
+      <input type="time" id="time" value="12:00">
+    </label>
+    <label class="check"><input type="checkbox" id="notime" checked> 時刻がわからない</label>
+    <label>生まれた場所（都道府県）
+      <select id="place"></select>
+    </label>
+    <label id="tzwrap" style="display:none">生まれた場所の時差（世界標準時から）
+      <select id="tz"></select>
+    </label>
+    <div id="custom" style="display:none;gap:8px;grid-template-columns:1fr 1fr">
+      <label>緯度（南はマイナス）<input type="number" id="lat" step="0.01" value="34.40"></label>
+      <label>経度（西はマイナス）<input type="number" id="lon" step="0.01" value="132.46"></label>
+    </div>
+    <button type="submit">空を出す</button>
+    <p class="note" style="margin:0">時刻がわからないときは正午で計算し、月の宿はその日の幅で表示します。アセンダントと天頂は、生まれた時刻と場所がそろったときだけ出します。海外で生まれた方は、場所を「海外・その他」にして緯度・経度と時差を入れてください。</p>
+  </form>
+
+  <div id="msg"></div>
+
+  <section id="result">
+    <div class="wheelwrap" id="wheel"></div>
+    <div class="honmei">
+      <div class="what">実際の月がいた宿 <a class="q" href="#g-shuku" aria-label="宿の説明">？</a></div>
+      <div class="big" id="honmei"></div>
+    </div>
+    <p class="compare" id="compare"></p>
+    <p id="honmeiKey" style="text-align:center"></p>
+
+    <h2>天体ごとの位置 <a class="q" href="#g-sign" aria-label="天体ごとの位置の説明">？</a></h2>
+    <div class="scroll"><table id="planets"></table></div>
+    <h3 style="font-family:var(--mincho);font-size:1.05rem;margin:20px 0 6px">重なっている天体（合） <a class="q" href="#g-conj" aria-label="合の説明">？</a></h3>
+    <div id="conj"></div>
+    <p class="note">星座は実際の星々を基準に30度ずつ区切るインド式（サイデリアル）。雑誌の星占いの星座とはほぼ1つずれます。宿も同じ基準の27等分です。</p>
+
+    <h2>東と南の星（アセンダントと天頂） <a class="q" href="#g-asc" aria-label="東と南の星（アセンダントと天頂）の説明">？</a></h2>
+    <div id="angles"></div>
+
+    <h2>数秘術 <a class="q" href="#g-num" aria-label="数秘術の説明">？</a></h2>
+    <div id="numero"></div>
+
+    <h2>干支 <a class="q" href="#g-eto" aria-label="干支の説明">？</a></h2>
+    <div id="eto"></div>
+
+    <h2>四柱推命 <a class="q" href="#g-shichu" aria-label="四柱推命の説明">？</a></h2>
+    <div id="shichu"></div>
+
+    <h2>算命学 <a class="q" href="#g-sanmei" aria-label="算命学の説明">？</a></h2>
+    <div id="sanmei"></div>
+
+    <h2>光と影（二元性） <a class="q" href="#g-dual" aria-label="二元性の説明">？</a></h2>
+    <p class="note">ケイシーや光田秀さんの解説では、どの惑星の力にも良く出る面と悪く出る面があり、それは別々の性質ではなく、ひとつの力の裏と表とされます。同じ石が、踏み石にもつまずきの石にもなる。どちらに出すかは、意志しだいです。</p>
+    <div id="dual"></div>
+
+    <h2>サターン・リターン <a class="q" href="#g-saturn" aria-label="サターン・リターンの説明">？</a></h2>
+    <p id="saturn"></p>
+
+    <h2>魂が入るころ（受精から49日目ごろ） <a class="q" href="#g-soul" aria-label="魂が入るころ（受精から49日目ごろ）の説明">？</a></h2>
+    <p class="note">予定日どおりの出産と仮定して、誕生の217日前を中心に前後2週間の幅で見ています。月や速い惑星は決められないので、ゆっくり動く天体だけです。</p>
+    <div class="scroll"><table id="soul"></table></div>
+
+    <h2>惹かれるもの <a class="q" href="#g-cayce" aria-label="惹かれるものの説明">？</a></h2>
+    <p class="note">ケイシーは、魂が滞在した惑星の性質が「惹かれるもの」や「心の癖」として出てくると語っています。滞在先は計算できないので、自分の内側から当てはまるものに印を付けていきます。右の小さな字は、生まれた日にその惑星がいた場所です。</p>
+    <div id="pulls"></div>
+    <textarea id="pullText" placeholder="例：見えないものへの関心。人の気持ちの変化に敏感。"></textarea>
+    <div class="saved" id="pullSaved"></div>
+
+    <h2>意志の欄 <a class="q" href="#g-will" aria-label="意志の欄の説明">？</a></h2>
+    <p class="note">配置どおりでなかった自分を書いておく場所です。この端末にだけ保存されます。</p>
+    <textarea id="will" placeholder="例：「人に頼らない」と出たけれど、今はよく頼る。"></textarea>
+    <div class="saved" id="saved"></div>
+  </section>
+  <section id="glossary" class="glossary">
+    <h2 style="margin-top:56px">用語集</h2>
+    <p class="note">結果の見出しの横にある「？」から、ここへ飛べます。</p>
+    <nav class="toc">
+      <a href="#g-base">占いの基本</a><a href="#g-shuku">宿曜</a><a href="#g-sign">星座</a><a href="#g-asc">アセンダント・天頂</a><a href="#g-saturn">サターン・リターン</a><a href="#g-cayce">ケイシー</a><a href="#g-soul">49日</a><a href="#g-num">数秘術</a><a href="#g-eto">干支</a><a href="#g-shichu">四柱推命</a><a href="#g-sanmei">算命学</a><a href="#g-will">意志の欄</a>
+    </nav>
+
+    <h3 id="g-base">占いの基本</h3>
+    <dl>
+      <dt>命・卜・相</dt>
+      <dd>日本では昔から、占いを3つに分けて考えます。「命（めい）」は生まれた日時から読むもので、宿曜・占星術・数秘術・四柱推命・算命学はすべてここに入ります。「卜（ぼく）」はタロットや易のように偶然出たもので読むもの、「相（そう）」は手相や風水のように形から読むものです。</dd>
+      <dt>周期</dt>
+      <dd>命の占いは、どれも何かの周期を物差しにしています。月の宿は27、干支は60、数秘術の個人年は9、土星は約29年。占いは、その巡りの「今どのあたりにいるか」を読むもの、と言うこともできます。ただし巡ってくるのは同じような出来事で、まったく同じではありません。</dd>
+      <dt id="g-dual">二元性</dt>
+      <dd>良いが生まれると、悪いも同時に生まれる。好きと嫌い、ラクときつさ、光と影。片方だけでは存在できない、コインの裏と表のような仕組みです。占いの世界でもこの形は繰り返し出てきます。光田秀さんの解説では、忍耐と衝動は同じ土星、情熱と怒りは同じ火星の力。ケイシーは、冥王星を霊的な進歩に関わる力と語る一方（1100-27）、別のリーディングでは自己中心性として挙げ、冥王星と水星を誤って使うと、成長の踏み石ではなく、つまずきの石になると語りました（3126-1）。二元性は超えるものではなく、理解するもの。良い面だけを取り出そうとせず、その力をどちらに使うかを選ぶ、という見方です。</dd>
+      <dt>未科学</dt>
+      <dd>生まれた日と性格の関係は、統計でははっきり確かめられていません。否定されたわけではなく、まだ測る方法が追いついていない領域、という意味でこのアプリでは「未科学」と呼んでいます。結果は当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</dd>
+    </dl>
+
+    <h3 id="g-shuku">宿曜</h3>
+    <dl>
+      <dt>宿曜経（すくようきょう）</dt>
+      <dd>8世紀の唐で、密教僧の不空が訳したとされる経典。インドの占星術がもとになっています。日本には806年に空海が持ち帰ったと伝わり、平安時代には「宿曜師」が陰陽師と並んで貴族の吉凶を占いました。</dd>
+      <dt>宿と曜</dt>
+      <dd>「宿」は、月の通り道を区切った27（または28）の区画。月が一晩ずつ泊まっていく宿場のイメージです。「曜」は日・月・火・水・木・金・土の七曜、つまり惑星のこと。曜日の名前もここから来ています。宿曜経はもともと、この2つを組み合わせて読むものでした。</dd>
+      <dt>27宿と28宿</dt>
+      <dd>違いは、幅の狭い「牛宿」を入れるかどうかです。自分の宿（本命宿）は27宿で、暦の日の吉凶は28宿で見るのが一般的です。28宿は東西南北の四神（青龍・玄武・白虎・朱雀）に7宿ずつ振り分けられます。</dd>
+      <dt>本命宿</dt>
+      <dd>生まれた時に月がいた宿。その人の生まれ持った気質を表すとされます。性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</dd>
+      <dt>旧暦（太陰太陽暦）</dt>
+      <dd>新月の日を1日とし、季節とのずれを閏月で調整する暦。旧暦の日付そのものは、新月を天文計算で求めているので正確です。</dd>
+      <dt>表で出す宿と、実際の月の宿</dt>
+      <dd>日本の宿曜占星術では、旧暦の月ごとに「1日はこの宿」と決めた表から数えるのが一般的です。ただ表は「月は毎日ちょうど1宿進む」という約束で作られていて、実際の月は速さが一定でないため、1〜2宿ずれることがあります。このアプリは実際の月の位置で出し、表で出した宿も並べて表示します。どちらを自分の宿とするかに、正解は一つではありません。</dd>
+    </dl>
+
+    <h3 id="g-sign">星座</h3>
+    <dl>
+      <dt>12星座</dt>
+      <dd>太陽の通り道（黄道）を30度ずつ12に区切ったもの。雑誌の「◯◯座」は、生まれた時に太陽がどこにいたかだけを見ています。本格的な占星術では、月や各惑星がどの星座にいたかも合わせて読みます。</dd>
+      <dt>季節基準と星基準（トロピカルとサイデリアル）</dt>
+      <dd>西洋占星術は春分点を牡羊座の始まりとする季節基準。インド占星術は実際の星の並びを基準にします。地球の首振り運動（歳差）で春分点は少しずつ動いていて、今では約24度、ほぼ1星座ずれています。このアプリは実際の星を基準にしているので、雑誌の星座と1つずれることが多いです。</dd>
+      <dt>アヤナムシャ</dt>
+      <dd>季節基準と星基準のずれの角度。流派によって少し値が違い、このアプリはインドで広く使われるラヒリ式の近似値を使っています。境目近くの天体には「（境目）」と表示しています。</dd>
+      <dt>13星座</dt>
+      <dd>天文学上の星座の境界は大きさがバラバラで、太陽の通り道には「へびつかい座」もかかっています。そちらで分けると13星座になりますが、占星術では30度ずつの12区分を使います。</dd>
+    </dl>
+
+    <h3 id="g-asc">アセンダント・天頂</h3>
+    <dl>
+      <dt>アセンダント（上昇点）</dt>
+      <dd>生まれた瞬間に、東の地平線から昇ってきていた星座の位置。星座の帯は一日で一周するので、およそ2時間で次の星座に移り、4分ほどで1度動きます。生まれた時刻と場所が必要なのはこのためです。「人からどう見えるか」「第一印象」「身体つきや雰囲気」を表すとされます。</dd>
+      <dt>天頂（MC・ミッドヘブン）</dt>
+      <dd>生まれた瞬間に、南の空で一番高いところにあった星座の位置。太陽でいえば正午ごろの位置です。「社会での役割」「仕事」「目指すところ」を表すとされます。本来の「天頂」は頭の真上のことですが、占星術の天頂は星座の帯が南で一番高くなる点を指します。</dd>
+      <dt>近くにいた天体</dt>
+      <dd>ケイシーは、生まれた時に東か南に来ている惑星が特に強く影響すると語りました。このアプリでは、アセンダントと天頂の前後12度以内にある天体を表示しています。</dd>
+      <dt>ハウス</dt>
+      <dd>アセンダントを起点に空を12の部屋に分け、仕事・お金・家族などの分野を割り当てる考え方。このアプリではまだ計算していません。</dd>
+    </dl>
+
+    <h3 id="g-saturn">サターン・リターン</h3>
+    <dl>
+      <dt>サターン・リターン</dt>
+      <dd>土星は約29年かけて空を一周し、生まれた時と同じ位置に戻ってきます。それが28〜30歳ごろと57〜59歳ごろ。この時期は人生の転機や試練が来やすいとされます。土星は地球から見ると行ったり戻ったりするので、1つの時期に2〜3回重なることがあります。</dd>
+    </dl>
+
+    <h3 id="g-cayce">エドガー・ケイシー</h3>
+    <dl>
+      <dt>エドガー・ケイシー（1877〜1945）</dt>
+      <dd>アメリカの人物。眠ったような状態で、病気の治し方や人生の相談に答え、その記録（リーディング）が1万4千件以上残っています。日本では日本エドガー・ケイシーセンターが研究と紹介を続けています。</dd>
+      <dt>ライフリーディング</dt>
+      <dd>その人の性質や可能性を読むリーディング。ケイシーはまず「どんな星の影響のもとに生まれたか」を述べ、そのあとで過去生を語り、最後に今回の人生の生かし方を提案しました。</dd>
+      <dt>惑星滞在</dt>
+      <dd>ケイシーの考えでは、魂は地上の人生と人生の間に、太陽系の惑星の領域に滞在します。特に大事なのは、前の人生のあと最初に行った惑星と、今回生まれる直前にいた惑星。そこで身についた性質を持って生まれてくるので、星の影響を受ける、という説明です。どこに滞在したかは計算では出せませんが、「惹かれるもの」や「心の癖」として現れるとされます。</dd>
+      <dt>位置と滞在</dt>
+      <dd>あるリーディング（398-2）では、惑星の位置から来るものは「衝動」にすぎず、心を動かすのはその領域での滞在だ、と強調しています。悪い配置も、理解への「踏み石」にできる、とも。</dd>
+      <dt>冥王星</dt>
+      <dd>1930年に発見された星。ケイシーは1939年のリーディング（1100-27）で、冥王星の影響は物質的なものとはまったく違い、宇宙で起きつつある進歩に関わる力だと語りました。人類が霊的な方向へ進むにつれてゆっくり広がり、今後100年、200年のうちに人間の進歩に大きな影響を与えるようになる。地球に一番密接に関わる力でありながら、まだ展開中で、定まっていない、と。光田秀さんは、冥王星が強い人は直感力が鋭く、理屈なしに「これがいい」とわかる傾向があると解説しています。一方、1943年のリーディング（3126-1）では、冥王星を「自己中心性、地上的なことへの自分の使い方」として挙げ、エゴが本当の自分（I AM）より前に出ないように、と戒めています。</dd>
+      <dt id="g-conj">合（コンジャンクション）</dt>
+      <dd>2つ以上の天体が、空のほぼ同じ場所に重なっている配置。重なった天体の性質が混ざり合い、強く出るとされます。特に太陽と重なる天体は、その人の芯に影響します。このアプリでは前後8度以内を「合」としています。ケイシーは、海王星が太陽と合になると、その時期を通して霊的・神秘的な影響に心が開かれやすい、と答えています（1100-27）。</dd>
+      <dt>意志</dt>
+      <dd>ケイシーは、どの星の影響も人の意志には勝てない、と繰り返しました。配置が決めるのは「傾向」で、どちらに転ぶかは意志しだい。意志は育てるもの、とも語っています。</dd>
+      <dt>惑星と内分泌腺</dt>
+      <dd>日本エドガー・ケイシーセンター会長・光田秀さんの解説では、滞在した惑星は身体の内分泌腺を通して影響します。同じ腺のエネルギーが、良い方向にも悪い方向にも出ます。
+        <div class="scroll"><table><tr><th>惑星</th><th>腺</th><th>良く出ると</th><th>悪く出ると</th></tr>
+        <tr><td>土星</td><td>性腺</td><td>忍耐強さ</td><td>衝動的</td></tr>
+        <tr><td>海王星</td><td>ライディッヒ腺</td><td>豊かな感情、誠実さ</td><td>感情の不安定さ</td></tr>
+        <tr><td>火星</td><td>副腎</td><td>情熱、義憤</td><td>激しい怒り</td></tr>
+        <tr><td>金星</td><td>胸腺</td><td>愛情深さ、美を愛でる</td><td>嫉妬、怠惰</td></tr>
+        <tr><td>天王星</td><td>甲状腺</td><td>意志力</td><td>わがまま、頑固</td></tr>
+        <tr><td>水星</td><td>松果体</td><td>知性、論理</td><td>あら探し、批判</td></tr>
+        <tr><td>木星</td><td>脳下垂体</td><td>洞察力、展望</td><td>妄想</td></tr></table></div></dd>
+    </dl>
+
+    <h3 id="g-soul">魂が入るころ（49日）</h3>
+    <dl>
+      <dt>魂が入る時</dt>
+      <dd>ケイシーは、身体が生まれた瞬間と魂が身体に入る瞬間は、必ずしも同じではないと語りました。また松果体を、魂と身体がつながる場所として重視しています。</dd>
+      <dt>松果体と49日</dt>
+      <dd>胎児の松果体は、受精からおよそ7週目、49日目ごろに見えてくると言われます。精神科医のリック・ストラスマンは、これをチベット仏教の「死から次の生まで49日」と結びつけました。日本の四十九日も同じ流れにあります。</dd>
+      <dt>このアプリの計算</dt>
+      <dd>予定日どおりの出産と仮定し、受精を誕生の266日前、その49日後を誕生の217日前として、前後2週間の幅で見ています。月や速い惑星はこの幅で大きく動くので、ゆっくり動く天体だけを表示しています。</dd>
+      <dt>49と7</dt>
+      <dd>49は7×7。四十九日、お釈迦様が悟りのあと過ごした7週間、ユダヤ教で50日目を祝う「オメルの数え」、49年のあとの「ヨベルの年」など、49で区切り50で新しく始まる形が各地にあります。「七」はもともと「切る」を表す字で、刀を添えて「切」になりました。</dd>
+    </dl>
+
+    <h3 id="g-num">数秘術</h3>
+    <dl>
+      <dt>数秘術</dt>
+      <dd>数にそれぞれ性質があると考え、生年月日や名前を数に置き換えて読む占い。古代ギリシャのピタゴラスが起源とされます。</dd>
+      <dt>ライフパスナンバー</dt>
+      <dd>生年月日の数字をすべて足し、1桁になるまで足し続けた数。その人の生き方の土台を表すとされます。例：1981年7月4日 → 1+9+8+1+7+4＝30 → 3+0＝3。</dd>
+      <dt>マスターナンバー</dt>
+      <dd>足していく途中で11・22・33になったときは、それ以上足さずにそのまま残します。普通の数より強い使命を持つ数とされます。</dd>
+      <dt>個人年（パーソナルイヤー）</dt>
+      <dd>生まれた月と日に、今年の西暦を足して1桁にした数。1から9まで一年ずつ進み、9で一巡りして1に戻ります。1は始まり、5は変化、9は完了。今が9年周期のどのあたりかを見ます。</dd>
+    </dl>
+
+    <h3 id="g-eto">干支</h3>
+    <dl>
+      <dt>十干（じっかん）</dt>
+      <dd>甲・乙・丙・丁・戊・己・庚・辛・壬・癸の10。木・火・土・金・水の五行を、それぞれ陽（兄＝え）と陰（弟＝と）に分けたものです。甲は「木の兄（きのえ）」、乙は「木の弟（きのと）」。ここから「えと」という呼び名が生まれました。</dd>
+      <dt>十二支（じゅうにし）</dt>
+      <dd>子・丑・寅・卯・辰・巳・午・未・申・酉・戌・亥の12。もとは順番を表す記号で、動物はあとから当てはめられました。十二支にもそれぞれ五行があります。</dd>
+      <dt>五行と陰陽</dt>
+      <dd>世界を木・火・土・金・水の5つの働きで捉える考え方。木は火を生み、火は土を、土は金を、金は水を、水は木を生む（相生）。木は土を、土は水を、水は火を、火は金を、金は木を抑える（相剋）。この関係が四柱推命や算命学の星を決めます。</dd>
+      <dt>六十干支と還暦</dt>
+      <dd>十干と十二支を順に組み合わせると、60で元に戻ります。年・月・日・時刻のすべてに干支があり、60年で生まれた年と同じ干支に還るのが「還暦」です。</dd>
+      <dt>立春と節入り</dt>
+      <dd>占いの一年は、1月1日ではなく立春（2月4日ごろ）から始まります。ひと月も、各月の「節入り」（太陽が決まった位置に来る日）で切り替わります。1月1日〜立春前に生まれた人は、年賀状で言う干支と1つずれることがあります。</dd>
+    </dl>
+
+    <h3 id="g-shichu">四柱推命</h3>
+    <dl>
+      <dt>四柱と八字</dt>
+      <dd>生まれた年・月・日・時のそれぞれの干支を「柱」と呼び、4本の柱（四柱）、8つの字（八字）から読む中国の占いです。時刻がわからないときは三柱で読みます。</dd>
+      <dt>日主（日干）</dt>
+      <dd>日柱の十干。その人自身を表し、ほかの字はすべてこの日主との関係で読みます。</dd>
+      <dt>蔵干（ぞうかん）</dt>
+      <dd>十二支の中に隠れている十干。このアプリでは、その支の主となる「本気」だけを使っています。</dd>
+      <dt>通変星（つうへんせい）</dt>
+      <dd>日主と、ほかの字との五行・陰陽の関係から出す10種類の星。月柱の蔵干から出る星が、その人の中心になるとされます。
+        <div class="scroll"><table><tr><th>関係</th><th>陰陽が同じ</th><th>陰陽が違う</th></tr>
+        <tr><td>同じ五行</td><td>比肩：自立、マイペース</td><td>劫財：仲間意識、負けず嫌い</td></tr>
+        <tr><td>自分が生む</td><td>食神：楽しむ、衣食住の豊かさ</td><td>傷官：鋭い感性、批判精神</td></tr>
+        <tr><td>自分が抑える</td><td>偏財：人付き合い、流れるお金</td><td>正財：堅実、こつこつ蓄える</td></tr>
+        <tr><td>自分を抑える</td><td>偏官：行動力、勇敢さ</td><td>正官：責任感、まじめさ</td></tr>
+        <tr><td>自分を生む</td><td>偏印：ひらめき、自由な発想</td><td>印綬：学び、知性、伝統</td></tr></table></div></dd>
+      <dt>十二運（じゅうにうん）</dt>
+      <dd>日主のエネルギーの強さを、人の一生にたとえた12段階。長生（生まれる）、沐浴（揺れ動く）、冠帯（成人）、建禄（働き盛り）、帝旺（頂点）、衰（円熟）、病（感受性）、死（静けさ）、墓（蓄える）、絶（ひらめき）、胎（宿る）、養（育まれる）。死や病という名前ですが、悪い意味ではありません。</dd>
+      <dt>五行のバランス</dt>
+      <dd>八字（または六字）の五行を数えたもの。多い五行はその人の得意な働き、少ない五行は補うと良い働きとされます。</dd>
+      <dt>時柱</dt>
+      <dd>生まれた時刻を2時間ごとの十二支（子の刻＝23〜1時、丑の刻＝1〜3時…）に分けて出します。23時台は翌日の子の刻として計算しています。</dd>
+    </dl>
+
+    <h3 id="g-sanmei">算命学</h3>
+    <dl>
+      <dt>算命学</dt>
+      <dd>四柱推命と同じく、中国の陰陽五行から生まれた占い。同じ干支を使いますが、星の名前や読み方の体系が違います。日本では高尾義政が体系をまとめたことで広まりました。</dd>
+      <dt>日干と自然のたとえ</dt>
+      <dd>日干（生まれた日の十干）を自然にたとえて、その人の本質を表します。甲は大樹、乙は草花、丙は太陽、丁は灯火、戊は山、己は大地、庚は鉄・原石、辛は宝石、壬は海、癸は雨露。</dd>
+      <dt>天中殺（てんちゅうさつ）</dt>
+      <dd>十干は10、十二支は12なので、組み合わせると十二支が2つ余ります。この余った2つの支の年（12年のうち2年）が天中殺です。自分の力が空回りしやすく、新しく始めるより流れに任せたほうがいい時期とされます。戌亥・申酉・午未・辰巳・寅卯・子丑の6種類があります。</dd>
+      <dt>十大主星</dt>
+      <dd>日干と、年・月・日の干支との関係から出す10種類の星。四柱推命の通変星と同じ仕組みで、名前が違います。
+        <div class="scroll"><table><tr><th>関係</th><th>陰陽が同じ</th><th>陰陽が違う</th></tr>
+        <tr><td>同じ五行</td><td>貫索星：自分を守る、マイペース</td><td>石門星：仲間と協調する</td></tr>
+        <tr><td>自分が生む</td><td>鳳閣星：自然体で表現する</td><td>調舒星：繊細な感性、芸術性</td></tr>
+        <tr><td>自分が抑える</td><td>禄存星：人を惹きつける、奉仕</td><td>司禄星：堅実に積み上げる</td></tr>
+        <tr><td>自分を抑える</td><td>車騎星：まっすぐ行動する</td><td>牽牛星：責任感、名誉</td></tr>
+        <tr><td>自分を生む</td><td>龍高星：冒険、改革</td><td>玉堂星：学ぶ、伝統</td></tr></table></div></dd>
+      <dt>人体星図</dt>
+      <dd>十大主星を人の身体の5か所に配置した図。中央（胸）は自分自身、北（頭）は目上・親、南（腹）は目下・子ども、東（右手）は友人・兄弟・社会、西（左手）は配偶者・家庭を表します。図では、向き合った相手の右手が左に来るので、東が左に描かれます。中央の星が、その人の中心の星です。</dd>
+      <dt>二十八元</dt>
+      <dd>十二支の中の蔵干を、節入りから何日目かで切り替える算命学の表。このアプリでは節入り日を1日目として数えています。流派によって数え方が少し違います。</dd>
+    </dl>
+
+    <h3 id="g-will">惹かれるもの・意志の欄</h3>
+    <dl>
+      <dt>惹かれるもの</dt>
+      <dd>魂がどの惑星に滞在したかは計算できません。でも、その性質が「惹かれるもの」や「心の癖」として出てくるなら、外から計算するのではなく、内側から観察してたどることはできます。当てはまるものに印を付けたり、自由に書いたりする欄です。</dd>
+      <dt>意志の欄</dt>
+      <dd>配置どおりでなかった自分を書いておく場所です。生まれた日の配置が「傾向」なら、そこから外れた部分に、意志が働いた跡があるのかもしれません。書いた内容は、この端末のブラウザにだけ保存されます。</dd>
+    </dl>
+    <p style="text-align:center;margin-top:24px"><a href="#top">ページの先頭へ</a></p>
+  </section>
+
+  <footer>
+    <p>占星術は、まだ科学では確かめられていない「未科学」の領域です。当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</p>
+    <p>計算はすべてお使いの端末の中で行います。生年月日や書いた内容がどこかに送られることはありません。書いた内容はその端末のブラウザにだけ保存されます。</p>
+    <p>天体の位置は astronomy-engine（MIT License）で計算しています。星座と宿はラヒリ式のアヤナムシャ（近似）による恒星基準です。内分泌腺との対応は、日本エドガー・ケイシーセンター会長・光田秀さんの解説によるものです。27宿の性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</p>
+    <p>1948〜1951年の日本のサマータイム期間は、自動で1時間ずらして計算します。</p>
+  </footer>
+</main>
+
+<script>
+(function(){
+const A = window.Astronomy;
+const NAK = ['婁','胃','昴','畢','觜','参','井','鬼','柳','星','張','翼','軫','角','亢','氐','房','心','尾','箕','斗','女','虚','危','室','壁','奎'];
+const ORDER27 = ['昴','畢','觜','参','井','鬼','柳','星','張','翼','軫','角','亢','氐','房','心','尾','箕','斗','女','虚','危','室','壁','奎','婁','胃'];
+const MONTH_START = {1:'室',2:'奎',3:'胃',4:'畢',5:'参',6:'鬼',7:'張',8:'角',9:'氐',10:'心',11:'斗',12:'虚'};
+const KEY = {昴:'品格、学問、上品さ',畢:'粘り強さ、着実、頑固さ',觜:'弁術、知恵、交渉上手',参:'行動力、革新、壊して作る',井:'理論、冷静、知性',鬼:'純粋、自由奔放、勘の鋭さ',柳:'情熱、一途、集中力',星:'独立心、逆境に強い、晩成',張:'華やかさ、自己表現、プライド',翼:'理想の高さ、遠方との縁、完璧主義',軫:'社交性、機転、人当たり',角:'明るさ、遊び心、人気',亢:'正義感、反骨心、筋を通す',氐:'野心、実行力、粘り',房:'恵まれた運、穏やかさ、財運',心:'人の心を読む、演技力、多面性',尾:'根気、一本気、忍耐',箕:'豪快、自由、行動派',斗:'カリスマ、闘争心、理想',女:'勤勉、教養、堅実',虚:'感受性、精神性、空想',危:'冒険心、変化好き、社交',室:'豪胆、パワフル、成功欲',壁:'縁の下の力持ち、包容力',奎:'真面目、品の良さ、潔癖',婁:'器用、気配り、管理力',胃:'たくましさ、自我の強さ、行動力'};
+const SIGNS = ['牡羊座','牡牛座','双子座','蟹座','獅子座','乙女座','天秤座','蠍座','射手座','山羊座','水瓶座','魚座'];
+const BODIES = [
+  {b:'Sun',n:'太陽',g:'日',c:'（ケイシーは惑星ほど語っていない）'},
+  {b:'Moon',n:'月',g:'月',c:'（宿曜では本命宿を決める天体）'},
+  {b:'Mercury',n:'水星',g:'水',c:'知性、頭の働き'},
+  {b:'Venus',n:'金星',g:'金',c:'愛、美しさ、人との調和'},
+  {b:'Mars',n:'火星',g:'火',c:'活動力、怒り'},
+  {b:'Jupiter',n:'木星',g:'木',c:'広がり、大らかさ'},
+  {b:'Saturn',n:'土星',g:'土',c:'試練、変化、やり直し'},
+  {b:'Uranus',n:'天王星',g:'天',c:'極端さ、直感、霊的な感受性'},
+  {b:'Neptune',n:'海王星',g:'海',c:'神秘、見えないものへの感度'},
+  {b:'Pluto',n:'冥王星',g:'冥',c:'まだ展開中の力。霊的な進歩、直感'}
+];
+const DAY = 86400000, JST = 9*3600000, SPAN = 360/27;
+
+function ayan(date){ const y = 2000 + (date.getTime() - Date.UTC(2000,0,1,12))/ (365.25*DAY); return 23.853 + (y-2000)*50.29/3600; }
+function sid(body, date){
+  const v = A.GeoVector(body, date, true);
+  const lon = A.Ecliptic(v).elon;
+  return ((lon - ayan(date)) % 360 + 360) % 360;
+}
+function nak(l){ return NAK[Math.floor(l / SPAN) % 27]; }
+function sign(l){ return SIGNS[Math.floor(l / 30) % 12]; }
+function nearEdge(l, span){ const r = l % span; return r < 0.5 || span - r < 0.5; }
+function dayIdx(d){ return Math.floor((d.getTime() + JST) / DAY); }
+function fmt(d){ const j = new Date(d.getTime()+JST); return j.getUTCFullYear()+'年'+(j.getUTCMonth()+1)+'月'+j.getUTCDate()+'日'; }
+function age(birth, d){ let a = new Date(d).getUTCFullYear() - birth.getUTCFullYear(); const b2 = new Date(birth); b2.setUTCFullYear(new Date(d).getUTCFullYear()); if (d < b2) a--; return a; }
+
+// 旧暦（太陰太陽暦）での月と日
+function newMoonOnOrBeforeDay(d){
+  let t = A.SearchMoonPhase(0, new Date(d.getTime() - 40*DAY), 45);
+  let last = null;
+  while (t && dayIdx(t.date) <= dayIdx(d)) { last = t.date; t = A.SearchMoonPhase(0, new Date(t.date.getTime() + DAY), 40); }
+  return {start:last, next:t.date};
+}
+function monthNumber(start, next){
+  const l0 = A.SunPosition(start).elon, l1 = A.SunPosition(next).elon;
+  let a = l0, b = l1 < l0 ? l1 + 360 : l1;
+  for (let k = Math.ceil(a/30)*30; k < b; k += 30){
+    const L = ((k % 360) + 360) % 360;
+    return {m: (Math.round(L/30) + 1) % 12 + 1, leap:false};
+  }
+  return null;
+}
+function lunarDate(d){
+  const {start, next} = newMoonOnOrBeforeDay(d);
+  let mn = monthNumber(start, next);
+  if (!mn){
+    const prev = newMoonOnOrBeforeDay(new Date(start.getTime() - 2*DAY));
+    const pm = monthNumber(prev.start, prev.next);
+    mn = {m: pm ? pm.m : 1, leap:true};
+  }
+  return {month: mn.m, leap: mn.leap, day: dayIdx(d) - dayIdx(start) + 1};
+}
+function tableShuku(ld){
+  const s = ORDER27.indexOf(MONTH_START[ld.month]);
+  return ORDER27[(s + ld.day - 1) % 27];
+}
+
+function saturnReturns(birth){
+  const s0 = sid('Saturn', birth), out = [];
+  for (const [y0, y1] of [[26,33],[55,62]]){
+    let prev = null;
+    for (let t = birth.getTime() + y0*365.25*DAY; t < birth.getTime() + y1*365.25*DAY; t += 2*DAY){
+      const d = new Date(t);
+      const diff = ((sid('Saturn', d) - s0 + 540) % 360) - 180;
+      if (prev !== null && (prev < 0) !== (diff < 0) && Math.abs(diff) < 5) out.push(d);
+      prev = diff;
+    }
+  }
+  return out;
+}
+
+function wheel(pos, moonNak, ang){
+  const W = 360, c = 180, rO = 172, rI = 138, rS = 118, rP = 92;
+  const P = (r, l) => { const a = l*Math.PI/180; return [c - r*Math.cos(a), c + r*Math.sin(a)]; };
+  let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="生まれた日の空の配置図">`;
+  s += `<circle cx="${c}" cy="${c}" r="${rO}" fill="var(--wheel)" stroke="var(--line)"/>`;
+  for (let i = 0; i < 27; i++){
+    const a0 = i*SPAN, a1 = (i+1)*SPAN, [x0,y0] = P(rO,a0), [x1,y1] = P(rO,a1), [x2,y2] = P(rI,a1), [x3,y3] = P(rI,a0);
+    const on = NAK[i] === moonNak;
+    s += `<path d="M${x0},${y0} A${rO},${rO} 0 0 0 ${x1},${y1} L${x2},${y2} A${rI},${rI} 0 0 1 ${x3},${y3} Z" fill="${on ? 'var(--gold-soft)' : 'none'}" stroke="var(--line)" stroke-width=".8"/>`;
+    const [tx,ty] = P((rO+rI)/2, a0 + SPAN/2);
+    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="13" font-weight="700" fill="${on ? 'var(--gold)' : 'var(--ink)'}">${NAK[i]}</text>`;
+  }
+  s += `<circle cx="${c}" cy="${c}" r="${rI}" fill="var(--bg)" stroke="var(--line)"/>`;
+  for (let i = 0; i < 12; i++){
+    const [x0,y0] = P(rI, i*30), [x1,y1] = P(rS, i*30);
+    s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--line)"/>`;
+    const [tx,ty] = P((rI+rS)/2, i*30+15);
+    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="9" fill="var(--muted)">${SIGNS[i].replace('座','')}</text>`;
+  }
+  s += `<circle cx="${c}" cy="${c}" r="${rS}" fill="none" stroke="var(--line)"/>`;
+  const sorted = pos.map((p,i)=>({...p,i})).sort((a,b)=>a.l-b.l);
+  const ring = {};
+  sorted.forEach((p, k) => {
+    let lvl = 0;
+    for (let j = 0; j < k; j++){ const q = sorted[j]; if (Math.abs(q.l - p.l) < 9 && ring[q.i] === lvl) lvl++; }
+    ring[p.i] = lvl;
+  });
+  pos.forEach((p, i) => {
+    const r = rP - ring[i]*24;
+    const [x,y] = P(r, p.l), [mx,my] = P(rS, p.l);
+    const moon = p.g === '月';
+    s += `<line x1="${mx}" y1="${my}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width=".6"/>`;
+    s += `<circle cx="${x}" cy="${y}" r="11" fill="${moon ? 'var(--gold)' : 'var(--panel)'}" stroke="${moon ? 'var(--gold)' : 'var(--moon)'}"/>`;
+    s += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="12" font-weight="700" fill="${moon ? 'var(--bg)' : 'var(--ink)'}">${p.g}</text>`;
+  });
+  if (ang){
+    [['asc','東'],['mc','南']].forEach(([k,lab]) => {
+      const [x0,y0] = P(rS, ang[k]), [x1,y1] = P(rO+4, ang[k]), [tx,ty] = P(rO-2, ang[k]);
+      s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--gold)" stroke-width="2"/>`;
+      s += `<circle cx="${tx}" cy="${ty}" r="9" fill="var(--gold)"/><text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill="var(--bg)">${lab}</text>`;
+    });
+  }
+  return s + '</svg>';
+}
+
+const $ = id => document.getElementById(id);
+function store(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+function load(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+
+const PLACES = [['北海道',43.06,141.35],['青森',40.82,140.74],['岩手',39.70,141.15],['宮城',38.27,140.87],['秋田',39.72,140.10],['山形',38.24,140.36],['福島',37.75,140.47],['茨城',36.34,140.45],['栃木',36.57,139.88],['群馬',36.39,139.06],['埼玉',35.86,139.65],['千葉',35.61,140.12],['東京',35.69,139.69],['神奈川',35.45,139.64],['新潟',37.90,139.02],['富山',36.70,137.21],['石川',36.59,136.63],['福井',36.07,136.22],['山梨',35.66,138.57],['長野',36.65,138.18],['岐阜',35.39,136.72],['静岡',34.98,138.38],['愛知',35.18,136.91],['三重',34.73,136.51],['滋賀',35.00,135.87],['京都',35.02,135.76],['大阪',34.69,135.52],['兵庫',34.69,135.18],['奈良',34.69,135.83],['和歌山',34.23,135.17],['鳥取',35.50,134.24],['島根',35.47,133.05],['岡山',34.66,133.93],['広島',34.40,132.46],['山口',34.19,131.47],['徳島',34.07,134.56],['香川',34.34,134.04],['愛媛',33.84,132.77],['高知',33.56,133.53],['福岡',33.61,130.42],['佐賀',33.25,130.30],['長崎',32.74,129.87],['熊本',32.79,130.74],['大分',33.24,131.61],['宮崎',31.91,131.42],['鹿児島',31.56,130.56],['沖縄',26.21,127.68]];
+const GLAND = {
+  Saturn:['性腺','忍耐強さ','衝動的になる'], Neptune:['ライディッヒ腺（丹田のあたり）','豊かな感情、誠実さ','感情の不安定さ'],
+  Mars:['副腎','情熱、義憤','激しい怒り'], Venus:['胸腺','愛情深さ、美しいものを愛でる','嫉妬、怠惰'],
+  Uranus:['甲状腺','意志力','わがまま、頑固'], Mercury:['松果体','知性、論理','あら探し、追い詰める批判'],
+  Jupiter:['脳下垂体','洞察力、未来を見通す力','妄想'], Sun:['（肉体全体）','',''], Moon:['（心全体）','',''], Pluto:['（腺の対応は語られていない）','直感、霊的な進歩','自己中心']
+};
+const D2R = Math.PI/180;
+function angles(date, lat, lon){
+  const T = (date.getTime() - Date.UTC(2000,0,1,12)) / (36525*DAY);
+  const eps = (23.439291 - 0.0130042*T) * D2R;
+  const ramc = ((A.SiderealTime(date) * 15 + lon) % 360 + 360) % 360 * D2R;
+  const mc = Math.atan2(Math.sin(ramc), Math.cos(ramc)*Math.cos(eps)) / D2R;
+  const asc = Math.atan2(Math.cos(ramc), -(Math.sin(eps)*Math.tan(lat*D2R) + Math.cos(eps)*Math.sin(ramc))) / D2R;
+  const a = ayan(date);
+  return { asc: ((asc - a) % 360 + 360) % 360, mc: ((mc - a) % 360 + 360) % 360 };
+}
+function sep(x, y){ const d = Math.abs(((x - y) % 360 + 360) % 360); return Math.min(d, 360 - d); }
+const ORB = 12;
+
+// 数秘術
+const NUM = {1:['始める人','リーダーシップ、独立心、開拓'],2:['寄り添う人','協調、調和、繊細な感受性'],3:['表現する人','創造、楽しさ、明るさ'],4:['築く人','堅実、安定、まじめさ'],5:['自由な人','変化、冒険、好奇心'],6:['愛を注ぐ人','奉仕、責任感、面倒見'],7:['探究する人','内省、分析、精神性'],8:['実らせる人','力、達成、豊かさ'],9:['包み込む人','博愛、完成、手放し'],11:['感じ取る人','直感、霊性、ひらめき'],22:['形にする人','大きな理想を現実にする力'],33:['無償の愛の人','分け隔てない愛、癒やし']};
+const PY = {1:'始まりの年。新しい種をまく',2:'協力の年。待つこと、人と組むこと',3:'表現の年。楽しむ、広げる',4:'土台の年。足元を固める',5:'変化の年。動く、手放して入れ替える',6:'責任の年。家庭や身近な人を大切に',7:'内省の年。立ち止まって深める',8:'実りの年。成果を受け取る',9:'完了の年。区切りをつけ、次の周期へ'};
+function reduce(n, master){ while (n > 9 && !(master && (n === 11 || n === 22 || n === 33))) n = String(n).split('').reduce((a,c) => a + +c, 0); return n; }
+function digits(str){ return str.replace(/\D/g,'').split('').reduce((a,c) => a + +c, 0); }
+function renderNumero(Y, M, D){
+  const lp = reduce(digits(`${Y}${M}${D}`), true);
+  const now = new Date(Date.now() + JST), cy = now.getUTCFullYear();
+  const py = y => reduce(digits(`${M}${D}${y}`), false);
+  const cur = py(cy);
+  let bar = '<div class="cycle">';
+  for (let i = 1; i <= 9; i++) bar += `<span class="${i === cur ? 'on' : ''}">${i}</span>`;
+  bar += '</div>';
+  $('numero').innerHTML = `<p><b style="font-family:var(--mincho);font-size:1.6rem;color:var(--gold)">${lp}</b>　${NUM[lp][0]}<br><span class="note">ライフパスナンバー：${NUM[lp][1]}</span></p>
+    <p>${cy}年の個人年は <b>${cur}</b>。${PY[cur]}</p>${bar}
+    <p class="note">個人年は1から9までを一年ずつ進み、9で一巡りして1に戻ります。${cy+1}年は${py(cy+1)}、${cy+2}年は${py(cy+2)}。</p>`;
+}
+// 算命学
+const KAN = '甲乙丙丁戊己庚辛壬癸', SHI = '子丑寅卯辰巳午未申酉戌亥';
+const KANT = {甲:['大樹','まっすぐ上に伸びる向上心'],乙:['草花','しなやかで粘り強く、周りと調和する'],丙:['太陽','明るく、まわりを照らす'],丁:['灯火','内に情熱を秘め、細やかに照らす'],戊:['山','どっしりとした包容力'],己:['大地','人や物事を育てる面倒見'],庚:['鉄・原石','行動力と闘争心'],辛:['宝石','美意識と繊細さ、誇り'],壬:['海','自由でスケールが大きく、知恵がある'],癸:['雨露','純粋で、静かに潤す知性']};
+const TCS = ['戌亥','申酉','午未','辰巳','寅卯','子丑'];
+function dayPillar(Y, M, D){ const n = Math.round((Date.UTC(Y, M-1, D) - Date.UTC(2000,0,1)) / DAY); return ((54 + n) % 60 + 60) % 60; }
+function renderSanmei(Y, M, D, birth){
+  const i = dayPillar(Y, M, D), kan = KAN[i % 10], kz = KAN[i % 10] + SHI[i % 12];
+  const tcs = TCS[Math.floor(i / 10)];
+  const now = new Date(Date.now() + JST), cy = now.getUTCFullYear();
+  const years = [];
+  for (let y = cy - 1; years.length < 4 && y < cy + 14; y++){ if (tcs.includes(SHI[((y - 4) % 12 + 12) % 12])) years.push(y); }
+  const isNow = years.includes(cy);
+  $('sanmei').innerHTML = `<p>生まれた日の干支は <b>${kz}</b>。日干は <b style="font-family:var(--mincho);font-size:1.6rem;color:var(--gold)">${kan}</b>（${KANT[kan][0]}）<br><span class="note">${KANT[kan][1]}</span></p>
+    <p>天中殺は <b>${tcs}天中殺</b>。12年のうち、${tcs.split('').join('年と')}年の2年間がこの時期にあたります。</p>
+    <p>${isNow ? `<b>${cy}年は天中殺の年です。</b>` : ''}近い天中殺の年：${years.map(y => y + '年（' + SHI[((y-4)%12+12)%12] + '）').join('、')}</p>
+    ${starChart(birth, i)}
+    <p class="note">算命学の一年は立春（2月4日ごろ）から、ひと月は各月の節入りから始まります。生まれた日の干支は、日付が変わる0時を境に計算しています。蔵干は節入り日を1日目として数える二十八元表で出しています。</p>`;
+}
+// 十大主星
+const GOGYO = i => Math.floor(i / 2); // 0木 1火 2土 3金 4水
+const STARS = {
+  貫索星:'自分を守る、マイペース、独立心', 石門星:'仲間と協調する、社交性、和',
+  鳳閣星:'自然体で表現する、楽しむ、伝える', 調舒星:'繊細な感性、芸術性、孤独を好む',
+  禄存星:'人を惹きつける、奉仕、愛情', 司禄星:'堅実に積み上げる、蓄える、家庭',
+  車騎星:'まっすぐ行動する、闘争心、働き者', 牽牛星:'責任感、名誉、品格',
+  龍高星:'冒険、改革、型にはまらない知恵', 玉堂星:'学ぶ、伝統を大切にする、母性'
+};
+function star(me, other){
+  const a = GOGYO(me), b = GOGYO(other), same = (me % 2) === (other % 2);
+  const r = (b - a + 5) % 5; // 0同じ 1我が生じる 2我が剋す 3他が剋す我 4他が生じる我
+  return [['貫索星','石門星'],['鳳閣星','調舒星'],['禄存星','司禄星'],['車騎星','牽牛星'],['龍高星','玉堂星']][r][same ? 0 : 1];
+}
+const ZOKAN = {子:[[99,'癸']],丑:[[9,'癸'],[12,'辛'],[99,'己']],寅:[[7,'戊'],[14,'丙'],[99,'甲']],卯:[[99,'乙']],辰:[[9,'乙'],[12,'癸'],[99,'戊']],巳:[[5,'戊'],[14,'庚'],[99,'丙']],午:[[19,'己'],[99,'丁']],未:[[9,'丁'],[12,'乙'],[99,'己']],申:[[10,'戊'],[13,'壬'],[99,'庚']],酉:[[99,'辛']],戌:[[9,'辛'],[12,'丁'],[99,'戊']],亥:[[12,'甲'],[99,'壬']]};
+function zokan(branch, n){ for (const [lim, k] of ZOKAN[branch]) if (n <= lim) return k; }
+function pillars(birth, dayIdx60){
+  const lonNow = A.SunPosition(birth).elon;
+  const k = Math.floor(((lonNow - 315 + 360) % 360) / 30);
+  const setsu = A.SearchSunLongitude((315 + 30*k) % 360, new Date(birth.getTime() - 40*DAY), 45).date;
+  const nDay = dayIdx(birth) - dayIdx(setsu) + 1;
+  const jy = new Date(birth.getTime() + JST).getUTCFullYear();
+  const risshun = A.SearchSunLongitude(315, new Date(Date.UTC(jy, 0, 20)), 30).date;
+  const y = birth < risshun ? jy - 1 : jy;
+  const ys = ((y - 4) % 10 + 10) % 10, yb = ((y - 4) % 12 + 12) % 12;
+  return {k, nDay, y, ys, yb, ms: ((ys % 5) * 2 + 2 + k) % 10, mb: (2 + k) % 12, ds: dayIdx60 % 10, db: dayIdx60 % 12};
+}
+// 干支
+const KAN_Y = ['きのえ','きのと','ひのえ','ひのと','つちのえ','つちのと','かのえ','かのと','みずのえ','みずのと'];
+const SHI_Y = ['ね','うし','とら','う','たつ','み','うま','ひつじ','さる','とり','いぬ','い'];
+const SHI_A = ['子（ねずみ）','丑（うし）','寅（とら）','卯（うさぎ）','辰（たつ）','巳（へび）','午（うま）','未（ひつじ）','申（さる）','酉（にわとり）','戌（いぬ）','亥（いのしし）'];
+const GO = ['木','火','土','金','水'];
+const SHI_GO = [4,2,0,0,2,1,1,2,3,3,2,4];
+function renderEto(Y, M, D, birth){
+  const P = pillars(birth, dayPillar(Y, M, D));
+  const yomi = (s, b) => `${KAN[s]}${SHI[b]}（${KAN_Y[s]}・${SHI_Y[b]}）`;
+  const n60 = (s, b) => { for (let i = 0; i < 60; i++) if (i % 10 === s && i % 12 === b) return i + 1; };
+  const cy = new Date(Date.now() + JST).getUTCFullYear(), cs = ((cy-4)%10+10)%10, cb = ((cy-4)%12+12)%12;
+  $('eto').innerHTML = `<p>生まれた年の干支は <b style="font-family:var(--mincho);font-size:1.4rem;color:var(--gold)">${KAN[P.ys]}${SHI[P.yb]}</b><br><span class="note">${KAN_Y[P.ys]}・${SHI_Y[P.yb]}。60ある干支の${n60(P.ys,P.yb)}番目。十干は${GO[Math.floor(P.ys/2)]}の${P.ys%2?'陰':'陽'}、十二支は${SHI_A[P.yb]}。</span></p>
+    <p>生まれた日の干支は ${yomi(P.ds, P.db)}、月の干支は ${yomi(P.ms, P.mb)}。</p>
+    <p>${cy}年は ${yomi(cs, cb)}。同じ${KAN[P.ys]}${SHI[P.yb]}の年が巡ってくる還暦は ${P.y + 60}年です。</p>
+    <p class="note">干支の年は、占いでは立春（2月4日ごろ）で切り替えます。1月1日〜立春前に生まれた人は、年賀状などで言う干支と1つずれることがあります。</p>`;
+}
+// 四柱推命
+const HONKI = '癸己甲乙戊丙丁己庚辛戊壬';
+const TSUHEN = [['比肩','劫財'],['食神','傷官'],['偏財','正財'],['偏官','正官'],['偏印','印綬']];
+const TSUHEN_M = {比肩:'自立、マイペース',劫財:'仲間意識、負けず嫌い',食神:'楽しむ、衣食住の豊かさ',傷官:'鋭い感性、批判精神',偏財:'人付き合い、流れるお金',正財:'堅実、こつこつ蓄える',偏官:'行動力、勇敢さ',正官:'責任感、まじめさ',偏印:'ひらめき、自由な発想',印綬:'学び、知性、伝統'};
+function tsuhen(me, other){ const r = (Math.floor(other/2) - Math.floor(me/2) + 5) % 5; return TSUHEN[r][(me % 2) === (other % 2) ? 0 : 1]; }
+const UN = ['長生','沐浴','冠帯','建禄','帝旺','衰','病','死','墓','絶','胎','養'];
+const UN_M = {長生:'生まれたての素直さ',沐浴:'揺れ動く、自由',冠帯:'華やか、自信',建禄:'安定、実力',帝旺:'最も強い、頂点',衰:'落ち着き、円熟',病:'感受性、想像力',死:'静けさ、探究',墓:'蓄える、継ぐ',絶:'ひらめき、極端さ',胎:'可能性、宿る',養:'育まれる、穏やか'};
+const CHOSEI = [11,6,2,9,2,9,5,0,8,3];
+function juniun(stem, branch){ const st = CHOSEI[stem]; const d = stem % 2 === 0 ? (branch - st + 12) % 12 : (st - branch + 12) % 12; return UN[d]; }
+function renderShichu(Y, M, D, birth, hour){
+  const P = pillars(birth, dayPillar(Y, M, D));
+  const cols = [];
+  if (hour !== null){
+    const hb = Math.floor((hour + 1) / 2) % 12;
+    const dsForHour = hour >= 23 ? (P.ds + 1) % 10 : P.ds;
+    cols.push(['時柱', ((dsForHour % 5) * 2 + hb) % 10, hb]);
+  }
+  cols.push(['日柱', P.ds, P.db], ['月柱', P.ms, P.mb], ['年柱', P.ys, P.yb]);
+  const cnt = [0,0,0,0,0];
+  cols.forEach(([, st, br]) => { cnt[Math.floor(st/2)]++; cnt[SHI_GO[br]]++; });
+  let h = '<div class="scroll"><table class="pillars"><tr><th></th>' + cols.map(c => `<th>${c[0]}</th>`).join('') + '</tr>';
+  h += '<tr><td class="e">天干</td>' + cols.map(c => `<td class="k big2">${KAN[c[1]]}</td>`).join('') + '</tr>';
+  h += '<tr><td class="e">地支</td>' + cols.map(c => `<td class="k big2">${SHI[c[2]]}</td>`).join('') + '</tr>';
+  h += '<tr><td class="e">蔵干</td>' + cols.map(c => `<td>${HONKI[c[2]]}</td>`).join('') + '</tr>';
+  h += '<tr><td class="e">通変星（天干）</td>' + cols.map(c => `<td>${c[0]==='日柱' ? '日主（自分）' : tsuhen(P.ds, c[1])}</td>`).join('') + '</tr>';
+  h += '<tr><td class="e">通変星（蔵干）</td>' + cols.map(c => `<td>${tsuhen(P.ds, KAN.indexOf(HONKI[c[2]]))}</td>`).join('') + '</tr>';
+  h += '<tr><td class="e">十二運</td>' + cols.map(c => `<td>${juniun(P.ds, c[2])}</td>`).join('') + '</tr></table></div>';
+  const max = Math.max(...cnt);
+  h += '<h3 style="font-family:var(--mincho);font-size:1.05rem;margin:18px 0 6px">五行のバランス</h3><div class="gogyo">' +
+    cnt.map((n, i) => `<div><span>${GO[i]}</span><i style="width:${max ? n/max*100 : 0}%"></i><b>${n}</b></div>`).join('') + '</div>';
+  const main = tsuhen(P.ds, KAN.indexOf(HONKI[P.mb]));
+  h += `<p>日主は <b>${KAN[P.ds]}</b>（${GO[Math.floor(P.ds/2)]}の${P.ds%2?'陰':'陽'}）。月柱の蔵干から出る中心の通変星は <b>${main}</b>（${TSUHEN_M[main]}）。日柱の十二運は <b>${juniun(P.ds, P.db)}</b>（${UN_M[juniun(P.ds, P.db)]}）。</p>`;
+  h += `<p class="note">${hour === null ? '生まれた時刻がわからないので、時柱を除いた三柱で出しています。' : '時柱は日本時間のまま出しています（23時台は翌日の子の刻として計算）。'}蔵干は本気（主となる蔵干）だけを使っています。算命学と同じ干支を使いますが、読み方の体系が違います。</p>`;
+  $('shichu').innerHTML = h;
+}
+
+function starChart(birth, dayIdx60){
+  // 節入り（太陽黄経 315+30k 度）を探す
+  const lonNow = A.SunPosition(birth).elon;
+  const k = Math.floor(((lonNow - 315 + 360) % 360) / 30);  // 0=寅月
+  const target = (315 + 30*k) % 360;
+  const setsu = A.SearchSunLongitude(target, new Date(birth.getTime() - 40*DAY), 45).date;
+  const nDay = dayIdx(birth) - dayIdx(setsu) + 1;
+  // 年（立春で切り替え）
+  const jy = new Date(birth.getTime() + JST).getUTCFullYear();
+  const risshun = A.SearchSunLongitude(315, new Date(Date.UTC(jy, 0, 20)), 30).date;
+  const y = birth < risshun ? jy - 1 : jy;
+  const ys = ((y - 4) % 10 + 10) % 10, yb = ((y - 4) % 12 + 12) % 12;
+  const ms = ((ys % 5) * 2 + 2 + k) % 10, mb = (2 + k) % 12;
+  const ds = dayIdx60 % 10, db = dayIdx60 % 12;
+  const kz = (s, b) => KAN[s] + SHI[b];
+  const pos = {
+    北: star(ds, ys), 南: star(ds, ms),
+    東: star(ds, KAN.indexOf(zokan(SHI[yb], nDay))),
+    中: star(ds, KAN.indexOf(zokan(SHI[mb], nDay))),
+    西: star(ds, KAN.indexOf(zokan(SHI[db], nDay)))
+  };
+  const cell = (dir, label) => `<div class="cell${dir==='中'?' center':''}"><div class="dir">${label}</div><div class="st">${pos[dir]}</div></div>`;
+  let h = `<h3 style="font-family:var(--mincho);font-size:1.05rem;margin:22px 0 6px">十大主星（人体星図）</h3>
+    <p class="note">年柱 ${kz(ys,yb)}・月柱 ${kz(ms,mb)}・日柱 ${kz(ds,db)}　節入りから${nDay}日目</p>
+    <div class="jintai"><div></div>${cell('北','北・頭')}<div></div>${cell('東','東・右手')}${cell('中','中央・胸')}${cell('西','西・左手')}<div></div>${cell('南','南・腹')}<div></div></div>
+    <div class="scroll"><table><tr><th>場所</th><th>表すもの</th><th>星</th><th>意味</th></tr>`;
+  [['中','中央・胸','自分自身、本質'],['北','北・頭','目上、親、上司'],['南','南・腹','目下、子ども、部下'],['東','東・右手','友人、兄弟、社会'],['西','西・左手','配偶者、家庭']].forEach(([d,l,m]) => {
+    h += `<tr><td class="k">${l}</td><td class="e">${m}</td><td class="k">${pos[d]}</td><td class="e">${STARS[pos[d]]}</td></tr>`;
+  });
+  return h + '</table></div><p class="note">中央の星が、その人の中心になる星とされます。</p>';
+}
+
+const PULLS = [
+  {b:'Mercury', n:'水星', t:'知りたい、理屈でわかりたい。頭の働きに惹かれる'},
+  {b:'Venus', n:'金星', t:'美しいもの、音楽、愛、人との調和に惹かれる'},
+  {b:'Mars', n:'火星', t:'動きたい、戦いたい。怒りや正義感が強く出る'},
+  {b:'Jupiter', n:'木星', t:'大きな視野、人を束ねる、広がっていくものに惹かれる'},
+  {b:'Saturn', n:'土星', t:'試練、やり直し。何度も変化をくぐってきた感覚'},
+  {b:'Uranus', n:'天王星', t:'極端さ、直感、霊的なもの、見えない世界への関心'},
+  {b:'Neptune', n:'海王星', t:'神秘、水、海。見えないものへの感度'}
+];
+let pullKey = null;
+function savePull(){
+  if (!pullKey) return;
+  const checks = [...document.querySelectorAll('#pulls input:checked')].map(i => i.value);
+  store(pullKey, JSON.stringify({checks, text: $('pullText').value}));
+  $('pullSaved').textContent = '保存しました';
+}
+let pullTimer = null;
+document.addEventListener('change', e => { if (e.target.closest && e.target.closest('#pulls')) savePull(); });
+document.addEventListener('input', e => { if (e.target.id === 'pullText'){ clearTimeout(pullTimer); pullTimer = setTimeout(savePull, 600); } });
+
+let currentKey = null;
+function run(){
+  $('msg').innerHTML = '';
+  if (!A){ $('msg').innerHTML = '<p class="err">計算用のライブラリを読み込めませんでした。通信状態を確認して、ページを開き直してください。</p>'; return; }
+  const ds = $('date').value; if (!ds){ $('msg').innerHTML = '<p class="err">生年月日を入れてください。</p>'; return; }
+  const noTime = $('notime').checked;
+  const ts = noTime ? '12:00' : ($('time').value || '12:00');
+  const [Y,M,D] = ds.split('-').map(Number), [h,mi] = ts.split(':').map(Number);
+  const custom = $('place').value === 'custom';
+  let offH = custom ? parseFloat($('tz').value) : 9;
+  let dstNote = '';
+  if (!custom && !noTime){
+    const key = Y*10000 + M*100 + D;
+    const DST = [[19480501,19480911],[19490402,19490910],[19500506,19500909],[19510505,19510908]];
+    if (DST.some(([a,b]) => key >= a && key <= b)){ offH = 10; dstNote = 'この日は日本のサマータイム期間なので、1時間ずらして計算しています。'; }
+  }
+  const birth = new Date(Date.UTC(Y, M-1, D, h, mi) - offH*3600000);
+  const pv = $('place').value;
+  let lat, lon;
+  if (pv === 'custom'){ lat = parseFloat($('lat').value); lon = parseFloat($('lon').value); }
+  else { const pl = PLACES[+pv]; lat = pl[1]; lon = pl[2]; }
+  store('sora:last', JSON.stringify({ds, ts: $('time').value, noTime, pv, lat: $('lat').value, lon: $('lon').value, tz: $('tz').value}));
+
+  const pos = BODIES.map(x => ({...x, l: sid(x.b, birth)}));
+  const moon = pos[1];
+  let moonText = nak(moon.l) + '宿';
+  if (noTime){
+    const a = nak(sid('Moon', new Date(Date.UTC(Y,M-1,D,0,0) - JST)));
+    const b = nak(sid('Moon', new Date(Date.UTC(Y,M-1,D,23,59) - JST)));
+    moonText = a === b ? a + '宿' : a + '宿・' + b + '宿';
+  }
+  $('honmei').textContent = moonText;
+  const ld = lunarDate(birth), ts27 = tableShuku(ld);
+  $('msg').innerHTML = dstNote ? `<p class="note">${dstNote}</p>` : '';
+  $('compare').textContent = `旧暦では${ld.leap ? '閏' : ''}${ld.month}月${ld.day}日。旧暦の表で出す宿は${ts27}宿。` + (noTime && moonText.includes('・') ? '月の宿は、生まれた時刻で決まります。' : '');
+  const keys = moonText.replace(/宿/g,'').split('・').map(n => `${n}宿：${KEY[n]}`);
+  $('honmeiKey').textContent = keys.join(' ／ ');
+  const ang = (!noTime && isFinite(lat) && isFinite(lon)) ? angles(birth, lat, lon) : null;
+  $('wheel').innerHTML = wheel(pos, nak(moon.l), ang);
+  if (!ang){
+    $('angles').innerHTML = '<p class="note">「時刻がわからない」のチェックを外し、生まれた時刻と場所を入れると出ます。アセンダントは4分ほどで1度動くので、時刻はできるだけ正確に。</p>';
+  } else {
+    const near = k => pos.filter(p => sep(p.l, ang[k]) <= ORB);
+    const line = (k, label, desc) => {
+      const ps = near(k);
+      let h = `<p><b style="font-family:var(--mincho)">${label}</b>　${sign(ang[k])}・${nak(ang[k])}宿<br><span class="note">${desc}</span></p>`;
+      if (ps.length){
+        h += '<div class="scroll"><table><tr><th>近くにいた天体</th><th>腺</th><th>良く出ると</th><th>悪く出ると</th></tr>';
+        ps.forEach(p => { const g = GLAND[p.b] || ['','','']; h += `<tr><td class="k">${p.n}（${sep(p.l, ang[k]).toFixed(1)}度）</td><td>${g[0]}</td><td>${g[1]}</td><td class="e">${g[2]}</td></tr>`; });
+        h += '</table></div>';
+      } else {
+        h += `<p class="note">前後${ORB}度以内に天体はありませんでした。</p>`;
+      }
+      return h;
+    };
+    const placeName = pv === 'custom' ? `${lat>=0?'北緯':'南緯'}${Math.abs(lat)}度・${lon>=0?'東経':'西経'}${Math.abs(lon)}度` : PLACES[+pv][0];
+    $('angles').innerHTML = `<p class="note">${placeName}で計算しています。場所が違う場合は選び直してください。</p>` + line('asc','東（アセンダント）','生まれた瞬間、東の地平線から昇っていた場所') + line('mc','南（天頂）','生まれた瞬間、南の空の一番高いところ') +
+      `<p class="note">ケイシーの考えでは、東か南に来ている惑星が、魂が滞在していた手がかりになりやすいとされます。ここでは前後${ORB}度以内を「近く」としています。腺の対応は光田秀さんの解説によるものです。</p>`;
+  }
+
+  let rows = '<tr><th>天体</th><th>星座</th><th>宿</th><th>ケイシーの読み方</th></tr>';
+  pos.forEach(p => {
+    let sg = sign(p.l), nk = nak(p.l) + '宿';
+    if (p.g === '月' && noTime){ nk = moonText; }
+    if (nearEdge(p.l, 30)) sg += '（境目）';
+    if (nearEdge(p.l, SPAN) && p.g !== '月') nk += '（境目）';
+    rows += `<tr><td class="k">${p.n}</td><td>${sg}</td><td>${nk}</td><td class="e">${p.c}</td></tr>`;
+  });
+  $('planets').innerHTML = rows;
+  const CONJ_ORB = 8, pairs = [];
+  for (let a = 0; a < pos.length; a++) for (let b = a + 1; b < pos.length; b++){
+    const d = sep(pos[a].l, pos[b].l);
+    if (d <= CONJ_ORB) pairs.push([pos[a], pos[b], d]);
+  }
+  const CONJ_NOTE = {
+    'Sun-Neptune':'ケイシーのリーディング（1100-27）では、海王星が太陽と重なると、その時期を通して霊的なことや神秘的な高い影響に心が開かれやすくなる、とされます。',
+    'Sun-Pluto':'ケイシーは冥王星を、まだ展開中で定まっていない、霊的な進歩に関わる力と語っています。',
+    'Jupiter-Saturn':'約20年に一度の「グレート・コンジャンクション」。広がりと試練が同じ場所にある配置です。'
+  };
+  const PC = p => p.b === 'Sun' ? 'その人の芯' : p.b === 'Moon' ? '感情、素の自分' : p.c.replace(/[（）]/g,'');
+  if (!pairs.length){
+    $('conj').innerHTML = `<p class="note">前後${CONJ_ORB}度以内で重なっている天体はありませんでした。</p>`;
+  } else {
+    $('conj').innerHTML = pairs.map(([x, y, d]) => {
+      const key = [x.b, y.b].join('-');
+      const moonWarn = (x.g === '月' || y.g === '月') && noTime ? '（月は時刻しだいで変わります）' : '';
+      const sunMark = (x.b === 'Sun' || y.b === 'Sun') ? ' class="k" style="color:var(--gold)"' : ' class="k"';
+      return `<p><span${sunMark}>${x.n}と${y.n}</span>　${d.toFixed(1)}度・${sign(x.l) === sign(y.l) ? sign(x.l) : sign(x.l) + 'と' + sign(y.l) + 'の境'}${moonWarn}<br><span class="note">${CONJ_NOTE[key] || (x.n + '（' + PC(x) + '）と' + y.n + '（' + PC(y) + '）の性質が、同じ場所で混ざり合います。')}</span></p>`;
+    }).join('') + `<p class="note">太陽と重なる天体は金色で示しています。太陽はその人の芯なので、重なった天体の性質が強く出やすいとされます。</p>`;
+  }
+
+  const sr = saturnReturns(birth);
+  $('saturn').textContent = sr.length
+    ? '土星が生まれた時と同じ位置に戻る時期。' + sr.map(d => `${fmt(d)}（${age(birth, d)}歳）`).join('、') + '。土星は行ったり来たりするので、1つの時期に何度か重なることがあります。'
+    : '計算範囲内に見つかりませんでした。';
+
+  const center = birth.getTime() - 217*DAY;
+  const pts = [-14, 0, 14].map(o => new Date(center + o*DAY));
+  let srows = `<tr><th>天体</th><th>${fmt(pts[0])}</th><th>${fmt(pts[1])}</th><th>${fmt(pts[2])}</th><th>誕生日</th></tr>`;
+  ['Jupiter','Saturn','Uranus','Neptune','Pluto'].forEach(b => {
+    const n = BODIES.find(x => x.b === b).n;
+    srows += `<tr><td class="k">${n}</td>` + pts.map(d => `<td>${nak(sid(b,d))}宿</td>`).join('') + `<td>${nak(sid(b,birth))}宿</td></tr>`;
+  });
+  $('soul').innerHTML = srows;
+
+  const DUAL_ORDER = ['Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto'];
+  $('dual').innerHTML = '<div class="scroll"><table><tr><th>天体</th><th>生まれた日の場所</th><th>良く出ると</th><th>悪く出ると</th></tr>' +
+    DUAL_ORDER.map(b => { const p = pos.find(x => x.b === b), g = GLAND[b]; return `<tr><td class="k">${p.n}</td><td class="e">${sign(p.l)}・${nak(p.l)}宿</td><td>${g[1]}</td><td class="e">${g[2]}</td></tr>`; }).join('') + '</table></div>';
+
+  renderNumero(Y, M, D);
+  renderSanmei(Y, M, D, birth);
+  renderEto(Y, M, D, birth);
+  renderShichu(Y, M, D, birth, noTime ? null : h);
+
+  pullKey = 'sora:pull:' + ds;
+  let saved = {};
+  try { saved = JSON.parse(load(pullKey) || '{}'); } catch(e){ saved = {}; }
+  const checks = saved.checks || [];
+  $('pulls').innerHTML = PULLS.map(p => {
+    const pp = pos.find(x => x.b === p.b);
+    return `<label class="pull"><input type="checkbox" value="${p.b}" ${checks.includes(p.b) ? 'checked' : ''}><span class="pn">${p.n}</span><span class="pt">${p.t}</span><span class="pp">${nak(pp.l)}宿・${sign(pp.l)}</span></label>`;
+  }).join('');
+  $('pullText').value = saved.text || '';
+  $('pullSaved').textContent = '';
+
+  currentKey = 'sora:will:' + ds;
+  $('will').value = load(currentKey) || '';
+  $('saved').textContent = '';
+  const r = $('result'); r.style.display = 'block'; r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
+}
+
+let timer = null;
+$('will').addEventListener('input', () => {
+  clearTimeout(timer);
+  timer = setTimeout(() => { if (currentKey){ store(currentKey, $('will').value); $('saved').textContent = '保存しました'; } }, 600);
+});
+$('notime').addEventListener('change', () => { $('time').disabled = $('notime').checked; });
+$('f').addEventListener('submit', e => { e.preventDefault(); run(); });
+
+$('place').innerHTML = PLACES.map((p,i) => `<option value="${i}" ${p[0]==='広島'?'selected':''}>${p[0]}</option>`).join('') + '<option value="custom">海外・その他（緯度・経度を入力）</option>';
+const tzs = []; for (let x = -12; x <= 14; x += 0.5) tzs.push(x);
+$('tz').innerHTML = tzs.map(x => `<option value="${x}" ${x===9?'selected':''}>${x>=0?'+':''}${Math.trunc(x)}${x%1? ':30':''} 時間</option>`).join('');
+const togglePlace = () => { const c = $('place').value === 'custom'; $('custom').style.display = c ? 'grid' : 'none'; $('tzwrap').style.display = c ? 'grid' : 'none'; };
+$('place').addEventListener('change', togglePlace);
+try {
+  const last = JSON.parse(load('sora:last') || 'null');
+  if (last){ $('date').value = last.ds; if (last.ts) $('time').value = last.ts; $('notime').checked = !!last.noTime;
+    if (last.pv) $('place').value = last.pv; if (last.lat) $('lat').value = last.lat; if (last.lon) $('lon').value = last.lon; if (last.tz) $('tz').value = last.tz; }
+} catch(e){}
+$('time').disabled = $('notime').checked;
+togglePlace();
+})();
+</script>
+</body>
+</html>
