@@ -64,6 +64,18 @@ td.e{color:var(--muted);font-size:.85rem}
 textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px;line-height:1.8}
 .saved{font-size:.8rem;color:var(--muted);height:1.4em}
 .err{color:#c0392b;font-weight:500}
+.helpbar{display:flex;gap:8px;margin:0 0 18px}
+.helpbar a,.helpbar button{flex:1;text-align:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 0;font:inherit;font-size:.85rem;color:var(--muted);text-decoration:none;cursor:pointer}
+.fb-overlay{position:fixed;inset:0;background:rgba(10,14,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:env(safe-area-inset-top,0px) 0 0}
+.fb-overlay[hidden]{display:none}
+.fb-box{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:14px 14px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.fb-box input[type=text],.fb-box textarea{font:inherit;width:100%;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px;line-height:1.7}
+.fb-label{font-size:.9rem;color:var(--muted)}
+.fb-kinds{display:flex;flex-wrap:wrap;gap:6px}
+.fb-kinds button{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.fb-kinds button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+.fb-cancel{background:transparent!important;color:var(--muted)!important;font-weight:400!important}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:60;max-width:90%;text-align:center}
 .jintai{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:8px auto 14px}
 .jintai .cell{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;background:var(--panel)}
 .jintai .cell.center{border-color:var(--gold);background:var(--gold-soft)}
@@ -110,6 +122,10 @@ footer p{margin:0 0 8px}
 <main>
   <h1>生まれた日の空</h1>
   <p class="sub">生まれた瞬間の、実際の星の位置から、宿曜の宿・星座・ケイシーの惑星の読み方を出します。数秘術と算命学も、あわせて見られます。</p>
+  <div class="helpbar">
+    <a href="manual.html" target="_blank" rel="noopener">❓ 使い方</a>
+    <button id="fbBtn" type="button">💬 ご意見箱</button>
+  </div>
   <p class="note" id="top"><a href="#glossary">用語集</a>で、宿・アセンダント・干支などの言葉を詳しく説明しています。結果の見出しの横の「？」からも飛べます。</p>
 
   <form id="f">
@@ -382,6 +398,23 @@ footer p{margin:0 0 8px}
     <p>1948〜1951年の日本のサマータイム期間は、自動で1時間ずらして計算します。</p>
   </footer>
 </main>
+
+<div class="fb-overlay" id="fbModal" hidden>
+  <div class="fb-box" role="dialog" aria-modal="true" aria-labelledby="fbTitle">
+    <h2 id="fbTitle" style="margin-top:0">💬 ご意見箱</h2>
+    <p class="note">使いにくいところ、分からないところ、こうなったらいいな、感想など、なんでも送ってください。小さなことでも大歓迎です。</p>
+    <label>お名前（なくても送れます）<input type="text" id="fbName" autocomplete="nickname"></label>
+    <div class="fb-label">種類</div>
+    <div id="fbKinds" class="fb-kinds">
+      <button type="button" class="on">困っている</button><button type="button">こうしてほしい</button><button type="button">不具合</button><button type="button">その他</button>
+    </div>
+    <label>内容<textarea id="fbText" rows="6" placeholder="例：アセンダントの見方が分かりにくい／生まれた国の選び方を増やしてほしい"></textarea></label>
+    <p class="note">生年月日や本名など、個人が分かることは書かないでください。</p>
+    <button type="button" id="fbSend">送信する</button>
+    <button type="button" id="fbCancel" class="fb-cancel">キャンセル</button>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
 
 <script>
 (function(){
@@ -697,6 +730,37 @@ function savePull(){
 let pullTimer = null;
 document.addEventListener('change', e => { if (e.target.closest && e.target.closest('#pulls')) savePull(); });
 document.addEventListener('input', e => { if (e.target.id === 'pullText'){ clearTimeout(pullTimer); pullTimer = setTimeout(savePull, 600); } });
+
+// ご意見箱
+// ↓ ご意見箱を動かしているGASのURLを '' の中に貼ってください
+const FEEDBACK_URL = 'https://script.google.com/macros/s/AKfycbxfIp_fyisYQyXsy_oOL4q1gMRk9KExHjgtZQBv_HvSJbvMukINH8f7pmy8wUX0cChO/exec';
+const FEEDBACK_APP_NAME = '生まれた日の空';
+let toastTimer = null;
+function showToast(msg){ const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2600); }
+function openFeedback(){ $('fbModal').hidden = false; $('fbText').focus(); }
+function closeFeedback(){ $('fbModal').hidden = true; }
+$('fbBtn').addEventListener('click', openFeedback);
+$('fbCancel').addEventListener('click', closeFeedback);
+$('fbModal').addEventListener('click', e => { if (e.target === $('fbModal')) closeFeedback(); });
+$('fbKinds').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  $('fbKinds').querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+});
+$('fbSend').addEventListener('click', () => {
+  const text = $('fbText').value.trim();
+  if (!text){ showToast('⚠️ 内容を書いてください'); return; }
+  if (!FEEDBACK_URL){ showToast('⚠️ ご意見箱は準備中です'); return; }
+  const kindEl = $('fbKinds').querySelector('.on');
+  try{
+    fetch(FEEDBACK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'},
+      body: JSON.stringify({ action:'save_feedback', data:{ feedback:{
+        at: new Date().toLocaleString('ja-JP'), app: FEEDBACK_APP_NAME,
+        name: $('fbName').value.trim(), kind: kindEl ? kindEl.textContent : 'その他', text } } }) });
+  }catch(e){}
+  $('fbText').value = '';
+  closeFeedback();
+  showToast('✅ 送信しました。ありがとうございます');
+});
 
 let currentKey = null;
 function run(){
