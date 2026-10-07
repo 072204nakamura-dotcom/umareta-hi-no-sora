@@ -64,6 +64,10 @@ td.e{color:var(--muted);font-size:.85rem}
 textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px;line-height:1.8}
 .saved{font-size:.8rem;color:var(--muted);height:1.4em}
 .err{color:#c0392b;font-weight:500}
+.yomi27{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px;margin-top:8px}
+.yk{display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);border-radius:6px;padding:4px 0;font-size:.75rem;color:var(--muted);background:var(--panel)}
+.yk b{font-family:var(--mincho);font-size:1.2rem;color:var(--ink)}
+rt{font-size:.5em;color:var(--muted);font-weight:400;font-family:var(--gothic)}
 .helpbar{display:flex;gap:8px;margin:0 0 18px}
 .helpbar a,.helpbar button{flex:1;text-align:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 0;font:inherit;font-size:.85rem;color:var(--muted);text-decoration:none;cursor:pointer}
 .fb-overlay{position:fixed;inset:0;background:rgba(10,14,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:env(safe-area-inset-top,0px) 0 0}
@@ -231,6 +235,8 @@ footer p{margin:0 0 8px}
       <dd>「宿」は、月の通り道を区切った27（または28）の区画。月が一晩ずつ泊まっていく宿場のイメージです。「曜」は日・月・火・水・木・金・土の七曜、つまり惑星のこと。曜日の名前もここから来ています。宿曜経はもともと、この2つを組み合わせて読むものでした。</dd>
       <dt>27宿と28宿</dt>
       <dd>違いは、幅の狭い「牛宿」を入れるかどうかです。自分の宿（本命宿）は27宿で、暦の日の吉凶は28宿で見るのが一般的です。28宿は東西南北の四神（青龍・玄武・白虎・朱雀）に7宿ずつ振り分けられます。</dd>
+      <dt>27宿の読み方</dt>
+      <dd>円の図の外側に並んでいる字です。昴宿から始まり、胃宿で一巡りします。「宿」は「しゅく」と読み、「昴宿（ぼうしゅく）」のように続けます。<div class="yomi27"><span class="yk"><b>昴</b>ぼう</span><span class="yk"><b>畢</b>ひつ</span><span class="yk"><b>觜</b>し</span><span class="yk"><b>参</b>しん</span><span class="yk"><b>井</b>せい</span><span class="yk"><b>鬼</b>き</span><span class="yk"><b>柳</b>りゅう</span><span class="yk"><b>星</b>せい</span><span class="yk"><b>張</b>ちょう</span><span class="yk"><b>翼</b>よく</span><span class="yk"><b>軫</b>しん</span><span class="yk"><b>角</b>かく</span><span class="yk"><b>亢</b>こう</span><span class="yk"><b>氐</b>てい</span><span class="yk"><b>房</b>ぼう</span><span class="yk"><b>心</b>しん</span><span class="yk"><b>尾</b>び</span><span class="yk"><b>箕</b>き</span><span class="yk"><b>斗</b>と</span><span class="yk"><b>女</b>じょ</span><span class="yk"><b>虚</b>きょ</span><span class="yk"><b>危</b>き</span><span class="yk"><b>室</b>しつ</span><span class="yk"><b>壁</b>へき</span><span class="yk"><b>奎</b>けい</span><span class="yk"><b>婁</b>ろう</span><span class="yk"><b>胃</b>い</span></div></dd>
       <dt>本命宿</dt>
       <dd>生まれた時に月がいた宿。その人の生まれ持った気質を表すとされます。性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</dd>
       <dt>旧暦（太陰太陽暦）</dt>
@@ -762,6 +768,28 @@ $('fbSend').addEventListener('click', () => {
   showToast('✅ 送信しました。ありがとうございます');
 });
 
+// ふりがな
+const YOMI = {"昴宿": "ぼうしゅく", "畢宿": "ひつしゅく", "觜宿": "ししゅく", "参宿": "しんしゅく", "井宿": "せいしゅく", "鬼宿": "きしゅく", "柳宿": "りゅうしゅく", "星宿": "せいしゅく", "張宿": "ちょうしゅく", "翼宿": "よくしゅく", "軫宿": "しんしゅく", "角宿": "かくしゅく", "亢宿": "こうしゅく", "氐宿": "ていしゅく", "房宿": "ぼうしゅく", "心宿": "しんしゅく", "尾宿": "びしゅく", "箕宿": "きしゅく", "斗宿": "としゅく", "女宿": "じょしゅく", "虚宿": "きょしゅく", "危宿": "きしゅく", "室宿": "しつしゅく", "壁宿": "へきしゅく", "奎宿": "けいしゅく", "婁宿": "ろうしゅく", "胃宿": "いしゅく", "牛宿": "ぎゅうしゅく", "貫索星": "かんさくせい", "石門星": "せきもんせい", "鳳閣星": "ほうかくせい", "調舒星": "ちょうじょせい", "禄存星": "ろくぞんせい", "司禄星": "しろくせい", "車騎星": "しゃきせい", "牽牛星": "けんぎゅうせい", "龍高星": "りゅうこうせい", "玉堂星": "ぎょくどうせい", "比肩": "ひけん", "劫財": "ごうざい", "食神": "しょくじん", "傷官": "しょうかん", "偏財": "へんざい", "正財": "せいざい", "偏官": "へんかん", "正官": "せいかん", "偏印": "へんいん", "印綬": "いんじゅ", "長生": "ちょうせい", "沐浴": "もくよく", "冠帯": "かんたい", "建禄": "けんろく", "帝旺": "ていおう", "戌亥天中殺": "いぬいてんちゅうさつ", "申酉天中殺": "さるとりてんちゅうさつ", "午未天中殺": "うまひつじてんちゅうさつ", "辰巳天中殺": "たつみてんちゅうさつ", "寅卯天中殺": "とらうてんちゅうさつ", "子丑天中殺": "ねうしてんちゅうさつ", "天中殺": "てんちゅうさつ", "蔵干": "ぞうかん", "日主": "にっしゅ", "日干": "にっかん", "本命宿": "ほんめいしゅく", "人体星図": "じんたいせいず", "二十八元": "にじゅうはちげん", "天頂": "てんちょう", "干支": "えと", "四柱推命": "しちゅうすいめい", "算命学": "さんめいがく", "宿曜経": "すくようきょう", "宿曜": "すくよう", "数秘術": "すうひじゅつ", "通変星": "つうへんせい", "十二運": "じゅうにうん", "十大主星": "じゅうだいしゅせい", "五行": "ごぎょう", "陰陽": "いんよう", "還暦": "かんれき", "節入り": "せついり", "立春": "りっしゅん", "内分泌腺": "ないぶんぴつせん", "松果体": "しょうかたい", "脳下垂体": "のうかすいたい", "副腎": "ふくじん", "胸腺": "きょうせん", "甲状腺": "こうじょうせん", "性腺": "せいせん", "未科学": "みかがく", "二元性": "にげんせい", "十干": "じっかん", "十二支": "じゅうにし", "八字": "はちじ", "四柱": "しちゅう", "時柱": "ときばしら", "日柱": "にっちゅう", "月柱": "げっちゅう", "年柱": "ねんちゅう", "閏": "うるう", "旧暦": "きゅうれき", "七曜": "しちよう", "四神": "しじん", "歳差": "さいさ", "合（コンジャンクション）": "ごう（コンジャンクション）"};
+const YOMI_RE = new RegExp(Object.keys(YOMI).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[（）]/g,'\\$&')).join('|'), 'g');
+function rubyify(root){
+  if (!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n =>
+    (n.parentNode.closest('ruby,script,style,textarea,button,option,svg,a.q') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const t = n.nodeValue; YOMI_RE.lastIndex = 0; if (!YOMI_RE.test(t)) return;
+    const frag = document.createDocumentFragment(); let last = 0; YOMI_RE.lastIndex = 0; let m;
+    while ((m = YOMI_RE.exec(t))){
+      if (m.index > last) frag.appendChild(document.createTextNode(t.slice(last, m.index)));
+      const r = document.createElement('ruby'); r.textContent = m[0];
+      const rt = document.createElement('rt'); rt.textContent = YOMI[m[0]]; r.appendChild(rt); frag.appendChild(r);
+      last = m.index + m[0].length;
+    }
+    if (last < t.length) frag.appendChild(document.createTextNode(t.slice(last)));
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+
 let currentKey = null;
 function run(){
   $('msg').innerHTML = '';
@@ -890,6 +918,7 @@ function run(){
   currentKey = 'sora:will:' + ds;
   $('will').value = load(currentKey) || '';
   $('saved').textContent = '';
+  ['honmei','compare','honmeiKey','planets','conj','angles','numero','shichu','sanmei','dual','soul','saturn'].forEach(id => rubyify($(id)));
   const r = $('result'); r.style.display = 'block'; r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
 }
 
@@ -913,6 +942,7 @@ try {
 } catch(e){}
 $('time').disabled = $('notime').checked;
 togglePlace();
+document.querySelectorAll('#result h2, #result h3, .glossary dt, .glossary h3, .glossary table, .sub').forEach(rubyify);
 })();
 </script>
 </body>
