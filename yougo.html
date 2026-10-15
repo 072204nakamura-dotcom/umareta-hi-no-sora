@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>用語集｜生まれた日の空</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82);
+  --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); } }
+:root[data-theme="dark"]{ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:1.8}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+h1{font-family:var(--mincho);font-weight:700;font-size:2.1rem;letter-spacing:.12em;margin:0 0 4px;line-height:1.3}
+.sub{color:var(--muted);font-size:.9rem;margin:0 0 24px}
+h2{font-family:var(--mincho);font-weight:700;font-size:1.3rem;letter-spacing:.06em;margin:40px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:0 0 12px}
+.note{color:var(--muted);font-size:.85rem}
+form{display:grid;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}
+select,input[type=number],input[type=date],input[type=time]{font:inherit;font-size:1.05rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+.check{display:flex;align-items:center;gap:8px;color:var(--ink)}
+.check input{width:20px;height:20px}
+button{font:inherit;font-weight:700;letter-spacing:.1em;background:var(--ink);color:var(--bg);border:0;border-radius:4px;padding:12px;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#result{display:none}
+.wheelwrap{margin:12px auto 4px;max-width:360px}
+.figtabs{display:flex;gap:6px;margin:22px 0 0}
+.figtabs button{flex:1;font:inherit;font-size:.85rem;padding:7px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);cursor:pointer}
+.figtabs button.on{border-color:var(--gold);color:var(--gold);font-weight:700}
+.figcap{text-align:center;margin:0 0 10px}
+.wheelwrap svg{width:100%;height:auto;display:block}
+.honmei{text-align:center;margin:8px 0 4px}
+.honmei .big{font-family:var(--mincho);font-weight:700;font-size:3.2rem;letter-spacing:.15em;color:var(--gold);line-height:1.2}
+.honmei .what{color:var(--muted);font-size:.9rem}
+.compare{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:420px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.82rem}
+td.k{font-family:var(--mincho);font-weight:700;white-space:nowrap}
+td.e{color:var(--muted);font-size:.85rem}
+textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px;line-height:1.8}
+.saved{font-size:.8rem;color:var(--muted);height:1.4em}
+.err{color:#c0392b;font-weight:500}
+.statbtn{width:100%;margin:18px 0 0;font:inherit;font-weight:700;padding:12px;border-radius:8px;border:2px solid var(--ink);background:var(--panel);color:var(--ink);cursor:pointer;font-family:"DotGothic16",var(--gothic);letter-spacing:.08em}
+.st-overlay{position:fixed;inset:0;z-index:70;background:#05071a;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 12px calc(24px + env(safe-area-inset-bottom,0px))}
+.st-overlay[hidden]{display:none}
+.st-win{max-width:460px;margin:0 auto;background:#0e1440;color:#f4f1e6;border:3px solid #f4f1e6;outline:3px solid #0e1440;box-shadow:0 0 0 6px #f4f1e6;border-radius:6px;padding:16px 16px 12px;font-family:"DotGothic16","Zen Kaku Gothic New",monospace;line-height:1.7}
+.st-win h4{margin:14px 0 4px;color:#ffd96a;font-weight:400;border-bottom:1px dashed #5a63a8}
+.st-win h4::before{content:'◆ '}
+.st-win ul{list-style:none;margin:0;padding:0}
+.st-win li{margin:4px 0}
+.st-win li small,.st-row small{display:block;color:#9aa3d8;font-size:.75rem}
+.st-row small{display:inline;margin-left:4px}
+.st-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.st-star{color:#ffd96a;letter-spacing:.1em}
+.st-head{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #f4f1e6;padding-bottom:8px;margin-bottom:6px}
+.st-head small{color:#9aa3d8;font-size:.72rem}
+.st-name{font-size:1.5rem;outline:none;border-bottom:1px dotted #5a63a8;min-width:6em}
+.st-lv{text-align:right}
+.st-dim{color:#9aa3d8;font-size:.75rem;margin:4px 0}
+.st-msg{margin:16px 0 0;color:#ffd96a}
+.st-close{display:block;margin:18px auto 0;font-family:"DotGothic16",monospace;font-size:1rem;background:none;border:none;color:#f4f1e6;cursor:pointer}
+.pcards{display:grid;gap:10px;margin-top:8px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.pcard.outer{opacity:.85}
+.pcard.sun{border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.pc b{color:var(--ink);font-weight:500}
+.ph{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.ph .pn{font-family:var(--mincho);font-weight:700;font-size:1.15rem}
+.ph .pt{font-size:.85rem;color:var(--gold)}
+.pw{display:flex;flex-wrap:wrap;gap:6px 14px;font-weight:500}
+.pw small{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+.ps{margin:8px 0 4px;line-height:1.8}
+.pc{margin:0;font-size:.8rem;color:var(--muted)}
+.base{display:grid;gap:4px;font-size:.9rem;color:var(--muted);margin:6px 0 10px}
+.aisho{display:flex;gap:8px}.aisho input{flex:1}.aisho button{white-space:nowrap;padding:8px 14px}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:4px;background:var(--bg);padding:10px 0 8px;margin:18px 0 4px;border-bottom:1px solid var(--line)}
+.tabs button{flex:1;font:inherit;font-size:.88rem;padding:9px 4px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+.panel-lead{margin:10px 0 0}
+.fcard{background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:14px 16px;margin:16px 0}
+.fcard ul{margin:0;padding-left:0;list-style:none}
+.fcard li{margin:4px 0}
+.tag{display:inline-block;font-size:.7rem;padding:0 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.tag.star{background:var(--gold);color:var(--bg)}
+.tag.cal{border:1px solid var(--muted);color:var(--muted)}
+.group{display:grid;gap:4px;margin:30px 0 4px;padding:12px 14px;border-radius:10px}
+.group b{font-family:var(--mincho);font-size:1.15rem}
+.group span{font-size:.85rem;color:var(--muted)}
+.group.star{background:var(--gold-soft);border:1px solid var(--gold)}
+.group.cal{background:var(--panel);border:1px dashed var(--muted)}
+tr.now td{background:var(--gold-soft)}
+.yomi27{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px;margin-top:8px}
+.yk{display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);border-radius:6px;padding:4px 0;font-size:.75rem;color:var(--muted);background:var(--panel)}
+.yk b{font-family:var(--mincho);font-size:1.2rem;color:var(--ink)}
+rt{font-size:.5em;color:var(--muted);font-weight:400;font-family:var(--gothic)}
+.helpbar{display:flex;gap:8px;margin:0 0 18px}
+.helpbar a,.helpbar button{flex:1;text-align:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 0;font:inherit;font-size:.85rem;color:var(--muted);text-decoration:none;cursor:pointer}
+.fb-overlay{position:fixed;inset:0;background:rgba(10,14,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:env(safe-area-inset-top,0px) 0 0}
+.fb-overlay[hidden]{display:none}
+.fb-box{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:14px 14px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.fb-box input[type=text],.fb-box textarea{font:inherit;width:100%;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px;line-height:1.7}
+.fb-label{font-size:.9rem;color:var(--muted)}
+.fb-kinds{display:flex;flex-wrap:wrap;gap:6px}
+.fb-kinds button{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.fb-kinds button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+.fb-cancel{background:transparent!important;color:var(--muted)!important;font-weight:400!important}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:60;max-width:90%;text-align:center}
+.jintai{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:8px auto 14px}
+.jintai .cell{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;background:var(--panel)}
+.jintai .cell.center{border-color:var(--gold);background:var(--gold-soft)}
+.jintai .dir{font-size:.72rem;color:var(--muted)}
+.jintai .st{font-family:var(--mincho);font-weight:700;font-size:1.05rem}
+.pillars td,.pillars th{text-align:center}
+.pillars td:first-child{text-align:left;white-space:nowrap}
+.big2{font-size:1.3rem}
+.gogyo div{display:flex;align-items:center;gap:8px;margin:4px 0}
+.gogyo span{font-family:var(--mincho);font-weight:700;width:1.5em}
+.gogyo i{display:block;height:12px;background:var(--gold);border-radius:3px;min-width:2px}
+.gogyo b{font-weight:500;color:var(--muted);font-size:.85rem}
+.glossary dl{margin:0}
+.glossary h3{font-family:var(--mincho);font-size:1.15rem;margin:32px 0 8px;padding-left:10px;border-left:3px solid var(--gold)}
+.glossary dt{font-weight:700;margin-top:14px}
+.glossary dd{margin:4px 0 0;line-height:1.85}
+.glossary table{min-width:360px;margin-top:8px;font-size:.85rem}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.toc a{font-size:.82rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:var(--panel)}
+a{color:var(--gold)}
+a.q{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--gold);font-size:.75rem;text-decoration:none;vertical-align:middle;font-family:var(--gothic)}
+.cycle{display:flex;gap:4px;margin:4px 0 8px}
+.cycle span{flex:1;text-align:center;padding:6px 0;border:1px solid var(--line);border-radius:4px;font-family:var(--mincho);color:var(--muted)}
+.cycle span.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+details.help{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:0 0 20px;font-size:.92rem}
+details.help summary{cursor:pointer;font-weight:500;color:var(--gold)}
+details.help p{margin:10px 0 0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+footer p{margin:0 0 8px}
+.pull{display:flex;gap:12px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.pull input{width:20px;height:20px;margin-top:4px;flex:none}
+.pull .pn{font-family:var(--mincho);font-weight:700;min-width:3.5em}
+.pull .pt{flex:1}
+.pull .pp{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.pull:has(input:checked) .pn{color:var(--gold)}
+#pullText{margin-top:12px}
+@media (prefers-reduced-motion:no-preference){
+  #result.show .wheelwrap{animation:rise 1.2s ease-out}
+  @keyframes rise{from{opacity:0;transform:rotate(-12deg)}to{opacity:1;transform:none}}
+}
+
+/* 宇宙 */
+body{font-size:17px;font-weight:500;line-height:1.9;text-shadow:0 1px 2px rgba(0,0,0,.65)}
+.note{font-size:.9rem}
+.pcard,.fcard,form,.fb-box,details.help,.group{background-color:rgba(18,25,64,.92)!important}
+.pc,.pw small,.ph .pt{font-size:.85rem}
+.pc{color:var(--muted)}
+td.e,th{color:var(--muted)}
+input,select,textarea,button{text-shadow:none}
+body{background:
+  radial-gradient(1100px 650px at 85% -12%, rgba(123,111,214,.30), transparent 62%),
+  radial-gradient(800px 560px at -15% 28%, rgba(61,127,193,.20), transparent 62%),
+  radial-gradient(700px 500px at 60% 110%, rgba(232,196,106,.08), transparent 60%),
+  linear-gradient(180deg,#070b1f 0%,#0b1131 55%,#070b1f 100%);
+  background-attachment:fixed;background-color:#070b1f}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.twinkles{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.twinkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8);opacity:.15;animation:tw 5s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.12}50%{opacity:.95}}
+@media (prefers-reduced-motion: reduce){.twinkles i{animation:none;opacity:.6}}
+main{position:relative}
+h1{color:#f4f1e6;text-shadow:0 0 22px rgba(232,196,106,.28),0 0 2px rgba(255,255,255,.4)}
+h2{border-bottom-color:rgba(154,164,207,.22)}
+
+form{border-radius:14px;box-shadow:0 0 0 1px rgba(154,164,207,.12),0 20px 50px -30px rgba(123,111,214,.6)}
+form button[type=submit]{background:linear-gradient(180deg,#f0d385,#d9ae4a);color:#141a3e;border-radius:999px;box-shadow:0 0 24px -6px rgba(232,196,106,.7)}
+select,input[type=number],input[type=date],input[type=time],input[type=text],textarea{background:rgba(7,11,31,.6)!important;color:var(--ink)}
+option{background:#121a3e;color:#e9ecf8}
+.tabs{background:rgba(7,11,31,.94)}
+.tabs button.on{background:var(--gold);color:#141a3e;border-color:var(--gold)}
+.tabs button{letter-spacing:.02em;font-size:.82rem;white-space:nowrap}
+.wheelwrap svg{filter:drop-shadow(0 0 18px rgba(123,111,214,.35))}
+.honmei .big{text-shadow:0 0 18px rgba(232,196,106,.45)}
+.pcard,.fcard{border-color:rgba(154,164,207,.2)}
+.fb-box{background:#0d1434}
+a{color:var(--gold)}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<main id="top">
+  <p style="margin:0 0 6px"><a href="index.html">← 生まれた日の空</a></p>
+  <h1>用語集</h1>
+  <section id="glossary" class="glossary">
+    
+    <p class="note">「生まれた日の空」に出てくる言葉の説明です。結果の見出しの横にある「？」からも、ここへ飛べます。</p>
+    <nav class="toc">
+      <a href="#g-base">占いの基本</a><a href="#g-shuku">宿曜</a><a href="#g-sign">星座</a><a href="#g-asc">アセンダント・天頂</a><a href="#g-saturn">サターン・リターン</a><a href="#g-cayce">ケイシー</a><a href="#g-soul">49日</a><a href="#g-will">意志の欄</a>
+    </nav>
+
+    <h3 id="g-base">占いの基本</h3>
+    <dl>
+      <dt>命・卜・相</dt>
+      <dd>日本では昔から、占いを3つに分けて考えます。「命（めい）」は生まれた日時から読むもので、宿曜・占星術・数秘術・四柱推命・算命学はすべてここに入ります。「卜（ぼく）」はタロットや易のように偶然出たもので読むもの、「相（そう）」は手相や風水のように形から読むものです。</dd>
+      <dt>周期</dt>
+      <dd>命の占いは、どれも何かの周期を物差しにしています。月の宿は27、干支は60、数秘術の個人年は9、土星は約29年。占いは、その巡りの「今どのあたりにいるか」を読むもの、と言うこともできます。ただし巡ってくるのは同じような出来事で、まったく同じではありません。</dd>
+      <dt>このページで読むもの</dt>
+      <dd>このページは「星の配置で読む」ものだけを集めています。生まれた瞬間に月や惑星が実際にどこにいたかを計算して読むものです（宿曜の実際の月の宿と日運、天体の位置、合、アセンダントと天頂、光と影、サターン・リターン、魂が入るころ、ケイシーの読み方）。数秘術・干支・四柱推命・算命学のように、カレンダーの日付から決まる周期や数で読む占いは、実際の星の位置を使わないので、ここには入れていません。</dd>
+      <dt id="g-dual">二元性</dt>
+      <dd>良いが生まれると、悪いも同時に生まれる。好きと嫌い、ラクときつさ、光と影。片方だけでは存在できない、コインの裏と表のような仕組みです。占いの世界でもこの形は繰り返し出てきます。光田秀さんの解説では、忍耐と衝動は同じ土星、情熱と怒りは同じ火星の力。ケイシーは、冥王星を霊的な進歩に関わる力と語る一方（1100-27）、別のリーディングでは自己中心性として挙げ、冥王星と水星を誤って使うと、成長の踏み石ではなく、つまずきの石になると語りました（3126-1）。二元性は超えるものではなく、理解するもの。良い面だけを取り出そうとせず、その力をどちらに使うかを選ぶ、という見方です。</dd>
+      <dt>未科学</dt>
+      <dd>生まれた日と性格の関係は、統計でははっきり確かめられていません。否定されたわけではなく、まだ測る方法が追いついていない領域、という意味でこのアプリでは「未科学」と呼んでいます。結果は当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</dd>
+    </dl>
+
+    <h3 id="g-shuku">宿曜</h3>
+    <dl>
+      <dt>宿曜経（すくようきょう）</dt>
+      <dd>8世紀の唐で、密教僧の不空が訳したとされる経典。インドの占星術がもとになっています。日本には806年に空海が持ち帰ったと伝わり、平安時代には「宿曜師」が陰陽師と並んで貴族の吉凶を占いました。</dd>
+      <dt>宿と曜</dt>
+      <dd>「宿」は、月の通り道を区切った27（または28）の区画。月が一晩ずつ泊まっていく宿場のイメージです。「曜」は日・月・火・水・木・金・土の七曜、つまり惑星のこと。曜日の名前もここから来ています。宿曜経はもともと、この2つを組み合わせて読むものでした。</dd>
+      <dt>27宿と28宿</dt>
+      <dd>違いは、幅の狭い「牛宿」を入れるかどうかです。自分の宿（本命宿）は27宿で、暦の日の吉凶は28宿で見るのが一般的です。28宿は東西南北の四神（青龍・玄武・白虎・朱雀）に7宿ずつ振り分けられます。</dd>
+      <dt>27宿の読み方</dt>
+      <dd>円の図の外側に並んでいる字です。昴宿から始まり、胃宿で一巡りします。「宿」は「しゅく」と読み、「昴宿（ぼうしゅく）」のように続けます。<div class="yomi27"><span class="yk"><b>昴</b>ぼう</span><span class="yk"><b>畢</b>ひつ</span><span class="yk"><b>觜</b>し</span><span class="yk"><b>参</b>しん</span><span class="yk"><b>井</b>せい</span><span class="yk"><b>鬼</b>き</span><span class="yk"><b>柳</b>りゅう</span><span class="yk"><b>星</b>せい</span><span class="yk"><b>張</b>ちょう</span><span class="yk"><b>翼</b>よく</span><span class="yk"><b>軫</b>しん</span><span class="yk"><b>角</b>かく</span><span class="yk"><b>亢</b>こう</span><span class="yk"><b>氐</b>てい</span><span class="yk"><b>房</b>ぼう</span><span class="yk"><b>心</b>しん</span><span class="yk"><b>尾</b>び</span><span class="yk"><b>箕</b>き</span><span class="yk"><b>斗</b>と</span><span class="yk"><b>女</b>じょ</span><span class="yk"><b>虚</b>きょ</span><span class="yk"><b>危</b>き</span><span class="yk"><b>室</b>しつ</span><span class="yk"><b>壁</b>へき</span><span class="yk"><b>奎</b>けい</span><span class="yk"><b>婁</b>ろう</span><span class="yk"><b>胃</b>い</span></div></dd>
+      <dt id="g-sanku">三九の秘法（相性と日運）</dt>
+      <dd>宿曜占星術の中心になる読み方。自分の宿から数えて、相手や日にちの宿が何番目にあるかで関係を読みます。27の宿を9つずつ3組に分け、それぞれの組の中を「命（業・胎）・栄・衰・安・危・成・壊・友・親」と数えます。1組目の始まりが命（自分と同じ宿）、2組目が業、3組目が胎です。<br>相性は、二人がお互いをどう見るかの組み合わせで、「栄・親」「友・衰」「安・壊」「危・成」「業・胎」「命」の6種類になります。日運は、その日の宿が自分から見て何にあたるかで、動く日か控える日かを見ます。どの関係も良し悪しを決めつけるものではなく、関わり方の傾向として見ます。</dd>
+      <dt>本命宿</dt>
+      <dd>生まれた時に月がいた宿。その人の生まれ持った気質を表すとされます。性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</dd>
+      <dt>旧暦（太陰太陽暦）</dt>
+      <dd>新月の日を1日とし、季節とのずれを閏月で調整する暦。旧暦の日付そのものは、新月を天文計算で求めているので正確です。</dd>
+      <dt>表で出す宿と、実際の月の宿</dt>
+      <dd>日本の宿曜占星術では、旧暦の月ごとに「1日はこの宿」と決めた表から数えるのが一般的です。ただ表は「月は毎日ちょうど1宿進む」という約束で作られていて、実際の月は速さが一定でないため、1〜2宿ずれることがあります。このアプリは実際の月の位置で出し、表で出した宿も並べて表示します。どちらを自分の宿とするかに、正解は一つではありません。</dd>
+    </dl>
+
+    <h3 id="g-sign">星座</h3>
+    <dl>
+      <dt>12星座</dt>
+      <dd>太陽の通り道（黄道）を30度ずつ12に区切ったもの。雑誌の「◯◯座」は、生まれた時に太陽がどこにいたかだけを見ています。本格的な占星術では、月や各惑星がどの星座にいたかも合わせて読みます。</dd>
+      <dt>季節基準と星基準（トロピカルとサイデリアル）</dt>
+      <dd>西洋占星術は春分点を牡羊座の始まりとする季節基準。インド占星術は実際の星の並びを基準にします。地球の首振り運動（歳差）で春分点は少しずつ動いていて、今では約24度、ほぼ1星座ずれています。このアプリは実際の星を基準にしているので、雑誌の星座と1つずれることが多いです。</dd>
+      <dt>アヤナムシャ</dt>
+      <dd>季節基準と星基準のずれの角度。流派によって少し値が違い、このアプリはインドで広く使われるラヒリ式の近似値を使っています。境目近くの天体には「（境目）」と表示しています。</dd>
+      <dt>13星座</dt>
+      <dd>天文学上の星座の境界は大きさがバラバラで、太陽の通り道には「へびつかい座」もかかっています。そちらで分けると13星座になりますが、占星術では30度ずつの12区分を使います。</dd>
+    </dl>
+
+    <h3 id="g-asc">アセンダント・天頂</h3>
+    <dl>
+      <dt>アセンダント（上昇点）</dt>
+      <dd>生まれた瞬間に、東の地平線から昇ってきていた星座の位置。星座の帯は一日で一周するので、およそ2時間で次の星座に移り、4分ほどで1度動きます。生まれた時刻と場所が必要なのはこのためです。「人からどう見えるか」「第一印象」「身体つきや雰囲気」を表すとされます。</dd>
+      <dt>天頂（MC・ミッドヘブン）</dt>
+      <dd>生まれた瞬間に、南の空で一番高いところにあった星座の位置。太陽でいえば正午ごろの位置です。「社会での役割」「仕事」「目指すところ」を表すとされます。本来の「天頂」は頭の真上のことですが、占星術の天頂は星座の帯が南で一番高くなる点を指します。</dd>
+      <dt>近くにいた天体</dt>
+      <dd>ケイシーは、生まれた時に東か南に来ている惑星が特に強く影響すると語りました。このアプリでは、アセンダントと天頂の前後12度以内にある天体を表示しています。</dd>
+      <dt>ケイシーとアセンダント</dt>
+      <dd>ケイシーのリーディングには、「アセンダント」を正面から説明したものはほとんどありません。ただ、生まれた瞬間の東の地平線と天頂にあった惑星を、繰り返し重く見ています。3744-4（1923年）では、人の運命に強く働くのは、まず太陽、次に地球に近い惑星か、生まれた時に昇ってきていた惑星だが、どれも意志の力は超えない、と答えています。254-2（1919年）は、ケイシー自身の配置を読んだリーディングで、生まれた時に金星がちょうど地平線に達しようとしていた、天王星が最も高い位置にあった、というように、東の地平線と天頂の位置から読んでいます。1100-27（1939年）では、質問者が「アセンダントの位置にある冥王星」について尋ね、ケイシーは冥王星を、霊的な進歩に関わる、まだ展開中の力と答えています。専門用語で語ったというより、ケイシーが重く見た東と天頂を、質問者がアセンダントという言葉で尋ねた、という形です。</dd>
+      <dt>時期の上昇（ascendancy）</dt>
+      <dd>ケイシーは「上昇」という言葉を、人生のある時期に特定の惑星の影響が強まる、という意味でも使っています。182-2（1925年）では、木星と天王星の気高い影響が今年再び強まり、特に6月と10月に際立つ、と読んでいます。311-1（1930年）では、35歳から39歳にかけて天王星の影響が強まり、人々の間で大いに豊かになる時期が来る。ただし、それが物質的なものだけになるか、精神的・霊的なものにもなるかは、本人が自分の知識をどう使うかしだい、と添えています。生まれた時の配置だけでなく、巡ってくる時期を読む、という見方です。</dd>
+      <dt>ハウス</dt>
+      <dd>アセンダントを起点に空を12の部屋に分け、仕事・お金・家族などの分野を割り当てる考え方。このアプリではまだ計算していません。</dd>
+    </dl>
+
+    <h3 id="g-saturn">サターン・リターン</h3>
+    <dl>
+      <dt>サターン・リターン</dt>
+      <dd>土星は約29年かけて空を一周し、生まれた時と同じ位置に戻ってきます。それが28〜30歳ごろと57〜59歳ごろ。この時期は人生の転機や試練が来やすいとされます。土星は地球から見ると行ったり戻ったりするので、1つの時期に2〜3回重なることがあります。</dd>
+    </dl>
+
+    <h3 id="g-cayce">エドガー・ケイシー</h3>
+    <dl>
+      <dt>エドガー・ケイシー（1877〜1945）</dt>
+      <dd>アメリカの人物。眠ったような状態で、病気の治し方や人生の相談に答え、その記録（リーディング）が1万4千件以上残っています。日本では日本エドガー・ケイシーセンターが研究と紹介を続けています。</dd>
+      <dt>ライフリーディング</dt>
+      <dd>その人の性質や可能性を読むリーディング。ケイシーはまず「どんな星の影響のもとに生まれたか」を述べ、そのあとで過去生を語り、最後に今回の人生の生かし方を提案しました。</dd>
+      <dt>惑星滞在</dt>
+      <dd>ケイシーの考えでは、魂は地上の人生と人生の間に、太陽系の惑星の領域に滞在します。特に大事なのは、前の人生のあと最初に行った惑星と、今回生まれる直前にいた惑星。そこで身についた性質を持って生まれてくるので、星の影響を受ける、という説明です。どこに滞在したかは計算では出せませんが、「惹かれるもの」や「心の癖」として現れるとされます。</dd>
+      <dt>位置と滞在</dt>
+      <dd>あるリーディング（398-2）では、惑星の位置から来るものは「衝動」にすぎず、心を動かすのはその領域での滞在だ、と強調しています。悪い配置も、理解への「踏み石」にできる、とも。</dd>
+      <dt>冥王星</dt>
+      <dd>1930年に発見された星。ケイシーは1939年のリーディング（1100-27）で、冥王星の影響は物質的なものとはまったく違い、宇宙で起きつつある進歩に関わる力だと語りました。人類が霊的な方向へ進むにつれてゆっくり広がり、今後100年、200年のうちに人間の進歩に大きな影響を与えるようになる。地球に一番密接に関わる力でありながら、まだ展開中で、定まっていない、と。光田秀さんは、冥王星が強い人は直感力が鋭く、理屈なしに「これがいい」とわかる傾向があると解説しています。一方、1943年のリーディング（3126-1）では、冥王星を「自己中心性、地上的なことへの自分の使い方」として挙げ、エゴが本当の自分（I AM）より前に出ないように、と戒めています。</dd>
+      <dt id="g-conj">合（コンジャンクション）</dt>
+      <dd>2つ以上の天体が、空のほぼ同じ場所に重なっている配置。重なった天体の性質が混ざり合い、強く出るとされます。特に太陽と重なる天体は、その人の芯に影響します。このアプリでは前後8度以内を「合」としています。ケイシーは、海王星が太陽と合になると、その時期を通して霊的・神秘的な影響に心が開かれやすい、と答えています（1100-27）。</dd>
+      <dt>惑星ごとの性質（900-10）</dt>
+      <dd>1924年のリーディング。「魂は転生のたびに行く惑星を自分で選ぶのか」という問いに対し、ケイシーは惑星ごとの性質を一語ずつ挙げています。水星は心（知性）、火星は狂気（激しさ）、地球は肉体、金星は愛、木星は力、土星は地上的な苦難の始まり（不十分なものがやり直しのために投げ込まれる所）、天王星は心霊的なもの、海王星は神秘的なもの、セプティマス（冥王星を指すと考えられています）は意識、アルクトゥルスは成長。行き先は自分で選ぶというより、悠久の時をかけて意志が自らにふさわしい状態を作っていく、という答え方です。続く問いでは、イエスはこれらすべての段階を通り、知性・怒り・愛・死などあらゆる面で完全になった人間の手本とされ、惑星の影響も成長も、本人の意志の力で変わり得ると添えています。</dd>
+      <dt>占星術についての問答（3744-4）</dt>
+      <dd>1923年のリーディング。占星術の定義、惑星の影響、使い方を一つずつ問うたものです。人の運命に一番強く働くのは太陽、次に地球に近い惑星か、生まれた時に昇ってきていた惑星。ただし、どの惑星も太陽も月も、人の意志の力を超えることはない。惑星の影響は、空での位置よりも、その惑星に滞在した経験を通して強く感じられる。占星術の研究は、意志こそが人を導き上へ向かわせるという理解の上で行うなら、とても有益。そして、人の傾向に一番影響するのは、その人のいる場所で天頂にある惑星、あるいは魂が地球に来る時に飛び立った領域から、とも答えています。このアプリの「南（天頂）」の欄は、この答えに沿っています。</dd>
+      <dt>惑星ごとの性質（リーディングの原文から）</dt>
+      <dd>英語の原文で惑星の滞在に触れた箇所を集めると、繰り返し語られる性質は次のとおりです。光田秀さんの解説や900-10とおおむね一致しますが、火星・土星・天王星には違う角度も見えます。
+        <div class="scroll"><table><tr><th>惑星</th><th>繰り返し語られる性質</th><th>主なリーディング</th></tr>
+        <tr><td>水星</td><td>高い知性、頭の働きの効率の良さ。ただし資格は滞在だけでなく、地上での使い方からも来る</td><td>490-1、608-7、357-2</td></tr>
+        <tr><td>金星</td><td>愛、美、家庭。他人の能力を愛する。愛は救いの恵みにも、気苦労の種にもなる</td><td>289-9、261-5、279-4、304-5</td></tr>
+        <tr><td>火星</td><td>怒りとしてではなく、活動として。争いとの縁</td><td>289-9、350-1</td></tr>
+        <tr><td>木星</td><td>広い視野、力、普遍性。慈悲と正義に和らげられた理性</td><td>328-1、264-31、272-4</td></tr>
+        <tr><td>土星</td><td>突然の変化。人間関係・活動・目的が突然変わる。忍耐は、その変化をくぐるために要るもの</td><td>459-12、877-1、1438-1</td></tr>
+        <tr><td>天王星</td><td>極端さ。熱意にも憎しみにもなり、真理から出るか自分を甘やかす心から出るかで分かれる</td><td>587-3、371-2、524-2</td></tr>
+        <tr><td>海王星</td><td>大きな水との縁、神秘的な力、普通ではない体験</td><td>510-1、543-11</td></tr>
+        <tr><td>冥王星</td><td>天体としてはほとんど語られない。冥王星とヴァルカンは同じもの</td><td>826-8</td></tr></table></div></dd>
+      <dt>惑星の重なり（リーディングの原文から）</dt>
+      <dd>ケイシーは惑星を単独ではなく、組み合わせで語ることが多く、その形は「混ざる」「和らげる」「逆風になる」の3つです。特に木星と金星は、他の惑星の厳しい影響を和らげる役として繰り返し出てきます。火星から来た人の困難を、木星・金星・天王星から来る愛と力が和らげる、という語り方もあります（3744-4）。組み合わせも、空での位置より滞在から来るもの、という立場です（520-4）。結果の「重なっている天体（合）」のカードには、該当する組み合わせのときにリーディングの言葉を添えています。</dd>
+      <dt>意志</dt>
+      <dd>ケイシーは、どの星の影響も人の意志には勝てない、と繰り返しました。配置が決めるのは「傾向」で、どちらに転ぶかは意志しだい。意志は育てるもの、とも語っています。</dd>
+      <dt>惑星と内分泌腺</dt>
+      <dd>日本エドガー・ケイシーセンター会長・光田秀さんの解説では、滞在した惑星は身体の内分泌腺を通して影響します。同じ腺のエネルギーが、良い方向にも悪い方向にも出ます。
+        <div class="scroll"><table><tr><th>惑星</th><th>腺</th><th>良く出ると</th><th>悪く出ると</th></tr>
+        <tr><td>土星</td><td>性腺</td><td>忍耐強さ</td><td>衝動的</td></tr>
+        <tr><td>海王星</td><td>ライディッヒ腺</td><td>豊かな感情、誠実さ</td><td>感情の不安定さ</td></tr>
+        <tr><td>火星</td><td>副腎</td><td>情熱、義憤</td><td>激しい怒り</td></tr>
+        <tr><td>金星</td><td>胸腺</td><td>愛情深さ、美を愛でる</td><td>嫉妬、怠惰</td></tr>
+        <tr><td>天王星</td><td>甲状腺</td><td>意志力</td><td>わがまま、頑固</td></tr>
+        <tr><td>水星</td><td>松果体</td><td>知性、論理</td><td>あら探し、批判</td></tr>
+        <tr><td>木星</td><td>脳下垂体</td><td>洞察力、展望</td><td>妄想</td></tr></table></div></dd>
+    </dl>
+
+    <h3 id="g-soul">魂が入るころ（49日）</h3>
+    <dl>
+      <dt>魂が入る時</dt>
+      <dd>ケイシーは、身体が生まれた瞬間と魂が身体に入る瞬間は、必ずしも同じではないと語りました。また松果体を、魂と身体がつながる場所として重視しています。</dd>
+      <dt>松果体と49日</dt>
+      <dd>胎児の松果体は、受精からおよそ7週目、49日目ごろに見えてくると言われます。精神科医のリック・ストラスマンは、これをチベット仏教の「死から次の生まで49日」と結びつけました。日本の四十九日も同じ流れにあります。</dd>
+      <dt>このアプリの計算</dt>
+      <dd>予定日どおりの出産と仮定し、受精を誕生の266日前、その49日後を誕生の217日前として、前後2週間の幅で見ています。月や速い惑星はこの幅で大きく動くので、ゆっくり動く天体だけを表示しています。</dd>
+      <dt>49と7</dt>
+      <dd>49は7×7。四十九日、お釈迦様が悟りのあと過ごした7週間、ユダヤ教で50日目を祝う「オメルの数え」、49年のあとの「ヨベルの年」など、49で区切り50で新しく始まる形が各地にあります。「七」はもともと「切る」を表す字で、刀を添えて「切」になりました。</dd>
+    </dl>
+
+    <h3 id="g-will">惹かれるもの・意志の欄</h3>
+    <dl>
+      <dt>惹かれるもの</dt>
+      <dd>魂がどの惑星に滞在したかは計算できません。でも、その性質が「惹かれるもの」や「心の癖」として出てくるなら、外から計算するのではなく、内側から観察してたどることはできます。当てはまるものに印を付けたり、自由に書いたりする欄です。</dd>
+      <dt>意志の欄</dt>
+      <dd>配置どおりでなかった自分を書いておく場所です。生まれた日の配置が「傾向」なら、そこから外れた部分に、意志が働いた跡があるのかもしれません。書いた内容は、この端末のブラウザにだけ保存されます。</dd>
+    </dl>
+    <p style="text-align:center;margin-top:24px"><a href="#top">ページの先頭へ</a>　／　<a href="index.html">生まれた日の空に戻る</a></p>
+  </section>
+</main>
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+// ふりがな
+const YOMI = {"昴宿": "ぼうしゅく", "畢宿": "ひつしゅく", "觜宿": "ししゅく", "参宿": "しんしゅく", "井宿": "せいしゅく", "鬼宿": "きしゅく", "柳宿": "りゅうしゅく", "星宿": "せいしゅく", "張宿": "ちょうしゅく", "翼宿": "よくしゅく", "軫宿": "しんしゅく", "角宿": "かくしゅく", "亢宿": "こうしゅく", "氐宿": "ていしゅく", "房宿": "ぼうしゅく", "心宿": "しんしゅく", "尾宿": "びしゅく", "箕宿": "きしゅく", "斗宿": "としゅく", "女宿": "じょしゅく", "虚宿": "きょしゅく", "危宿": "きしゅく", "室宿": "しつしゅく", "壁宿": "へきしゅく", "奎宿": "けいしゅく", "婁宿": "ろうしゅく", "胃宿": "いしゅく", "牛宿": "ぎゅうしゅく", "貫索星": "かんさくせい", "石門星": "せきもんせい", "鳳閣星": "ほうかくせい", "調舒星": "ちょうじょせい", "禄存星": "ろくぞんせい", "司禄星": "しろくせい", "車騎星": "しゃきせい", "牽牛星": "けんぎゅうせい", "龍高星": "りゅうこうせい", "玉堂星": "ぎょくどうせい", "比肩": "ひけん", "劫財": "ごうざい", "食神": "しょくじん", "傷官": "しょうかん", "偏財": "へんざい", "正財": "せいざい", "偏官": "へんかん", "正官": "せいかん", "偏印": "へんいん", "印綬": "いんじゅ", "長生": "ちょうせい", "沐浴": "もくよく", "冠帯": "かんたい", "建禄": "けんろく", "帝旺": "ていおう", "戌亥天中殺": "いぬいてんちゅうさつ", "申酉天中殺": "さるとりてんちゅうさつ", "午未天中殺": "うまひつじてんちゅうさつ", "辰巳天中殺": "たつみてんちゅうさつ", "寅卯天中殺": "とらうてんちゅうさつ", "子丑天中殺": "ねうしてんちゅうさつ", "天中殺": "てんちゅうさつ", "蔵干": "ぞうかん", "日主": "にっしゅ", "日干": "にっかん", "本命宿": "ほんめいしゅく", "人体星図": "じんたいせいず", "二十八元": "にじゅうはちげん", "天頂": "てんちょう", "干支": "えと", "四柱推命": "しちゅうすいめい", "算命学": "さんめいがく", "宿曜経": "すくようきょう", "宿曜": "すくよう", "数秘術": "すうひじゅつ", "通変星": "つうへんせい", "十二運": "じゅうにうん", "十大主星": "じゅうだいしゅせい", "五行": "ごぎょう", "陰陽": "いんよう", "還暦": "かんれき", "節入り": "せついり", "立春": "りっしゅん", "内分泌腺": "ないぶんぴつせん", "松果体": "しょうかたい", "脳下垂体": "のうかすいたい", "副腎": "ふくじん", "胸腺": "きょうせん", "甲状腺": "こうじょうせん", "性腺": "せいせん", "未科学": "みかがく", "二元性": "にげんせい", "十干": "じっかん", "十二支": "じゅうにし", "八字": "はちじ", "四柱": "しちゅう", "時柱": "ときばしら", "日柱": "にっちゅう", "月柱": "げっちゅう", "年柱": "ねんちゅう", "閏": "うるう", "旧暦": "きゅうれき", "七曜": "しちよう", "四神": "しじん", "歳差": "さいさ", "合（コンジャンクション）": "ごう（コンジャンクション）"};
+const YOMI_RE = new RegExp(Object.keys(YOMI).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[（）]/g,'\\$&')).join('|'), 'g');
+function rubyify(root){
+  if (!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n =>
+    (n.parentNode.closest('ruby,script,style,textarea,button,option,svg,a.q') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const t = n.nodeValue; YOMI_RE.lastIndex = 0; if (!YOMI_RE.test(t)) return;
+    const frag = document.createDocumentFragment(); let last = 0; YOMI_RE.lastIndex = 0; let m;
+    while ((m = YOMI_RE.exec(t))){
+      if (m.index > last) frag.appendChild(document.createTextNode(t.slice(last, m.index)));
+      const r = document.createElement('ruby'); r.textContent = m[0];
+      const rt = document.createElement('rt'); rt.textContent = YOMI[m[0]]; r.appendChild(rt); frag.appendChild(r);
+      last = m.index + m[0].length;
+    }
+    if (last < t.length) frag.appendChild(document.createTextNode(t.slice(last)));
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+document.querySelectorAll('.glossary dt, .glossary h3, .glossary table, .glossary .yk').forEach(rubyify);
+if (location.hash){ const t = document.querySelector(location.hash); if (t) setTimeout(() => t.scrollIntoView(), 50); }
+})();
+
+// 星空
+(function(){
+  const cv = document.getElementById('sky'); if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d'); let W, H, stars = [];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function build(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+    seed = 7; stars = [];
+    const n = Math.round(innerWidth * innerHeight / 3200);
+    for (let k = 0; k < n; k++){
+      const t = rnd();
+      stars.push({x: rnd()*W, y: rnd()*H, r: (t < .9 ? .3 + rnd()*.8 : 1 + rnd()*1.1) * dpr,
+        a: .35 + rnd()*.6, c: t > .97 ? '255,214,140' : t > .93 ? '170,200,255' : '255,255,255', tw: rnd() < .12, ph: rnd()*6.28});
+    }
+  }
+  function draw(time){
+    ctx.clearRect(0,0,W,H);
+    for (const s of stars){
+      const a = s.a;
+      ctx.fillStyle = `rgba(${s.c},${a})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+    }
+  }
+  build(); draw(0);
+  addEventListener('resize', () => { build(); draw(performance.now()); });
+  // またたき：少数の星だけCSSで（軽い）
+  const tw = document.createElement('div'); tw.className = 'twinkles'; tw.setAttribute('aria-hidden','true');
+  let sd = 11; const r2 = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  for (let k = 0; k < 14; k++){ const d = document.createElement('i'); d.style.left = (r2()*100) + '%'; d.style.top = (r2()*100) + '%'; d.style.animationDelay = (r2()*6).toFixed(2) + 's'; d.style.animationDuration = (4 + r2()*4).toFixed(2) + 's'; tw.appendChild(d); }
+  document.body.appendChild(tw);
+})();
+</script>
+</body>
+</html>

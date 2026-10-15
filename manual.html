@@ -9,14 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#e8ecf4; --panel:#f4f6fb; --ink:#1c2342; --muted:#5b6382; --line:#c9cfe0; --gold:#8f6d22;
+    --bg:#070b1f; --panel:rgba(20,28,70,.92); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35); --gold:#e8c46a;
     --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
     --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
     box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
   }
-  @media (prefers-color-scheme: dark){ :root{ --bg:#131a33; --panel:#1b2342; --ink:#ece4cf; --muted:#a3a9c2; --line:#323c63; --gold:#d8b76c; } }
+  
   *,*::before,*::after{box-sizing:inherit}
-  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:17px;line-height:1.85}
+  html{color-scheme:dark}
+  html,body{margin:0;background:radial-gradient(1000px 600px at 85% -10%, rgba(123,111,214,.28), transparent 62%),radial-gradient(700px 500px at -15% 30%, rgba(61,127,193,.18), transparent 62%),#070b1f;background-attachment:fixed;color:var(--ink);font-family:var(--gothic);font-size:17px;font-weight:500;line-height:1.9}
   .wrap{max-width:640px;margin:0 auto;padding:20px 20px 80px}
   h1{font-family:var(--mincho);font-size:26px;letter-spacing:.08em;margin:10px 0 4px}
   .lead{color:var(--muted);margin:0 0 22px}
@@ -28,7 +29,7 @@
   .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:12px 0 18px}
   .box b{color:var(--gold)}
   .btn{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:0 10px;font-size:14px;background:var(--panel);white-space:nowrap}
-  .btn.k{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .btn.k{background:var(--gold);color:#141a3e;border-color:var(--gold)}
   .btn.g{background:var(--gold);color:var(--bg);border-color:var(--gold)}
   .scroll{overflow-x:auto}
   table{border-collapse:collapse;width:100%;margin:8px 0 16px;font-size:15px}
@@ -85,7 +86,7 @@
 <div class="box">このページは、生まれた瞬間に月や惑星が<b>実際にどこにいたか</b>を計算して読むものだけを集めています。数秘術・干支・四柱推命・算命学のような、暦と数で読む占いは入っていません。</div>
 <h3>生まれ持ったもの</h3>
 <div class="scroll"><table>
-  <tr><th>円の図</th><td>外側が27の宿、内側が12星座。「日」「月」「水」などの丸が、生まれた日に各天体がいた場所。時刻と場所を入れると「東」「南」の印も出ます</td></tr>
+  <tr><th>空の図</th><td>「宿曜の図」「星座の図」「惑星の図」を切り替えて見られます。宿曜の図と星座の図は、真ん中の地球から見た方向で、月や惑星がどこにいたかを表します。惑星の図は太陽を中心にした太陽系の並びで、点線が地球から各惑星を見た方向です。時刻と場所を入れると、星座の図に「東」「南」の印も出ます</td></tr>
   <tr><th>実際の月がいた宿</th><td>本命宿。旧暦の表で出した宿も下に並べています。時刻がわからないと「柳宿・鬼宿」のように2つ出ることがあります</td></tr>
   <tr><th>宿曜の見方</th><td>自分の宿の性格。「基準にする宿」で、実際の月の宿か、旧暦の表の宿（本やサイトと同じ）かを選べます</td></tr>
   <tr><th>相性を見る</th><td>相手の生年月日を入れて「相性を見る」を押すと、二人の宿の関係（栄・親、安・壊など）が出ます。相手の生年月日は保存されません</td></tr>
@@ -113,7 +114,7 @@
 <div class="box">書いた内容は、<b>その端末のブラウザの中だけ</b>に、生年月日ごとに保存されます。どこにも送られず、ほかの人には見えません。別のスマホやパソコンには引き継がれません。</div>
 
 <h2 id="s5">5. 言葉の意味（用語集）</h2>
-<p>宿、アセンダント、合、二元性などの言葉は、ページのいちばん下の「用語集」で詳しく説明しています。用語集の上の目次から、知りたいところへ飛べます。読み終えたら「ページの先頭へ」で上に戻れます。</p>
+<p>宿、アセンダント、合、二元性などの言葉は、別のページの「用語集」で詳しく説明しています。題名の下の案内にある「用語集」か、結果の見出しの横の <span class="btn">？</span> を押すと、新しいタブで開きます。結果の画面はそのまま残るので、読み終えたらタブを閉じて戻れます。</p>
 
 <h2 id="s6">6. 困ったとき</h2>
 <div class="scroll"><table>

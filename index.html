@@ -14,24 +14,19 @@
 <script src="https://cdn.jsdelivr.net/npm/astronomy-engine@2.1.19/astronomy.browser.min.js"></script>
 <style>
 :root{
-  --bg:#e8ecf4; --panel:#f4f6fb; --ink:#1c2342; --muted:#5b6382; --line:#c9cfe0;
-  --gold:#8f6d22; --gold-soft:#e7d7a8; --moon:#4d5b86; --wheel:#dfe4ef;
+  --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82);
   --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
   --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color-scheme:dark;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#131a33; --panel:#1b2342; --ink:#ece4cf; --muted:#a3a9c2; --line:#323c63;
-    --gold:#d8b76c; --gold-soft:#4a3f22; --moon:#b9c3e0; --wheel:#1f2848;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#131a33; --panel:#1b2342; --ink:#ece4cf; --muted:#a3a9c2; --line:#323c63;
-  --gold:#d8b76c; --gold-soft:#4a3f22; --moon:#b9c3e0; --wheel:#1f2848;
-}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); } }
+:root[data-theme="dark"]{ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); }
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:1.8}
@@ -49,7 +44,11 @@ select,input[type=number],input[type=date],input[type=time]{font:inherit;font-si
 button{font:inherit;font-weight:700;letter-spacing:.1em;background:var(--ink);color:var(--bg);border:0;border-radius:4px;padding:12px;cursor:pointer}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #result{display:none}
-.wheelwrap{margin:28px auto 8px;max-width:360px}
+.wheelwrap{margin:12px auto 4px;max-width:360px}
+.figtabs{display:flex;gap:6px;margin:22px 0 0}
+.figtabs button{flex:1;font:inherit;font-size:.85rem;padding:7px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);cursor:pointer}
+.figtabs button.on{border-color:var(--gold);color:var(--gold);font-weight:700}
+.figcap{text-align:center;margin:0 0 10px}
 .wheelwrap svg{width:100%;height:auto;display:block}
 .honmei{text-align:center;margin:8px 0 4px}
 .honmei .big{font-family:var(--mincho);font-weight:700;font-size:3.2rem;letter-spacing:.15em;color:var(--gold);line-height:1.2}
@@ -169,9 +168,46 @@ footer p{margin:0 0 8px}
   #result.show .wheelwrap{animation:rise 1.2s ease-out}
   @keyframes rise{from{opacity:0;transform:rotate(-12deg)}to{opacity:1;transform:none}}
 }
+
+/* 宇宙 */
+body{font-size:17px;font-weight:500;line-height:1.9;text-shadow:0 1px 2px rgba(0,0,0,.65)}
+.note{font-size:.9rem}
+.pcard,.fcard,form,.fb-box,details.help,.group{background-color:rgba(18,25,64,.92)!important}
+.pc,.pw small,.ph .pt{font-size:.85rem}
+.pc{color:var(--muted)}
+td.e,th{color:var(--muted)}
+input,select,textarea,button{text-shadow:none}
+body{background:
+  radial-gradient(1100px 650px at 85% -12%, rgba(123,111,214,.30), transparent 62%),
+  radial-gradient(800px 560px at -15% 28%, rgba(61,127,193,.20), transparent 62%),
+  radial-gradient(700px 500px at 60% 110%, rgba(232,196,106,.08), transparent 60%),
+  linear-gradient(180deg,#070b1f 0%,#0b1131 55%,#070b1f 100%);
+  background-attachment:fixed;background-color:#070b1f}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.twinkles{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.twinkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8);opacity:.15;animation:tw 5s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.12}50%{opacity:.95}}
+@media (prefers-reduced-motion: reduce){.twinkles i{animation:none;opacity:.6}}
+main{position:relative}
+h1{color:#f4f1e6;text-shadow:0 0 22px rgba(232,196,106,.28),0 0 2px rgba(255,255,255,.4)}
+h2{border-bottom-color:rgba(154,164,207,.22)}
+
+form{border-radius:14px;box-shadow:0 0 0 1px rgba(154,164,207,.12),0 20px 50px -30px rgba(123,111,214,.6)}
+form button[type=submit]{background:linear-gradient(180deg,#f0d385,#d9ae4a);color:#141a3e;border-radius:999px;box-shadow:0 0 24px -6px rgba(232,196,106,.7)}
+select,input[type=number],input[type=date],input[type=time],input[type=text],textarea{background:rgba(7,11,31,.6)!important;color:var(--ink)}
+option{background:#121a3e;color:#e9ecf8}
+.tabs{background:rgba(7,11,31,.94)}
+.tabs button.on{background:var(--gold);color:#141a3e;border-color:var(--gold)}
+.tabs button{letter-spacing:.02em;font-size:.82rem;white-space:nowrap}
+.wheelwrap svg{filter:drop-shadow(0 0 18px rgba(123,111,214,.35))}
+.honmei .big{text-shadow:0 0 18px rgba(232,196,106,.45)}
+.pcard,.fcard{border-color:rgba(154,164,207,.2)}
+.fb-box{background:#0d1434}
+a{color:var(--gold)}
 </style>
 </head>
 <body>
+<canvas id="sky" aria-hidden="true"></canvas>
 <main>
   <h1>生まれた日の空</h1>
   <p class="sub">生まれた瞬間の、実際の星の位置から、宿曜の宿・星座・ケイシーの惑星の読み方を出します。</p>
@@ -179,7 +215,7 @@ footer p{margin:0 0 8px}
     <a href="manual.html" target="_blank" rel="noopener">❓ 使い方</a>
     <button id="fbBtn" type="button">💬 ご意見箱</button>
   </div>
-  <p class="note" id="top"><a href="#glossary">用語集</a>で、宿・アセンダント・干支などの言葉を詳しく説明しています。結果の見出しの横の「？」からも飛べます。</p>
+  <p class="note" id="top"><a href="yougo.html" target="_blank" rel="noopener">用語集</a>で、宿・アセンダント・合などの言葉を詳しく説明しています。結果の見出しの横の「？」からも飛べます。</p>
 
   <form id="f">
     <label>生年月日
@@ -214,15 +250,17 @@ footer p{margin:0 0 8px}
     </nav>
     <div class="panel" data-panel="born">
     <p class="note panel-lead">生まれた瞬間に、月や惑星が実際にどこにいたかから読む、あなたが持って生まれたものです。</p>
+    <nav class="figtabs"><button type="button" class="on" data-fig="shuku">宿曜の図</button><button type="button" data-fig="sign">星座の図</button><button type="button" data-fig="helio">惑星の図</button></nav>
     <div class="wheelwrap" id="wheel"></div>
+    <p class="note figcap" id="figcap"></p>
     <div class="honmei">
-      <div class="what">実際の月がいた宿 <a class="q" href="#g-shuku" aria-label="宿の説明">？</a></div>
+      <div class="what">実際の月がいた宿 <a class="q" href="yougo.html#g-shuku" target="_blank" rel="noopener" aria-label="宿の説明">？</a></div>
       <div class="big" id="honmei"></div>
     </div>
     <p class="compare" id="compare"></p>
     <p id="honmeiKey" style="text-align:center"></p>
 
-    <h2>宿曜の見方 <a class="q" href="#g-sanku" aria-label="宿曜の説明">？</a></h2>
+    <h2>宿曜の見方 <a class="q" href="yougo.html#g-sanku" target="_blank" rel="noopener" aria-label="宿曜の説明">？</a></h2>
     <label class="base">基準にする宿
       <select id="shukuBase"><option value="actual">実際の月の宿</option><option value="table">旧暦の表の宿（暦で数える約束ごと・本やサイトと同じ）</option></select>
     </label>
@@ -232,21 +270,21 @@ footer p{margin:0 0 8px}
     <div class="aisho"><input type="date" id="pDate" aria-label="相手の生年月日"><button type="button" id="pBtn">相性を見る</button></div>
     <div id="aishoOut"></div>
 
-    <h2>天体ごとの位置 <a class="q" href="#g-sign" aria-label="天体ごとの位置の説明">？</a></h2>
+    <h2>天体ごとの位置 <a class="q" href="yougo.html#g-sign" target="_blank" rel="noopener" aria-label="天体ごとの位置の説明">？</a></h2>
     <p class="note">天体は「何についての話か」、星座と宿は「どんな色で出るか」を表します。組み合わせて読みます。</p>
     <div id="planets" class="pcards"></div>
-    <h3 style="font-family:var(--mincho);font-size:1.05rem;margin:20px 0 6px">重なっている天体（合） <a class="q" href="#g-conj" aria-label="合の説明">？</a></h3>
+    <h3 style="font-family:var(--mincho);font-size:1.05rem;margin:20px 0 6px">重なっている天体（合） <a class="q" href="yougo.html#g-conj" target="_blank" rel="noopener" aria-label="合の説明">？</a></h3>
     <div id="conj"></div>
     <p class="note">星座は実際の星々を基準に30度ずつ区切るインド式（サイデリアル）。雑誌の星占いの星座とはほぼ1つずれます。宿も同じ基準の27等分です。</p>
 
-    <h2>東と南の星（アセンダントと天頂） <a class="q" href="#g-asc" aria-label="東と南の星（アセンダントと天頂）の説明">？</a></h2>
+    <h2>東と南の星（アセンダントと天頂） <a class="q" href="yougo.html#g-asc" target="_blank" rel="noopener" aria-label="東と南の星（アセンダントと天頂）の説明">？</a></h2>
     <div id="angles"></div>
 
-    <h2>光と影（二元性） <a class="q" href="#g-dual" aria-label="二元性の説明">？</a></h2>
+    <h2>光と影（二元性） <a class="q" href="yougo.html#g-dual" target="_blank" rel="noopener" aria-label="二元性の説明">？</a></h2>
     <p class="note">ケイシーや光田秀さんの解説では、どの惑星の力にも良く出る面と悪く出る面があり、それは別々の性質ではなく、ひとつの力の裏と表とされます。同じ石が、踏み石にもつまずきの石にもなる。どちらに出すかは、意志しだいです。</p>
     <div id="dual"></div>
 
-    <h2>魂が入るころ（受精から49日目ごろ） <a class="q" href="#g-soul" aria-label="魂が入るころ（受精から49日目ごろ）の説明">？</a></h2>
+    <h2>魂が入るころ（受精から49日目ごろ） <a class="q" href="yougo.html#g-soul" target="_blank" rel="noopener" aria-label="魂が入るころ（受精から49日目ごろ）の説明">？</a></h2>
     <p class="note">予定日どおりの出産と仮定して、誕生の217日前を中心に前後2週間の幅で見ています。月や速い惑星は決められないので、ゆっくり動く天体だけです。</p>
     <div class="scroll"><table id="soul"></table></div>
 
@@ -255,155 +293,28 @@ footer p{margin:0 0 8px}
     <div class="panel" data-panel="future" hidden>
     <p class="note panel-lead">実際の空の動きから見た、これから先の流れです。</p>
     <div class="fcard" id="fSummary"></div>
-    <h2>宿曜の日運（これから7日間） <a class="q" href="#g-sanku" aria-label="宿曜の説明">？</a></h2>
+    <h2>宿曜の日運（これから7日間） <a class="q" href="yougo.html#g-sanku" target="_blank" rel="noopener" aria-label="宿曜の説明">？</a></h2>
     <div id="fDaily"></div>
-    <h2>サターン・リターン <a class="q" href="#g-saturn" aria-label="サターン・リターンの説明">？</a></h2>
+    <h2>サターン・リターン <a class="q" href="yougo.html#g-saturn" target="_blank" rel="noopener" aria-label="サターン・リターンの説明">？</a></h2>
     <p id="saturn"></p>
 
     </div>
 
     <div class="panel" data-panel="write" hidden>
     <p class="note panel-lead">星の配置を読んで、自分の内側から気づいたことを書き残す場所です。</p>
-    <h2>惹かれるもの <a class="q" href="#g-cayce" aria-label="惹かれるものの説明">？</a></h2>
+    <h2>惹かれるもの <a class="q" href="yougo.html#g-cayce" target="_blank" rel="noopener" aria-label="惹かれるものの説明">？</a></h2>
     <p class="note">ケイシーは、魂が滞在した惑星の性質が「惹かれるもの」や「心の癖」として出てくると語っています。滞在先は計算できないので、自分の内側から当てはまるものに印を付けていきます。右の小さな字は、生まれた日にその惑星がいた場所です。</p>
     <div id="pulls"></div>
     <textarea id="pullText" placeholder="例：見えないものへの関心。人の気持ちの変化に敏感。"></textarea>
     <div class="saved" id="pullSaved"></div>
 
-    <h2>意志の欄 <a class="q" href="#g-will" aria-label="意志の欄の説明">？</a></h2>
+    <h2>意志の欄 <a class="q" href="yougo.html#g-will" target="_blank" rel="noopener" aria-label="意志の欄の説明">？</a></h2>
     <p class="note">配置どおりでなかった自分を書いておく場所です。この端末にだけ保存されます。</p>
     <textarea id="will" placeholder="例：「人に頼らない」と出たけれど、今はよく頼る。"></textarea>
     <div class="saved" id="saved"></div>
     </div>
   </section>
-  <section id="glossary" class="glossary">
-    <h2 style="margin-top:56px">用語集</h2>
-    <p class="note">結果の見出しの横にある「？」から、ここへ飛べます。</p>
-    <nav class="toc">
-      <a href="#g-base">占いの基本</a><a href="#g-shuku">宿曜</a><a href="#g-sign">星座</a><a href="#g-asc">アセンダント・天頂</a><a href="#g-saturn">サターン・リターン</a><a href="#g-cayce">ケイシー</a><a href="#g-soul">49日</a><a href="#g-will">意志の欄</a>
-    </nav>
 
-    <h3 id="g-base">占いの基本</h3>
-    <dl>
-      <dt>命・卜・相</dt>
-      <dd>日本では昔から、占いを3つに分けて考えます。「命（めい）」は生まれた日時から読むもので、宿曜・占星術・数秘術・四柱推命・算命学はすべてここに入ります。「卜（ぼく）」はタロットや易のように偶然出たもので読むもの、「相（そう）」は手相や風水のように形から読むものです。</dd>
-      <dt>周期</dt>
-      <dd>命の占いは、どれも何かの周期を物差しにしています。月の宿は27、干支は60、数秘術の個人年は9、土星は約29年。占いは、その巡りの「今どのあたりにいるか」を読むもの、と言うこともできます。ただし巡ってくるのは同じような出来事で、まったく同じではありません。</dd>
-      <dt>このページで読むもの</dt>
-      <dd>このページは「星の配置で読む」ものだけを集めています。生まれた瞬間に月や惑星が実際にどこにいたかを計算して読むものです（宿曜の実際の月の宿と日運、天体の位置、合、アセンダントと天頂、光と影、サターン・リターン、魂が入るころ、ケイシーの読み方）。数秘術・干支・四柱推命・算命学のように、カレンダーの日付から決まる周期や数で読む占いは、実際の星の位置を使わないので、ここには入れていません。</dd>
-      <dt id="g-dual">二元性</dt>
-      <dd>良いが生まれると、悪いも同時に生まれる。好きと嫌い、ラクときつさ、光と影。片方だけでは存在できない、コインの裏と表のような仕組みです。占いの世界でもこの形は繰り返し出てきます。光田秀さんの解説では、忍耐と衝動は同じ土星、情熱と怒りは同じ火星の力。ケイシーは、冥王星を霊的な進歩に関わる力と語る一方（1100-27）、別のリーディングでは自己中心性として挙げ、冥王星と水星を誤って使うと、成長の踏み石ではなく、つまずきの石になると語りました（3126-1）。二元性は超えるものではなく、理解するもの。良い面だけを取り出そうとせず、その力をどちらに使うかを選ぶ、という見方です。</dd>
-      <dt>未科学</dt>
-      <dd>生まれた日と性格の関係は、統計でははっきり確かめられていません。否定されたわけではなく、まだ測る方法が追いついていない領域、という意味でこのアプリでは「未科学」と呼んでいます。結果は当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</dd>
-    </dl>
-
-    <h3 id="g-shuku">宿曜</h3>
-    <dl>
-      <dt>宿曜経（すくようきょう）</dt>
-      <dd>8世紀の唐で、密教僧の不空が訳したとされる経典。インドの占星術がもとになっています。日本には806年に空海が持ち帰ったと伝わり、平安時代には「宿曜師」が陰陽師と並んで貴族の吉凶を占いました。</dd>
-      <dt>宿と曜</dt>
-      <dd>「宿」は、月の通り道を区切った27（または28）の区画。月が一晩ずつ泊まっていく宿場のイメージです。「曜」は日・月・火・水・木・金・土の七曜、つまり惑星のこと。曜日の名前もここから来ています。宿曜経はもともと、この2つを組み合わせて読むものでした。</dd>
-      <dt>27宿と28宿</dt>
-      <dd>違いは、幅の狭い「牛宿」を入れるかどうかです。自分の宿（本命宿）は27宿で、暦の日の吉凶は28宿で見るのが一般的です。28宿は東西南北の四神（青龍・玄武・白虎・朱雀）に7宿ずつ振り分けられます。</dd>
-      <dt>27宿の読み方</dt>
-      <dd>円の図の外側に並んでいる字です。昴宿から始まり、胃宿で一巡りします。「宿」は「しゅく」と読み、「昴宿（ぼうしゅく）」のように続けます。<div class="yomi27"><span class="yk"><b>昴</b>ぼう</span><span class="yk"><b>畢</b>ひつ</span><span class="yk"><b>觜</b>し</span><span class="yk"><b>参</b>しん</span><span class="yk"><b>井</b>せい</span><span class="yk"><b>鬼</b>き</span><span class="yk"><b>柳</b>りゅう</span><span class="yk"><b>星</b>せい</span><span class="yk"><b>張</b>ちょう</span><span class="yk"><b>翼</b>よく</span><span class="yk"><b>軫</b>しん</span><span class="yk"><b>角</b>かく</span><span class="yk"><b>亢</b>こう</span><span class="yk"><b>氐</b>てい</span><span class="yk"><b>房</b>ぼう</span><span class="yk"><b>心</b>しん</span><span class="yk"><b>尾</b>び</span><span class="yk"><b>箕</b>き</span><span class="yk"><b>斗</b>と</span><span class="yk"><b>女</b>じょ</span><span class="yk"><b>虚</b>きょ</span><span class="yk"><b>危</b>き</span><span class="yk"><b>室</b>しつ</span><span class="yk"><b>壁</b>へき</span><span class="yk"><b>奎</b>けい</span><span class="yk"><b>婁</b>ろう</span><span class="yk"><b>胃</b>い</span></div></dd>
-      <dt id="g-sanku">三九の秘法（相性と日運）</dt>
-      <dd>宿曜占星術の中心になる読み方。自分の宿から数えて、相手や日にちの宿が何番目にあるかで関係を読みます。27の宿を9つずつ3組に分け、それぞれの組の中を「命（業・胎）・栄・衰・安・危・成・壊・友・親」と数えます。1組目の始まりが命（自分と同じ宿）、2組目が業、3組目が胎です。<br>相性は、二人がお互いをどう見るかの組み合わせで、「栄・親」「友・衰」「安・壊」「危・成」「業・胎」「命」の6種類になります。日運は、その日の宿が自分から見て何にあたるかで、動く日か控える日かを見ます。どの関係も良し悪しを決めつけるものではなく、関わり方の傾向として見ます。</dd>
-      <dt>本命宿</dt>
-      <dd>生まれた時に月がいた宿。その人の生まれ持った気質を表すとされます。性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</dd>
-      <dt>旧暦（太陰太陽暦）</dt>
-      <dd>新月の日を1日とし、季節とのずれを閏月で調整する暦。旧暦の日付そのものは、新月を天文計算で求めているので正確です。</dd>
-      <dt>表で出す宿と、実際の月の宿</dt>
-      <dd>日本の宿曜占星術では、旧暦の月ごとに「1日はこの宿」と決めた表から数えるのが一般的です。ただ表は「月は毎日ちょうど1宿進む」という約束で作られていて、実際の月は速さが一定でないため、1〜2宿ずれることがあります。このアプリは実際の月の位置で出し、表で出した宿も並べて表示します。どちらを自分の宿とするかに、正解は一つではありません。</dd>
-    </dl>
-
-    <h3 id="g-sign">星座</h3>
-    <dl>
-      <dt>12星座</dt>
-      <dd>太陽の通り道（黄道）を30度ずつ12に区切ったもの。雑誌の「◯◯座」は、生まれた時に太陽がどこにいたかだけを見ています。本格的な占星術では、月や各惑星がどの星座にいたかも合わせて読みます。</dd>
-      <dt>季節基準と星基準（トロピカルとサイデリアル）</dt>
-      <dd>西洋占星術は春分点を牡羊座の始まりとする季節基準。インド占星術は実際の星の並びを基準にします。地球の首振り運動（歳差）で春分点は少しずつ動いていて、今では約24度、ほぼ1星座ずれています。このアプリは実際の星を基準にしているので、雑誌の星座と1つずれることが多いです。</dd>
-      <dt>アヤナムシャ</dt>
-      <dd>季節基準と星基準のずれの角度。流派によって少し値が違い、このアプリはインドで広く使われるラヒリ式の近似値を使っています。境目近くの天体には「（境目）」と表示しています。</dd>
-      <dt>13星座</dt>
-      <dd>天文学上の星座の境界は大きさがバラバラで、太陽の通り道には「へびつかい座」もかかっています。そちらで分けると13星座になりますが、占星術では30度ずつの12区分を使います。</dd>
-    </dl>
-
-    <h3 id="g-asc">アセンダント・天頂</h3>
-    <dl>
-      <dt>アセンダント（上昇点）</dt>
-      <dd>生まれた瞬間に、東の地平線から昇ってきていた星座の位置。星座の帯は一日で一周するので、およそ2時間で次の星座に移り、4分ほどで1度動きます。生まれた時刻と場所が必要なのはこのためです。「人からどう見えるか」「第一印象」「身体つきや雰囲気」を表すとされます。</dd>
-      <dt>天頂（MC・ミッドヘブン）</dt>
-      <dd>生まれた瞬間に、南の空で一番高いところにあった星座の位置。太陽でいえば正午ごろの位置です。「社会での役割」「仕事」「目指すところ」を表すとされます。本来の「天頂」は頭の真上のことですが、占星術の天頂は星座の帯が南で一番高くなる点を指します。</dd>
-      <dt>近くにいた天体</dt>
-      <dd>ケイシーは、生まれた時に東か南に来ている惑星が特に強く影響すると語りました。このアプリでは、アセンダントと天頂の前後12度以内にある天体を表示しています。</dd>
-      <dt>ケイシーとアセンダント</dt>
-      <dd>ケイシーのリーディングには、「アセンダント」を正面から説明したものはほとんどありません。ただ、生まれた瞬間の東の地平線と天頂にあった惑星を、繰り返し重く見ています。3744-4（1923年）では、人の運命に強く働くのは、まず太陽、次に地球に近い惑星か、生まれた時に昇ってきていた惑星だが、どれも意志の力は超えない、と答えています。254-2（1919年）は、ケイシー自身の配置を読んだリーディングで、生まれた時に金星がちょうど地平線に達しようとしていた、天王星が最も高い位置にあった、というように、東の地平線と天頂の位置から読んでいます。1100-27（1939年）では、質問者が「アセンダントの位置にある冥王星」について尋ね、ケイシーは冥王星を、霊的な進歩に関わる、まだ展開中の力と答えています。専門用語で語ったというより、ケイシーが重く見た東と天頂を、質問者がアセンダントという言葉で尋ねた、という形です。</dd>
-      <dt>時期の上昇（ascendancy）</dt>
-      <dd>ケイシーは「上昇」という言葉を、人生のある時期に特定の惑星の影響が強まる、という意味でも使っています。182-2（1925年）では、木星と天王星の気高い影響が今年再び強まり、特に6月と10月に際立つ、と読んでいます。311-1（1930年）では、35歳から39歳にかけて天王星の影響が強まり、人々の間で大いに豊かになる時期が来る。ただし、それが物質的なものだけになるか、精神的・霊的なものにもなるかは、本人が自分の知識をどう使うかしだい、と添えています。生まれた時の配置だけでなく、巡ってくる時期を読む、という見方です。</dd>
-      <dt>ハウス</dt>
-      <dd>アセンダントを起点に空を12の部屋に分け、仕事・お金・家族などの分野を割り当てる考え方。このアプリではまだ計算していません。</dd>
-    </dl>
-
-    <h3 id="g-saturn">サターン・リターン</h3>
-    <dl>
-      <dt>サターン・リターン</dt>
-      <dd>土星は約29年かけて空を一周し、生まれた時と同じ位置に戻ってきます。それが28〜30歳ごろと57〜59歳ごろ。この時期は人生の転機や試練が来やすいとされます。土星は地球から見ると行ったり戻ったりするので、1つの時期に2〜3回重なることがあります。</dd>
-    </dl>
-
-    <h3 id="g-cayce">エドガー・ケイシー</h3>
-    <dl>
-      <dt>エドガー・ケイシー（1877〜1945）</dt>
-      <dd>アメリカの人物。眠ったような状態で、病気の治し方や人生の相談に答え、その記録（リーディング）が1万4千件以上残っています。日本では日本エドガー・ケイシーセンターが研究と紹介を続けています。</dd>
-      <dt>ライフリーディング</dt>
-      <dd>その人の性質や可能性を読むリーディング。ケイシーはまず「どんな星の影響のもとに生まれたか」を述べ、そのあとで過去生を語り、最後に今回の人生の生かし方を提案しました。</dd>
-      <dt>惑星滞在</dt>
-      <dd>ケイシーの考えでは、魂は地上の人生と人生の間に、太陽系の惑星の領域に滞在します。特に大事なのは、前の人生のあと最初に行った惑星と、今回生まれる直前にいた惑星。そこで身についた性質を持って生まれてくるので、星の影響を受ける、という説明です。どこに滞在したかは計算では出せませんが、「惹かれるもの」や「心の癖」として現れるとされます。</dd>
-      <dt>位置と滞在</dt>
-      <dd>あるリーディング（398-2）では、惑星の位置から来るものは「衝動」にすぎず、心を動かすのはその領域での滞在だ、と強調しています。悪い配置も、理解への「踏み石」にできる、とも。</dd>
-      <dt>冥王星</dt>
-      <dd>1930年に発見された星。ケイシーは1939年のリーディング（1100-27）で、冥王星の影響は物質的なものとはまったく違い、宇宙で起きつつある進歩に関わる力だと語りました。人類が霊的な方向へ進むにつれてゆっくり広がり、今後100年、200年のうちに人間の進歩に大きな影響を与えるようになる。地球に一番密接に関わる力でありながら、まだ展開中で、定まっていない、と。光田秀さんは、冥王星が強い人は直感力が鋭く、理屈なしに「これがいい」とわかる傾向があると解説しています。一方、1943年のリーディング（3126-1）では、冥王星を「自己中心性、地上的なことへの自分の使い方」として挙げ、エゴが本当の自分（I AM）より前に出ないように、と戒めています。</dd>
-      <dt id="g-conj">合（コンジャンクション）</dt>
-      <dd>2つ以上の天体が、空のほぼ同じ場所に重なっている配置。重なった天体の性質が混ざり合い、強く出るとされます。特に太陽と重なる天体は、その人の芯に影響します。このアプリでは前後8度以内を「合」としています。ケイシーは、海王星が太陽と合になると、その時期を通して霊的・神秘的な影響に心が開かれやすい、と答えています（1100-27）。</dd>
-      <dt>惑星ごとの性質（900-10）</dt>
-      <dd>1924年のリーディング。「魂は転生のたびに行く惑星を自分で選ぶのか」という問いに対し、ケイシーは惑星ごとの性質を一語ずつ挙げています。水星は心（知性）、火星は狂気（激しさ）、地球は肉体、金星は愛、木星は力、土星は地上的な苦難の始まり（不十分なものがやり直しのために投げ込まれる所）、天王星は心霊的なもの、海王星は神秘的なもの、セプティマス（冥王星を指すと考えられています）は意識、アルクトゥルスは成長。行き先は自分で選ぶというより、悠久の時をかけて意志が自らにふさわしい状態を作っていく、という答え方です。続く問いでは、イエスはこれらすべての段階を通り、知性・怒り・愛・死などあらゆる面で完全になった人間の手本とされ、惑星の影響も成長も、本人の意志の力で変わり得ると添えています。</dd>
-      <dt>占星術についての問答（3744-4）</dt>
-      <dd>1923年のリーディング。占星術の定義、惑星の影響、使い方を一つずつ問うたものです。人の運命に一番強く働くのは太陽、次に地球に近い惑星か、生まれた時に昇ってきていた惑星。ただし、どの惑星も太陽も月も、人の意志の力を超えることはない。惑星の影響は、空での位置よりも、その惑星に滞在した経験を通して強く感じられる。占星術の研究は、意志こそが人を導き上へ向かわせるという理解の上で行うなら、とても有益。そして、人の傾向に一番影響するのは、その人のいる場所で天頂にある惑星、あるいは魂が地球に来る時に飛び立った領域から、とも答えています。このアプリの「南（天頂）」の欄は、この答えに沿っています。</dd>
-      <dt>意志</dt>
-      <dd>ケイシーは、どの星の影響も人の意志には勝てない、と繰り返しました。配置が決めるのは「傾向」で、どちらに転ぶかは意志しだい。意志は育てるもの、とも語っています。</dd>
-      <dt>惑星と内分泌腺</dt>
-      <dd>日本エドガー・ケイシーセンター会長・光田秀さんの解説では、滞在した惑星は身体の内分泌腺を通して影響します。同じ腺のエネルギーが、良い方向にも悪い方向にも出ます。
-        <div class="scroll"><table><tr><th>惑星</th><th>腺</th><th>良く出ると</th><th>悪く出ると</th></tr>
-        <tr><td>土星</td><td>性腺</td><td>忍耐強さ</td><td>衝動的</td></tr>
-        <tr><td>海王星</td><td>ライディッヒ腺</td><td>豊かな感情、誠実さ</td><td>感情の不安定さ</td></tr>
-        <tr><td>火星</td><td>副腎</td><td>情熱、義憤</td><td>激しい怒り</td></tr>
-        <tr><td>金星</td><td>胸腺</td><td>愛情深さ、美を愛でる</td><td>嫉妬、怠惰</td></tr>
-        <tr><td>天王星</td><td>甲状腺</td><td>意志力</td><td>わがまま、頑固</td></tr>
-        <tr><td>水星</td><td>松果体</td><td>知性、論理</td><td>あら探し、批判</td></tr>
-        <tr><td>木星</td><td>脳下垂体</td><td>洞察力、展望</td><td>妄想</td></tr></table></div></dd>
-    </dl>
-
-    <h3 id="g-soul">魂が入るころ（49日）</h3>
-    <dl>
-      <dt>魂が入る時</dt>
-      <dd>ケイシーは、身体が生まれた瞬間と魂が身体に入る瞬間は、必ずしも同じではないと語りました。また松果体を、魂と身体がつながる場所として重視しています。</dd>
-      <dt>松果体と49日</dt>
-      <dd>胎児の松果体は、受精からおよそ7週目、49日目ごろに見えてくると言われます。精神科医のリック・ストラスマンは、これをチベット仏教の「死から次の生まで49日」と結びつけました。日本の四十九日も同じ流れにあります。</dd>
-      <dt>このアプリの計算</dt>
-      <dd>予定日どおりの出産と仮定し、受精を誕生の266日前、その49日後を誕生の217日前として、前後2週間の幅で見ています。月や速い惑星はこの幅で大きく動くので、ゆっくり動く天体だけを表示しています。</dd>
-      <dt>49と7</dt>
-      <dd>49は7×7。四十九日、お釈迦様が悟りのあと過ごした7週間、ユダヤ教で50日目を祝う「オメルの数え」、49年のあとの「ヨベルの年」など、49で区切り50で新しく始まる形が各地にあります。「七」はもともと「切る」を表す字で、刀を添えて「切」になりました。</dd>
-    </dl>
-
-    <h3 id="g-will">惹かれるもの・意志の欄</h3>
-    <dl>
-      <dt>惹かれるもの</dt>
-      <dd>魂がどの惑星に滞在したかは計算できません。でも、その性質が「惹かれるもの」や「心の癖」として出てくるなら、外から計算するのではなく、内側から観察してたどることはできます。当てはまるものに印を付けたり、自由に書いたりする欄です。</dd>
-      <dt>意志の欄</dt>
-      <dd>配置どおりでなかった自分を書いておく場所です。生まれた日の配置が「傾向」なら、そこから外れた部分に、意志が働いた跡があるのかもしれません。書いた内容は、この端末のブラウザにだけ保存されます。</dd>
-    </dl>
-    <p style="text-align:center;margin-top:24px"><a href="#top">ページの先頭へ</a></p>
-  </section>
 
   <footer>
     <p>占星術は、まだ科学では確かめられていない「未科学」の領域です。当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</p>
@@ -445,13 +356,13 @@ const SIGNS = ['牡羊座','牡牛座','双子座','蟹座','獅子座','乙女�
 const BODIES = [
   {b:'Sun',n:'太陽',g:'日',c:'（ケイシーは惑星ほど語っていない）'},
   {b:'Moon',n:'月',g:'月',c:'（宿曜では本命宿を決める天体）'},
-  {b:'Mercury',n:'水星',g:'水',c:'知性、頭の働き'},
-  {b:'Venus',n:'金星',g:'金',c:'愛、美しさ、人との調和'},
-  {b:'Mars',n:'火星',g:'火',c:'活動力、怒り'},
-  {b:'Jupiter',n:'木星',g:'木',c:'広がり、大らかさ'},
-  {b:'Saturn',n:'土星',g:'土',c:'試練、変化、やり直し'},
-  {b:'Uranus',n:'天王星',g:'天',c:'極端さ、直感、霊的な感受性'},
-  {b:'Neptune',n:'海王星',g:'海',c:'神秘、見えないものへの感度'},
+  {b:'Mercury',n:'水星',g:'水',c:'高い知性、頭の働きの効率の良さ'},
+  {b:'Venus',n:'金星',g:'金',c:'愛、美、家庭、人との調和'},
+  {b:'Mars',n:'火星',g:'火',c:'活動。怒りとしてではなく、動く力として'},
+  {b:'Jupiter',n:'木星',g:'木',c:'広い視野、力、普遍性'},
+  {b:'Saturn',n:'土星',g:'土',c:'突然の変化、やり直し'},
+  {b:'Uranus',n:'天王星',g:'天',c:'極端さ、神秘的なものへの関心'},
+  {b:'Neptune',n:'海王星',g:'海',c:'神秘、水との縁'},
   {b:'Pluto',n:'冥王星',g:'冥',c:'まだ展開中の力。霊的な進歩、直感'}
 ];
 const DAY = 86400000, JST = 9*3600000, SPAN = 360/27;
@@ -514,50 +425,104 @@ function saturnReturns(birth){
   return out;
 }
 
-function wheel(pos, moonNak, ang){
-  const W = 360, c = 180, rO = 172, rI = 138, rS = 118, rP = 92;
-  const P = (r, l) => { const a = l*Math.PI/180; return [c - r*Math.cos(a), c + r*Math.sin(a)]; };
-  let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="生まれた日の空の配置図">`;
+const FP = (c, r, l) => { const a = l*Math.PI/180; return [c - r*Math.cos(a), c + r*Math.sin(a)]; };
+function earthSvg(c, r, label){
+  return `<circle cx="${c}" cy="${c}" r="${r}" fill="#3d7fc1" stroke="#9cc8f0" stroke-width="1.5"/>
+    <path d="M${c-r*.55},${c-r*.2} q${r*.3},-${r*.5} ${r*.6},-${r*.2} q${r*.2},${r*.3} -${r*.1},${r*.5} q-${r*.3},${r*.1} -${r*.5},-${r*.3}Z M${c+r*.1},${c+r*.25} q${r*.35},-${r*.1} ${r*.45},${r*.25} q-${r*.15},${r*.3} -${r*.45},${r*.15}Z" fill="#6fbf73" opacity=".9"/>
+    ${label ? `<text x="${c}" y="${c+r+13}" text-anchor="middle" font-size="11" font-weight="700" fill="var(--ink)">${label}</text>` : ''}`;
+}
+function stackR(items, base, step, gap){
+  const sorted = items.map((p,i)=>({...p,i})).sort((a,b)=>a.l-b.l), lv = {};
+  sorted.forEach((p,k) => { let v = 0; for (let j = 0; j < k; j++){ const q = sorted[j]; if (Math.abs(q.l - p.l) < gap && lv[q.i] === v) v++; } lv[p.i] = v; });
+  return i => base - lv[i]*step;
+}
+function figShuku(moonL, moonNak){
+  const W = 360, c = 180, rO = 172, rI = 132, P = (r,l) => FP(c,r,l);
+  let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="宿曜の図">`;
   s += `<circle cx="${c}" cy="${c}" r="${rO}" fill="var(--wheel)" stroke="var(--line)"/>`;
   for (let i = 0; i < 27; i++){
     const a0 = i*SPAN, a1 = (i+1)*SPAN, [x0,y0] = P(rO,a0), [x1,y1] = P(rO,a1), [x2,y2] = P(rI,a1), [x3,y3] = P(rI,a0);
     const on = NAK[i] === moonNak;
     s += `<path d="M${x0},${y0} A${rO},${rO} 0 0 0 ${x1},${y1} L${x2},${y2} A${rI},${rI} 0 0 1 ${x3},${y3} Z" fill="${on ? 'var(--gold-soft)' : 'none'}" stroke="var(--line)" stroke-width=".8"/>`;
     const [tx,ty] = P((rO+rI)/2, a0 + SPAN/2);
-    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="13" font-weight="700" fill="${on ? 'var(--gold)' : 'var(--ink)'}">${NAK[i]}</text>`;
+    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="14" font-weight="700" fill="${on ? 'var(--gold)' : 'var(--ink)'}">${NAK[i]}</text>`;
   }
   s += `<circle cx="${c}" cy="${c}" r="${rI}" fill="var(--bg)" stroke="var(--line)"/>`;
+  const [mx,my] = P(rI-6, moonL), [lx,ly] = P(96, moonL);
+  s += `<line x1="${c}" y1="${c}" x2="${mx}" y2="${my}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+  s += `<circle cx="${lx}" cy="${ly}" r="14" fill="var(--gold)"/><text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="13" font-weight="700" fill="var(--bg)">月</text>`;
+  s += earthSvg(c, 20, 'あなた（地球）');
+  return s + '</svg>';
+}
+function figSign(pos, ang){
+  const W = 360, c = 180, rO = 172, rI = 138, P = (r,l) => FP(c,r,l);
+  let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="星座の図">`;
+  s += `<circle cx="${c}" cy="${c}" r="${rO}" fill="var(--wheel)" stroke="var(--line)"/>`;
   for (let i = 0; i < 12; i++){
-    const [x0,y0] = P(rI, i*30), [x1,y1] = P(rS, i*30);
+    const [x0,y0] = P(rO, i*30), [x1,y1] = P(rI, i*30);
     s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--line)"/>`;
-    const [tx,ty] = P((rI+rS)/2, i*30+15);
-    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="9" fill="var(--muted)">${SIGNS[i].replace('座','')}</text>`;
+    const [tx,ty] = P((rO+rI)/2, i*30+15);
+    s += `<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="12" font-weight="700" fill="var(--ink)">${SIGNS[i].replace('座','')}</text>`;
   }
-  s += `<circle cx="${c}" cy="${c}" r="${rS}" fill="none" stroke="var(--line)"/>`;
-  const sorted = pos.map((p,i)=>({...p,i})).sort((a,b)=>a.l-b.l);
-  const ring = {};
-  sorted.forEach((p, k) => {
-    let lvl = 0;
-    for (let j = 0; j < k; j++){ const q = sorted[j]; if (Math.abs(q.l - p.l) < 9 && ring[q.i] === lvl) lvl++; }
-    ring[p.i] = lvl;
-  });
-  pos.forEach((p, i) => {
-    const r = rP - ring[i]*24;
-    const [x,y] = P(r, p.l), [mx,my] = P(rS, p.l);
-    const moon = p.g === '月';
-    s += `<line x1="${mx}" y1="${my}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width=".6"/>`;
-    s += `<circle cx="${x}" cy="${y}" r="11" fill="${moon ? 'var(--gold)' : 'var(--panel)'}" stroke="${moon ? 'var(--gold)' : 'var(--moon)'}"/>`;
-    s += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="12" font-weight="700" fill="${moon ? 'var(--bg)' : 'var(--ink)'}">${p.g}</text>`;
-  });
+  s += `<circle cx="${c}" cy="${c}" r="${rI}" fill="var(--bg)" stroke="var(--line)"/>`;
   if (ang){
     [['asc','東'],['mc','南']].forEach(([k,lab]) => {
-      const [x0,y0] = P(rS, ang[k]), [x1,y1] = P(rO+4, ang[k]), [tx,ty] = P(rO-2, ang[k]);
-      s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--gold)" stroke-width="2"/>`;
+      const [x0,y0] = P(30, ang[k]), [x1,y1] = P(rO+4, ang[k]), [tx,ty] = P(rO-2, ang[k]);
+      s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--gold)" stroke-width="1.5" stroke-dasharray="3 3"/>`;
       s += `<circle cx="${tx}" cy="${ty}" r="9" fill="var(--gold)"/><text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill="var(--bg)">${lab}</text>`;
     });
   }
+  const R = stackR(pos, 116, 22, 9);
+  pos.forEach((p, i) => {
+    const r = R(i), [x,y] = P(r, p.l), [mx,my] = P(rI, p.l), moon = p.g === '月', sun = p.g === '日';
+    s += `<line x1="${mx}" y1="${my}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width=".7"/>`;
+    s += `<circle cx="${x}" cy="${y}" r="11" fill="${sun ? '#e0a52b' : moon ? 'var(--gold)' : 'var(--panel)'}" stroke="${sun || moon ? 'var(--gold)' : 'var(--moon)'}"/>`;
+    s += `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="12" font-weight="700" fill="${sun || moon ? 'var(--bg)' : 'var(--ink)'}">${p.g}</text>`;
+  });
+  s += earthSvg(c, 16, '');
   return s + '</svg>';
 }
+function figHelio(birth){
+  const W = 360, c = 180, P = (r,l) => FP(c,r,l), a = ayan(birth);
+  const OR = [['Mercury','水',30],['Venus','金',46],['Earth','地',62],['Mars','火',78],['Jupiter','木',98],['Saturn','土',117],['Uranus','天',135],['Neptune','海',152],['Pluto','冥',169]];
+  const pts = OR.map(([b,g,r]) => { const v = A.HelioVector(b, birth); const l = ((A.Ecliptic(v).elon - a) % 360 + 360) % 360; return {b,g,r,l,xy:P(r,l)}; });
+  const E = pts.find(p => p.b === 'Earth');
+  let s = `<svg viewBox="0 0 ${W} ${W}" role="img" aria-label="惑星の図（太陽系）">`;
+  s += `<circle cx="${c}" cy="${c}" r="176" fill="var(--wheel)"/>`;
+  OR.forEach(([,,r]) => { s += `<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--line)" stroke-width=".8"/>`; });
+  pts.filter(p => p.b !== 'Earth').forEach(p => { s += `<line x1="${E.xy[0]}" y1="${E.xy[1]}" x2="${p.xy[0]}" y2="${p.xy[1]}" stroke="var(--gold)" stroke-width=".7" opacity=".55" stroke-dasharray="2 3"/>`; });
+  s += `<circle cx="${c}" cy="${c}" r="12" fill="#e0a52b" stroke="#f3cf73" stroke-width="3"/><text x="${c}" y="${c}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="11" font-weight="700" fill="#fff">日</text>`;
+  pts.forEach(p => {
+    const [x,y] = p.xy;
+    if (p.b === 'Earth'){
+      s += `<circle cx="${x}" cy="${y}" r="10" fill="#3d7fc1" stroke="#9cc8f0" stroke-width="1.5"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="10" font-weight="700" fill="#fff">地</text>`;
+    } else {
+      s += `<circle cx="${x}" cy="${y}" r="9" fill="var(--panel)" stroke="var(--moon)"/><text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="var(--mincho)" font-size="10" font-weight="700" fill="var(--ink)">${p.g}</text>`;
+    }
+  });
+  return s + '</svg>';
+}
+function drawFig(){
+  const f = window.__fig; if (!f) return;
+  const which = document.querySelector('.figtabs button.on').dataset.fig;
+  let cap = '';
+  if (which === 'shuku'){
+    $('wheel').innerHTML = figShuku(f.moonL, f.moonNak);
+    cap = `真ん中が地球（あなた）。生まれた瞬間、月は地球から見て${f.moonNak}宿の方向にいました。宿曜では、この月の宿が本命宿です。`;
+  } else if (which === 'sign'){
+    $('wheel').innerHTML = figSign(f.pos, f.ang);
+    cap = `真ん中が地球。地球から見て、太陽・月・惑星がどの星座の方向にあったかを表します。${f.ang ? '「東」「南」はアセンダントと天頂です。' : ''}`;
+  } else {
+    $('wheel').innerHTML = figHelio(f.birth);
+    cap = '太陽を中心にした、生まれた瞬間の太陽系の並びです。点線は地球から各惑星を見た方向で、この方向が星座の図や宿曜の図の位置になります。軌道の大きさは実際の比率ではありません。';
+  }
+  $('figcap').textContent = cap;
+}
+document.querySelector('.figtabs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('.figtabs button').forEach(x => x.classList.toggle('on', x === b));
+  drawFig();
+});
 
 const $ = id => document.getElementById(id);
 function store(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
@@ -565,9 +530,9 @@ function load(k){ try { return localStorage.getItem(k); } catch(e){ return null;
 
 const PLACES = [['北海道',43.06,141.35],['青森',40.82,140.74],['岩手',39.70,141.15],['宮城',38.27,140.87],['秋田',39.72,140.10],['山形',38.24,140.36],['福島',37.75,140.47],['茨城',36.34,140.45],['栃木',36.57,139.88],['群馬',36.39,139.06],['埼玉',35.86,139.65],['千葉',35.61,140.12],['東京',35.69,139.69],['神奈川',35.45,139.64],['新潟',37.90,139.02],['富山',36.70,137.21],['石川',36.59,136.63],['福井',36.07,136.22],['山梨',35.66,138.57],['長野',36.65,138.18],['岐阜',35.39,136.72],['静岡',34.98,138.38],['愛知',35.18,136.91],['三重',34.73,136.51],['滋賀',35.00,135.87],['京都',35.02,135.76],['大阪',34.69,135.52],['兵庫',34.69,135.18],['奈良',34.69,135.83],['和歌山',34.23,135.17],['鳥取',35.50,134.24],['島根',35.47,133.05],['岡山',34.66,133.93],['広島',34.40,132.46],['山口',34.19,131.47],['徳島',34.07,134.56],['香川',34.34,134.04],['愛媛',33.84,132.77],['高知',33.56,133.53],['福岡',33.61,130.42],['佐賀',33.25,130.30],['長崎',32.74,129.87],['熊本',32.79,130.74],['大分',33.24,131.61],['宮崎',31.91,131.42],['鹿児島',31.56,130.56],['沖縄',26.21,127.68]];
 const GLAND = {
-  Saturn:['性腺','忍耐強さ','衝動的になる'], Neptune:['ライディッヒ腺（丹田のあたり）','豊かな感情、誠実さ','感情の不安定さ'],
-  Mars:['副腎','情熱、義憤','激しい怒り'], Venus:['胸腺','愛情深さ、美しいものを愛でる','嫉妬、怠惰'],
-  Uranus:['甲状腺','意志力','わがまま、頑固'], Mercury:['松果体','知性、論理','あら探し、追い詰める批判'],
+  Saturn:['性腺','忍耐強さ、変化をくぐる力','衝動的、突然の変化に振り回される'], Neptune:['ライディッヒ腺（丹田のあたり）','豊かな感情、誠実さ','感情の不安定さ'],
+  Mars:['副腎','情熱、義憤、動く力','激しい怒り、争い'], Venus:['胸腺','愛情深さ、美しいものを愛でる','嫉妬、怠惰'],
+  Uranus:['甲状腺','意志力、真理から出る熱意','わがまま、頑固、自分を甘やかす極端さ'], Mercury:['松果体','知性、論理','あら探し、追い詰める批判'],
   Jupiter:['脳下垂体','洞察力、未来を見通す力','妄想'], Sun:['（肉体全体）','',''], Moon:['（心全体）','',''], Pluto:['（腺の対応は語られていない）','直感、霊的な進歩','自己中心']
 };
 const D2R = Math.PI/180;
@@ -815,7 +780,8 @@ function run(){
   const keys = moonText.replace(/宿/g,'').split('・').map(n => `${n}宿：${KEY[n]}`);
   $('honmeiKey').textContent = keys.join(' ／ ');
   const ang = (!noTime && isFinite(lat) && isFinite(lon)) ? angles(birth, lat, lon) : null;
-  $('wheel').innerHTML = wheel(pos, nak(moon.l), ang);
+  window.__fig = { pos, ang, birth, moonL: moon.l, moonNak: nak(moon.l) };
+  drawFig();
   if (!ang){
     $('angles').innerHTML = '<p class="note">「時刻がわからない」のチェックを外し、生まれた時刻と場所を入れると出ます。アセンダントは4分ほどで1度動くので、時刻はできるだけ正確に。</p>';
   } else {
@@ -868,7 +834,13 @@ function run(){
   const CONJ_NOTE = {
     'Sun-Neptune':'ケイシーのリーディング（1100-27）では、海王星が太陽と重なると、その時期を通して霊的なことや神秘的な高い影響に心が開かれやすくなる、とされます。',
     'Sun-Pluto':'ケイシーは冥王星を、まだ展開中で定まっていない、霊的な進歩に関わる力と語っています。',
-    'Jupiter-Saturn':'約20年に一度の「グレート・コンジャンクション」。広がりと試練が同じ場所にある配置です。'
+    'Jupiter-Saturn':'約20年に一度の「グレート・コンジャンクション」。ケイシーのリーディングでは、木星と土星の組み合わせは突然の変化をもたらす一方（1043-1）、インスピレーションへの感受性を高め（559-7）、視野を広げる（608-7）と語られています。',
+    'Venus-Mars':'リーディングでは、金星と火星の組み合わせは、心や人間関係に風変わりな関わりを生み（357-2、453-1）、小さないさかいも起きやすい（341-1）とされます。',
+    'Jupiter-Uranus':'リーディングでは、気高い影響（182-2）、慈悲・正義・調和に和らげられた純粋な理性（272-4）、芸術などでの並外れた能力（38-1）と語られています。',
+    'Venus-Jupiter':'リーディングでは、崇高な力と大きなビジョン（221-2）、愛が人生の救いの恵みになる（279-4）一方、空想の城を築く夢見がちなところ（275-11）も語られています。',
+    'Mercury-Jupiter':'リーディングでは、知性と広い視野が組むが、どの状態もはっきりさせる必要がある（357-2）とされます。',
+    'Venus-Neptune':'リーディングでは、人付き合いや関わる人のタイプに独特さが出る（640-1）とされます。',
+    'Mars-Saturn':'リーディングでは、由来の定かでない突然の変化を、生まれつき抱える（699-1）とされます。'
   };
   const PC = p => p.b === 'Sun' ? 'その人の芯' : p.b === 'Moon' ? '感情、素の自分' : p.c.replace(/[（）]/g,'');
   const PAIR_R = {
@@ -979,6 +951,38 @@ try {
 $('time').disabled = $('notime').checked;
 togglePlace();
 document.querySelectorAll('#result h2, #result h3, .glossary dt, .glossary h3, .glossary table, .sub').forEach(rubyify);
+})();
+
+// 星空
+(function(){
+  const cv = document.getElementById('sky'); if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d'); let W, H, stars = [];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function build(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+    seed = 7; stars = [];
+    const n = Math.round(innerWidth * innerHeight / 3200);
+    for (let k = 0; k < n; k++){
+      const t = rnd();
+      stars.push({x: rnd()*W, y: rnd()*H, r: (t < .9 ? .3 + rnd()*.8 : 1 + rnd()*1.1) * dpr,
+        a: .35 + rnd()*.6, c: t > .97 ? '255,214,140' : t > .93 ? '170,200,255' : '255,255,255', tw: rnd() < .12, ph: rnd()*6.28});
+    }
+  }
+  function draw(time){
+    ctx.clearRect(0,0,W,H);
+    for (const s of stars){
+      const a = s.a;
+      ctx.fillStyle = `rgba(${s.c},${a})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+    }
+  }
+  build(); draw(0);
+  addEventListener('resize', () => { build(); draw(performance.now()); });
+  // またたき：少数の星だけCSSで（軽い）
+  const tw = document.createElement('div'); tw.className = 'twinkles'; tw.setAttribute('aria-hidden','true');
+  let sd = 11; const r2 = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  for (let k = 0; k < 14; k++){ const d = document.createElement('i'); d.style.left = (r2()*100) + '%'; d.style.top = (r2()*100) + '%'; d.style.animationDelay = (r2()*6).toFixed(2) + 's'; d.style.animationDuration = (4 + r2()*4).toFixed(2) + 's'; tw.appendChild(d); }
+  document.body.appendChild(tw);
 })();
 </script>
 </body>
