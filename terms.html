@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>利用規約｜生まれた日の空</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82);
+  --mincho:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --gothic:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); } }
+:root[data-theme="dark"]{ --bg:#070b1f; --panel:rgba(20,28,70,.9); --ink:#f3f5fd; --muted:#c3cae9; --line:rgba(170,180,225,.35);
+  --gold:#e8c46a; --gold-soft:rgba(232,196,106,.16); --moon:#c9d2f2; --wheel:rgba(14,21,56,.82); }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--gothic);font-size:16px;line-height:1.8}
+main{max-width:640px;margin:0 auto;padding:28px 18px 60px}
+h1{font-family:var(--mincho);font-weight:700;font-size:2.1rem;letter-spacing:.12em;margin:0 0 4px;line-height:1.3}
+.sub{color:var(--muted);font-size:.9rem;margin:0 0 24px}
+h2{font-family:var(--mincho);font-weight:700;font-size:1.3rem;letter-spacing:.06em;margin:40px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:0 0 12px}
+.note{color:var(--muted);font-size:.85rem}
+form{display:grid;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+label{display:grid;gap:4px;font-size:.9rem;color:var(--muted)}
+select,input[type=number],input[type=date],input[type=time]{font:inherit;font-size:1.05rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;width:100%}
+.check{display:flex;align-items:center;gap:8px;color:var(--ink)}
+.check input{width:20px;height:20px}
+button{font:inherit;font-weight:700;letter-spacing:.1em;background:var(--ink);color:var(--bg);border:0;border-radius:4px;padding:12px;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#result{display:none}
+.wheelwrap{margin:12px auto 4px;max-width:360px}
+.figtabs{display:flex;gap:6px;margin:22px 0 0}
+.figtabs button{flex:1;font:inherit;font-size:.85rem;padding:7px 4px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);cursor:pointer}
+.figtabs button.on{border-color:var(--gold);color:var(--gold);font-weight:700}
+.figcap{text-align:center;margin:0 0 10px}
+.wheelwrap svg{width:100%;height:auto;display:block}
+.honmei{text-align:center;margin:8px 0 4px}
+.honmei .big{font-family:var(--mincho);font-weight:700;font-size:3.2rem;letter-spacing:.15em;color:var(--gold);line-height:1.2}
+.honmei .what{color:var(--muted);font-size:.9rem}
+.compare{text-align:center;color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:420px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.82rem}
+td.k{font-family:var(--mincho);font-weight:700;white-space:nowrap}
+td.e{color:var(--muted);font-size:.85rem}
+textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:12px;line-height:1.8}
+.saved{font-size:.8rem;color:var(--muted);height:1.4em}
+.err{color:#c0392b;font-weight:500}
+.statbtn{width:100%;margin:18px 0 0;font:inherit;font-weight:700;padding:12px;border-radius:8px;border:2px solid var(--ink);background:var(--panel);color:var(--ink);cursor:pointer;font-family:"DotGothic16",var(--gothic);letter-spacing:.08em}
+.st-overlay{position:fixed;inset:0;z-index:70;background:#05071a;overflow:auto;padding:calc(16px + env(safe-area-inset-top,0px)) 12px calc(24px + env(safe-area-inset-bottom,0px))}
+.st-overlay[hidden]{display:none}
+.st-win{max-width:460px;margin:0 auto;background:#0e1440;color:#f4f1e6;border:3px solid #f4f1e6;outline:3px solid #0e1440;box-shadow:0 0 0 6px #f4f1e6;border-radius:6px;padding:16px 16px 12px;font-family:"DotGothic16","Zen Kaku Gothic New",monospace;line-height:1.7}
+.st-win h4{margin:14px 0 4px;color:#ffd96a;font-weight:400;border-bottom:1px dashed #5a63a8}
+.st-win h4::before{content:'◆ '}
+.st-win ul{list-style:none;margin:0;padding:0}
+.st-win li{margin:4px 0}
+.st-win li small,.st-row small{display:block;color:#9aa3d8;font-size:.75rem}
+.st-row small{display:inline;margin-left:4px}
+.st-row{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.st-star{color:#ffd96a;letter-spacing:.1em}
+.st-head{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #f4f1e6;padding-bottom:8px;margin-bottom:6px}
+.st-head small{color:#9aa3d8;font-size:.72rem}
+.st-name{font-size:1.5rem;outline:none;border-bottom:1px dotted #5a63a8;min-width:6em}
+.st-lv{text-align:right}
+.st-dim{color:#9aa3d8;font-size:.75rem;margin:4px 0}
+.st-msg{margin:16px 0 0;color:#ffd96a}
+.st-close{display:block;margin:18px auto 0;font-family:"DotGothic16",monospace;font-size:1rem;background:none;border:none;color:#f4f1e6;cursor:pointer}
+.pcards{display:grid;gap:10px;margin-top:8px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.pcard.outer{opacity:.85}
+.pcard.sun{border-color:var(--gold);box-shadow:inset 3px 0 0 var(--gold)}
+.pc b{color:var(--ink);font-weight:500}
+.ph{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.ph .pn{font-family:var(--mincho);font-weight:700;font-size:1.15rem}
+.ph .pt{font-size:.85rem;color:var(--gold)}
+.pw{display:flex;flex-wrap:wrap;gap:6px 14px;font-weight:500}
+.pw small{display:block;font-weight:400;font-size:.78rem;color:var(--muted)}
+.ps{margin:8px 0 4px;line-height:1.8}
+.pc{margin:0;font-size:.8rem;color:var(--muted)}
+.base{display:grid;gap:4px;font-size:.9rem;color:var(--muted);margin:6px 0 10px}
+.aisho{display:flex;gap:8px}.aisho input{flex:1}.aisho button{white-space:nowrap;padding:8px 14px}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:4px;background:var(--bg);padding:10px 0 8px;margin:18px 0 4px;border-bottom:1px solid var(--line)}
+.tabs button{flex:1;font:inherit;font-size:.88rem;padding:9px 4px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--muted);cursor:pointer}
+.tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
+.panel-lead{margin:10px 0 0}
+.fcard{background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:14px 16px;margin:16px 0}
+.howto small{color:var(--muted);font-size:.82rem}
+.fcard ul{margin:0;padding-left:0;list-style:none}
+.fcard li{margin:4px 0}
+.tag{display:inline-block;font-size:.7rem;padding:0 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
+.tag.star{background:var(--gold);color:var(--bg)}
+.tag.cal{border:1px solid var(--muted);color:var(--muted)}
+.group{display:grid;gap:4px;margin:30px 0 4px;padding:12px 14px;border-radius:10px}
+.group b{font-family:var(--mincho);font-size:1.15rem}
+.group span{font-size:.85rem;color:var(--muted)}
+.group.star{background:var(--gold-soft);border:1px solid var(--gold)}
+.group.cal{background:var(--panel);border:1px dashed var(--muted)}
+tr.now td{background:var(--gold-soft)}
+.yomi27{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px;margin-top:8px}
+.yk{display:flex;flex-direction:column;align-items:center;border:1px solid var(--line);border-radius:6px;padding:4px 0;font-size:.75rem;color:var(--muted);background:var(--panel)}
+.yk b{font-family:var(--mincho);font-size:1.2rem;color:var(--ink)}
+rt{font-size:.5em;color:var(--muted);font-weight:400;font-family:var(--gothic)}
+.helpbar{display:flex;gap:8px;margin:0 0 18px}
+.helpbar a,.helpbar button{flex:1;text-align:center;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 0;font:inherit;font-size:.85rem;color:var(--muted);text-decoration:none;cursor:pointer}
+.fb-overlay{position:fixed;inset:0;background:rgba(10,14,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:env(safe-area-inset-top,0px) 0 0}
+.fb-overlay[hidden]{display:none}
+.fb-box{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:14px 14px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px));display:grid;gap:10px}
+.fb-box input[type=text],.fb-box textarea{font:inherit;width:100%;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px;line-height:1.7}
+.fb-label{font-size:.9rem;color:var(--muted)}
+.fb-kinds{display:flex;flex-wrap:wrap;gap:6px}
+.fb-kinds button{font:inherit;font-size:.85rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+.fb-kinds button.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+.fb-cancel{background:transparent!important;color:var(--muted)!important;font-weight:400!important}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:.9rem;z-index:60;max-width:90%;text-align:center}
+.jintai{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:340px;margin:8px auto 14px}
+.jintai .cell{border:1px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;background:var(--panel)}
+.jintai .cell.center{border-color:var(--gold);background:var(--gold-soft)}
+.jintai .dir{font-size:.72rem;color:var(--muted)}
+.jintai .st{font-family:var(--mincho);font-weight:700;font-size:1.05rem}
+.pillars td,.pillars th{text-align:center}
+.pillars td:first-child{text-align:left;white-space:nowrap}
+.big2{font-size:1.3rem}
+.gogyo div{display:flex;align-items:center;gap:8px;margin:4px 0}
+.gogyo span{font-family:var(--mincho);font-weight:700;width:1.5em}
+.gogyo i{display:block;height:12px;background:var(--gold);border-radius:3px;min-width:2px}
+.gogyo b{font-weight:500;color:var(--muted);font-size:.85rem}
+.glossary dl{margin:0}
+.glossary h3{font-family:var(--mincho);font-size:1.15rem;margin:32px 0 8px;padding-left:10px;border-left:3px solid var(--gold)}
+.glossary dt{font-weight:700;margin-top:14px}
+.glossary dd{margin:4px 0 0;line-height:1.85}
+.glossary table{min-width:360px;margin-top:8px;font-size:.85rem}
+.toc{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.toc a{font-size:.82rem;padding:4px 10px;border:1px solid var(--line);border-radius:999px;color:var(--ink);text-decoration:none;background:var(--panel)}
+a{color:var(--gold)}
+a.q{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--gold);font-size:.75rem;text-decoration:none;vertical-align:middle;font-family:var(--gothic)}
+.cycle{display:flex;gap:4px;margin:4px 0 8px}
+.cycle span{flex:1;text-align:center;padding:6px 0;border:1px solid var(--line);border-radius:4px;font-family:var(--mincho);color:var(--muted)}
+.cycle span.on{background:var(--gold);border-color:var(--gold);color:var(--bg);font-weight:700}
+details.help{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:0 0 20px;font-size:.92rem}
+details.help summary{cursor:pointer;font-weight:500;color:var(--gold)}
+details.help p{margin:10px 0 0}
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.8rem}
+footer p{margin:0 0 8px}
+.pull{display:flex;gap:12px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.pull input{width:20px;height:20px;margin-top:4px;flex:none}
+.pull .pn{font-family:var(--mincho);font-weight:700;min-width:3.5em}
+.pull .pt{flex:1}
+.pull .pp{font-size:.78rem;color:var(--muted);white-space:nowrap}
+.pull:has(input:checked) .pn{color:var(--gold)}
+#pullText{margin-top:12px}
+@media (prefers-reduced-motion:no-preference){
+  #result.show .wheelwrap{animation:rise 1.2s ease-out}
+  @keyframes rise{from{opacity:0;transform:rotate(-12deg)}to{opacity:1;transform:none}}
+}
+
+/* 宇宙 */
+body{font-size:17px;font-weight:500;line-height:1.9;text-shadow:0 1px 2px rgba(0,0,0,.65)}
+.note{font-size:.9rem}
+.pcard,.fcard,form,.fb-box,details.help,.group{background-color:rgba(18,25,64,.92)!important}
+.pc,.pw small,.ph .pt{font-size:.85rem}
+.pc{color:var(--muted)}
+td.e,th{color:var(--muted)}
+input,select,textarea,button{text-shadow:none}
+body{background:
+  radial-gradient(1100px 650px at 85% -12%, rgba(123,111,214,.30), transparent 62%),
+  radial-gradient(800px 560px at -15% 28%, rgba(61,127,193,.20), transparent 62%),
+  radial-gradient(700px 500px at 60% 110%, rgba(232,196,106,.08), transparent 60%),
+  linear-gradient(180deg,#070b1f 0%,#0b1131 55%,#070b1f 100%);
+  background-attachment:fixed;background-color:#070b1f}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.twinkles{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.twinkles i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 6px 1px rgba(255,255,255,.8);opacity:.15;animation:tw 5s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.12}50%{opacity:.95}}
+@media (prefers-reduced-motion: reduce){.twinkles i{animation:none;opacity:.6}}
+main{position:relative}
+h1{color:#f4f1e6;text-shadow:0 0 22px rgba(232,196,106,.28),0 0 2px rgba(255,255,255,.4)}
+h2{border-bottom-color:rgba(154,164,207,.22)}
+
+form{border-radius:14px;box-shadow:0 0 0 1px rgba(154,164,207,.12),0 20px 50px -30px rgba(123,111,214,.6)}
+form button[type=submit]{background:linear-gradient(180deg,#f0d385,#d9ae4a);color:#141a3e;border-radius:999px;box-shadow:0 0 24px -6px rgba(232,196,106,.7)}
+select,input[type=number],input[type=date],input[type=time],input[type=text],textarea{background:rgba(7,11,31,.6)!important;color:var(--ink)}
+option{background:#121a3e;color:#e9ecf8}
+.tabs{background:rgba(7,11,31,.94)}
+.tabs button.on{background:var(--gold);color:#141a3e;border-color:var(--gold)}
+.tabs button{letter-spacing:.02em;font-size:.82rem;white-space:nowrap}
+.wheelwrap svg{filter:drop-shadow(0 0 18px rgba(123,111,214,.35))}
+.honmei .big{text-shadow:0 0 18px rgba(232,196,106,.45)}
+.pcard,.fcard{border-color:rgba(154,164,207,.2)}
+.fb-box{background:#0d1434}
+a{color:var(--gold)}
+
+.site-foot{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:10px}
+.foot-links a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line)}
+.legal h2{font-size:1.1rem;margin-top:28px}
+.legal p,.legal li{line-height:1.9}
+</style>
+
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<main>
+  <p style="margin:0 0 6px"><a href="index.html">← 生まれた日の空</a></p>
+  <article class="legal">
+  <h1>利用規約</h1>
+  <p>本規約は、「生まれた日の空」（以下「本サイト」）の利用条件を定めるものです。本サイトを利用した方は、本規約に同意したものとみなします。</p>
+  <h2>本サイトの性質</h2>
+  <p>本サイトの内容は、宿曜・西洋占星術・エドガー・ケイシーのリーディングなどを参考にした読み物です。占星術は科学的に確かめられたものではなく、結果は当たり外れや将来を保証するものではありません。医療・法律・お金などの大切な判断は、本サイトの内容だけで行わず、専門家にご相談ください。</p>
+  <h2>著作権</h2>
+  <p>本サイトの文章・デザイン・図は運営者に帰属します。個人で楽しむ範囲を超えて、無断で転載・複製することはご遠慮ください。結果の画面をSNSなどで紹介していただくのは歓迎します。</p>
+  <h2>禁止事項</h2>
+  <ul><li>本サイトの運営を妨げる行為</li><li>ご意見箱に、他人を傷つける内容や個人情報を書き込む行為</li><li>法令や公序良俗に反する行為</li></ul>
+  <h2>免責</h2>
+  <p>本サイトの利用によって生じた損害について、運営者は責任を負いません。内容は予告なく変更・中止することがあります。</p>
+  <h2>有料サービス</h2>
+  <p>有料サービスを始める際には、料金・支払い方法・返金などの条件を本規約と「特定商取引法に基づく表記」に追記します。</p>
+  </article>
+  <footer class="site-foot">
+    <nav class="foot-links">
+      <a href="index.html">生まれた日の空</a><a href="aishou.html">ふたりの相性</a><a href="yougo.html">用語集</a><a href="manual.html">使い方</a><a href="privacy.html">プライバシーポリシー</a><a href="terms.html">利用規約</a><a href="tokushoho.html">特定商取引法に基づく表記</a>
+    </nav>
+    <p>占星術は、まだ科学では確かめられていない「未科学」の領域です。当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</p>
+  </footer>
+</main>
+<script>
+(function(){
+const $ = id => document.getElementById(id);
+})();
+// 星空
+(function(){
+  const cv = document.getElementById('sky'); if (!cv || !cv.getContext) return;
+  const ctx = cv.getContext('2d'); let W, H, stars = [];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  function build(){
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+    seed = 7; stars = [];
+    const n = Math.round(innerWidth * innerHeight / 3200);
+    for (let k = 0; k < n; k++){
+      const t = rnd();
+      stars.push({x: rnd()*W, y: rnd()*H, r: (t < .9 ? .3 + rnd()*.8 : 1 + rnd()*1.1) * dpr,
+        a: .35 + rnd()*.6, c: t > .97 ? '255,214,140' : t > .93 ? '170,200,255' : '255,255,255', tw: rnd() < .12, ph: rnd()*6.28});
+    }
+  }
+  function draw(time){
+    ctx.clearRect(0,0,W,H);
+    for (const s of stars){
+      const a = s.a;
+      ctx.fillStyle = `rgba(${s.c},${a})`; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+    }
+  }
+  build(); draw(0);
+  addEventListener('resize', () => { build(); draw(performance.now()); });
+  // またたき：少数の星だけCSSで（軽い）
+  const tw = document.createElement('div'); tw.className = 'twinkles'; tw.setAttribute('aria-hidden','true');
+  let sd = 11; const r2 = () => (sd = (sd * 16807) % 2147483647) / 2147483647;
+  for (let k = 0; k < 14; k++){ const d = document.createElement('i'); d.style.left = (r2()*100) + '%'; d.style.top = (r2()*100) + '%'; d.style.animationDelay = (r2()*6).toFixed(2) + 's'; d.style.animationDuration = (4 + r2()*4).toFixed(2) + 's'; tw.appendChild(d); }
+  document.body.appendChild(tw);
+})();
+
+</script>
+</body>
+</html>

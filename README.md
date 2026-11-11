@@ -44,6 +44,10 @@
 | index.html | アプリ本体 |
 | manual.html | 使い方マニュアル |
 | yougo.html | 用語集 |
+| aishou.html | ふたりの相性（宿曜） |
+| privacy.html | プライバシーポリシー |
+| terms.html | 利用規約 |
+| tokushoho.html | 特定商取引法に基づく表記（有料サービス開始時に記載） |
 | README.md | この説明書き |
 
 ## ご意見

@@ -101,6 +101,7 @@ textarea{font:inherit;width:100%;min-height:140px;background:var(--panel);color:
 .tabs button.on{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700}
 .panel-lead{margin:10px 0 0}
 .fcard{background:var(--panel);border:1px solid var(--gold);border-radius:10px;padding:14px 16px;margin:16px 0}
+.howto small{color:var(--muted);font-size:.82rem}
 .fcard ul{margin:0;padding-left:0;list-style:none}
 .fcard li{margin:4px 0}
 .tag{display:inline-block;font-size:.7rem;padding:0 6px;border-radius:4px;margin-right:6px;vertical-align:1px}
@@ -169,6 +170,48 @@ footer p{margin:0 0 8px}
   @keyframes rise{from{opacity:0;transform:rotate(-12deg)}to{opacity:1;transform:none}}
 }
 
+
+main > h1:first-of-type{font-size:1.05rem;letter-spacing:.3em;color:var(--gold);margin-bottom:2px}
+.catch{font-family:var(--mincho);font-weight:700;font-size:1.6rem;line-height:1.6;margin:6px 0 10px;color:#f4f1e6;text-shadow:0 0 16px rgba(232,196,106,.25)}
+.entry{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 14px}
+.entry a{display:block;text-decoration:none;color:var(--ink);background:rgba(18,25,64,.92);border:1px solid rgba(232,196,106,.45);border-radius:12px;padding:10px 12px}
+.entry small{display:block;color:var(--gold);font-size:.75rem}
+.entry b{font-family:var(--mincho);font-size:1rem}
+.shikumi{margin-top:56px}
+.shikumi .lead2{font-family:var(--mincho);font-size:1.2rem;color:var(--gold)}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.cards a{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink);background:rgba(18,25,64,.92);border:1px solid var(--line);border-radius:12px;padding:12px}
+.cards b{font-family:var(--mincho);font-size:1.02rem}
+.cards span{font-size:.82rem;color:var(--muted);line-height:1.7;flex:1}
+.cards i{font-style:normal;font-size:.78rem;color:var(--gold)}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:12px}
+.foot-links a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--line)}
+@media (max-width:360px){.cards,.entry{grid-template-columns:1fr}}
+
+.headline{text-align:center;margin:20px 0 6px;padding:22px 14px;border-radius:16px;background:radial-gradient(120% 140% at 50% 0%, rgba(232,196,106,.18), rgba(18,25,64,.92) 60%);border:1px solid rgba(232,196,106,.35)}
+.hl-name{margin:0 0 6px;color:var(--muted);letter-spacing:.2em;font-size:.9rem}
+.hl-main{margin:0;font-family:var(--mincho);font-weight:700;font-size:1.45rem;line-height:1.6;color:#f4f1e6;text-shadow:0 0 16px rgba(232,196,106,.3)}
+.hl-sub{margin:10px 0 0;font-size:.82rem;color:var(--gold)}
+.s3{display:grid;gap:6px;margin-top:6px}
+.s3 div{border-radius:10px;padding:8px 12px;font-size:.92rem;line-height:1.75}
+.s3 span{display:block;font-size:.75rem;margin-bottom:2px;font-weight:700}
+.s3 span::before{content:'● '}
+.s3a{background:rgba(232,196,106,.13)}.s3a span{color:#f0d385}
+.s3b{background:rgba(110,160,230,.14)}.s3b span{color:#9cc4f5}
+.s3c{background:rgba(170,130,230,.15)}.s3c span{color:#c9aef2}
+
+.scenes{display:grid;gap:8px;margin:8px 0 10px}
+.scene{background:rgba(18,25,64,.92);border:1px solid rgba(232,196,106,.35);border-radius:12px;padding:0}
+.scene summary{list-style:none;cursor:pointer;padding:12px 40px 12px 14px;position:relative}
+.scene summary::-webkit-details-marker{display:none}
+.scene summary::after{content:'＋';position:absolute;right:14px;top:14px;color:var(--gold)}
+.scene[open] summary::after{content:'－'}
+.scene summary b{display:block;font-family:var(--mincho);font-size:1.08rem}
+.scene summary small{display:block;color:var(--gold);font-size:.82rem;margin-top:2px}
+.sc-body{padding:0 14px 12px}
+.sc-row{padding:8px 0;border-top:1px solid var(--line);line-height:1.8}
+.sc-row span{display:block;font-size:.8rem;color:var(--muted)}
+.sc-row small{font-size:.75rem}
 /* 宇宙 */
 body{font-size:17px;font-weight:500;line-height:1.9;text-shadow:0 1px 2px rgba(0,0,0,.65)}
 .note{font-size:.9rem}
@@ -210,14 +253,22 @@ a{color:var(--gold)}
 <canvas id="sky" aria-hidden="true"></canvas>
 <main>
   <h1>生まれた日の空</h1>
+  <p class="catch">あなたが生まれた瞬間、<br>月と惑星は、どこにいたのか。</p>
   <p class="sub">生まれた瞬間の、実際の星の位置から、宿曜の宿・星座・ケイシーの惑星の読み方を出します。</p>
   <div class="helpbar">
     <a href="manual.html" target="_blank" rel="noopener">❓ 使い方</a>
     <button id="fbBtn" type="button">💬 ご意見箱</button>
   </div>
+  <nav class="entry">
+    <a href="aishou.html"><small>無料</small><b>ふたりの相性を見る</b></a>
+    <a href="#shikumi"><small>はじめての方へ</small><b>生まれた日の空の仕組み</b></a>
+  </nav>
   <p class="note" id="top"><a href="yougo.html" target="_blank" rel="noopener">用語集</a>で、宿・アセンダント・合などの言葉を詳しく説明しています。結果の見出しの横の「？」からも飛べます。</p>
 
   <form id="f">
+    <label>おなまえ（なくても大丈夫です）
+      <input type="text" id="nm" autocomplete="nickname" placeholder="例：ハナコ">
+    </label>
     <label>生年月日
       <input type="date" id="date" required>
     </label>
@@ -242,6 +293,7 @@ a{color:var(--gold)}
   <div id="msg"></div>
 
   <section id="result">
+    <div class="headline" id="headline"></div>
     <button type="button" id="statBtn" class="statbtn">🎮 ステータス画面で見る</button>
     <nav class="tabs" role="tablist">
       <button type="button" class="on" data-tab="born">生まれ持ったもの</button>
@@ -270,8 +322,19 @@ a{color:var(--gold)}
     <div class="aisho"><input type="date" id="pDate" aria-label="相手の生年月日"><button type="button" id="pBtn">相性を見る</button></div>
     <div id="aishoOut"></div>
 
+    <h2>場面ごとのあなた</h2>
+    <p class="note">押すと開きます。星の配置から、人との関わり・お金・仕事の場面での出方を読みます。</p>
+    <div id="scenes" class="scenes"></div>
     <h2>天体ごとの位置 <a class="q" href="yougo.html#g-sign" target="_blank" rel="noopener" aria-label="天体ごとの位置の説明">？</a></h2>
-    <div class="fcard" style="margin-top:8px"><p class="note" style="margin:0">ケイシーの惑星の性質を軸に、西洋占星術の星座と宿曜の宿を重ねて読む、<b>このアプリ独自の組み合わせ</b>です。天体は「何についての話か」、星座と宿は「どんな色で出るか」を表します。宿曜で宿を見るのは本来は月だけで、他の天体の宿はこのアプリの応用です。</p></div>
+    <div class="fcard howto" style="margin-top:8px">
+      <p style="margin:0 0 6px"><b>カードの読み方</b></p>
+      <ol style="margin:0;padding-left:1.4em">
+        <li><b>天体</b>＝何についての話か<br><small>例：金星 → 愛し方</small></li>
+        <li><b>星座と宿</b>＝その話が、どんな色で出るか<br><small>例：蟹座 → 守る　鬼宿 → 純粋</small></li>
+        <li>合わせて読む<br><small>例：「愛し方が、守る・純粋な色を帯びている」</small></li>
+      </ol>
+      <p class="note" style="margin:8px 0 0">ケイシー・西洋占星術・宿曜を重ねた、このアプリ独自の読み方です。</p>
+    </div>
     <div id="planets" class="pcards"></div>
     <h3 style="font-family:var(--mincho);font-size:1.05rem;margin:20px 0 6px">重なっている天体（合） <a class="q" href="yougo.html#g-conj" target="_blank" rel="noopener" aria-label="合の説明">？</a></h3>
     <div id="conj"></div>
@@ -282,7 +345,7 @@ a{color:var(--gold)}
 
     <h2>光と影（二元性） <a class="q" href="yougo.html#g-dual" target="_blank" rel="noopener" aria-label="二元性の説明">？</a></h2>
     <p class="note">ケイシーや光田秀さんの解説では、どの惑星の力にも良く出る面と悪く出る面があり、それは別々の性質ではなく、ひとつの力の裏と表とされます。同じ石が、踏み石にもつまずきの石にもなる。どちらに出すかは、意志しだいです。</p>
-    <div id="dual"></div>
+    <div id="dual" class="pcards"></div>
 
     <h2>魂が入るころ（受精から49日目ごろ） <a class="q" href="yougo.html#g-soul" target="_blank" rel="noopener" aria-label="魂が入るころ（受精から49日目ごろ）の説明">？</a></h2>
     <p class="note">予定日どおりの出産と仮定して、誕生の217日前を中心に前後2週間の幅で見ています。月や速い惑星は決められないので、ゆっくり動く天体だけです。</p>
@@ -316,7 +379,26 @@ a{color:var(--gold)}
   </section>
 
 
+  <section id="shikumi" class="shikumi">
+    <h2>生まれた日の空の仕組み</h2>
+    <p class="lead2"><b>見えている空と、見えていない滞在</b></p>
+    <p>生まれた瞬間の空は、計算で見ることができます。月がどの宿にいたか、惑星がどの星座の方向にあったか。これが「見えている空」です。</p>
+    <p>エドガー・ケイシーは、魂は生まれ変わりの間に惑星の領域に滞在し、そこで身につけた性質を持って生まれてくる、と語りました。どこに滞在したかは、計算では出せません。これが「見えていない滞在」です。</p>
+    <p>見えている空は、見えていない滞在を映す手がかりになる。ケイシーはそう考えながら、同時に、どの星の影響も本人の意志には勝てない、とも繰り返しました。</p>
+    <p>このサイトは、見えている空を計算して、見えていない自分をたどるための入り口です。配置どおりの自分も、配置どおりでない自分も、どちらも観ていく場所です。</p>
+    <div class="cards">
+      <a href="yougo.html#g-shuku"><b>宿曜とは</b><span>月の通り道を27に分けた「宿」で読む、空海が伝えた占星術</span><i>詳しく見る →</i></a>
+      <a href="yougo.html#g-sign"><b>星座とは</b><span>太陽の通り道を12に分けた西洋占星術。季節の基準と、実際の星の基準</span><i>詳しく見る →</i></a>
+      <a href="yougo.html#g-asc"><b>アセンダントと天頂</b><span>生まれた瞬間の東と南。ケイシーが重く見た位置</span><i>詳しく見る →</i></a>
+      <a href="yougo.html#g-cayce"><b>ケイシーと惑星</b><span>惑星滞在、内分泌腺、リーディングに見る惑星の性質</span><i>詳しく見る →</i></a>
+      <a href="yougo.html#g-dual"><b>光と影（二元性）</b><span>同じ力が、踏み石にも、つまずきの石にもなる</span><i>詳しく見る →</i></a>
+      <a href="yougo.html#g-soul"><b>49日と松果体</b><span>魂が身体に入るころの、ゆっくり動く星の配置</span><i>詳しく見る →</i></a>
+    </div>
+  </section>
   <footer>
+    <nav class="foot-links">
+      <a href="aishou.html">ふたりの相性</a><a href="yougo.html">用語集</a><a href="manual.html">使い方</a><a href="privacy.html">プライバシーポリシー</a><a href="terms.html">利用規約</a><a href="tokushoho.html">特定商取引法に基づく表記</a>
+    </nav>
     <p>占星術は、まだ科学では確かめられていない「未科学」の領域です。当たり外れを決めるものではなく、自分を観るきっかけとして使ってください。</p>
     <p>計算はすべてお使いの端末の中で行います。生年月日や書いた内容がどこかに送られることはありません。書いた内容はその端末のブラウザにだけ保存されます。</p>
     <p>天体の位置は astronomy-engine（MIT License）で計算しています。星座と宿はラヒリ式のアヤナムシャ（近似）による恒星基準です。内分泌腺との対応は、日本エドガー・ケイシーセンター会長・光田秀さんの解説によるものです。27宿の性格キーワードは、現代の宿曜占星術で一般的に言われる傾向をまとめたものです。</p>
@@ -741,6 +823,56 @@ function openStatus(){
 $('statBtn').addEventListener('click', openStatus);
 $('statClose').addEventListener('click', () => { $('statModal').hidden = true; });
 
+// ひとことの見出し
+const SHUKU_HEAD = {昴:'品よく学びながら',畢:'粘り強く着実に',觜:'言葉と知恵で',参:'壊して作り直しながら',井:'筋道を立てて冷静に',鬼:'純粋な勘のままに',柳:'情熱をもって一途に',星:'人に頼らず自分の力で',張:'華やかに堂々と',翼:'高い理想を掲げて',軫:'人と人をつなぎながら',角:'明るく楽しみながら',亢:'筋を通して',氐:'ねばり強く野心をもって',房:'穏やかに恵みを受けながら',心:'人の心を読みとって',尾:'一本気に最後まで',箕:'豪快に自由に',斗:'理想に向かって果敢に',女:'まじめにこつこつと',虚:'豊かな感受性で',危:'変化を楽しみながら',室:'パワフルに大胆に',壁:'縁の下で支えながら',奎:'誠実に品よく',婁:'気配りよく器用に',胃:'たくましくまっすぐに'};
+const SIGN_HEAD = {牡羊座:'自分から始めていく',牡牛座:'じっくり形にしていく',双子座:'知って、伝えていく',蟹座:'大切なものを守っていく',獅子座:'自分を表して、人を照らす',乙女座:'細やかに整えていく',天秤座:'調和をつくっていく',蠍座:'ひとつのことを深めていく',射手座:'自由に探しにいく',山羊座:'こつこつ築いていく',水瓶座:'仲間と新しい形を生む',魚座:'見えないものに寄り添う'};
+// 3つの状態
+const STATES = {
+  Mercury:['筋道立てて考え、物事の本質をつかむ','考えすぎて動けず、言葉を飲み込む','あら探しをしたり、人を言葉で追い詰めたりする'],
+  Venus:['人や美しいものを愛で、場を和ませる','愛されているか不安になり、嫉妬しやすい','心地よさに流され、怠けてしまう'],
+  Mars:['思ったことをすぐ行動に移し、義のために動ける','怒りをため込み、動けなくなる','激しい怒りや争いになる'],
+  Jupiter:['広い視野で先を見通し、人を包み込む','目先のことにとらわれ、可能性を狭める','現実から離れた妄想に走る'],
+  Saturn:['忍耐強く、変化をくぐり抜けて積み上げる','変化を怖がり、自分に厳しくなりすぎる','我慢が切れて、衝動的に動く'],
+  Uranus:['真理に向かう強い意志と熱意','頑固になり、自分の殻に閉じこもる','極端に走り、わがままになる'],
+  Neptune:['豊かな感情と、見えないものへの感度','気持ちが沈み、現実から逃げたくなる','感情の波にのまれ、不安定になる'],
+  Pluto:['直感で本質をつかみ、深く変わっていける','自分の中に閉じて、変化を拒む','自分中心になり、周りが見えなくなる']
+};
+function stateBoxes(b){
+  const st = STATES[b]; if (!st) return '';
+  return `<div class="s3"><div class="s3a"><span>軌道に乗っているとき</span>${st[0]}</div><div class="s3b"><span>内にこもると</span>${st[1]}</div><div class="s3c"><span>軌道をはずれると</span>${st[2]}</div></div>`;
+}
+
+// 場面ごとのあなた
+const REL = {牡羊座:'自分から声をかけ、まっすぐ関わる',牡牛座:'ゆっくり信頼を育て、長く付き合う',双子座:'話題が豊富で、軽やかにつながる',蟹座:'身内を大切にし、守るように関わる',獅子座:'人を楽しませ、場の中心になる',乙女座:'さりげなく気を配り、役に立とうとする',天秤座:'相手との釣り合いを大切にし、調和を保つ',蠍座:'少数の人と、深く濃く関わる',射手座:'束縛せず、自由に広く付き合う',山羊座:'礼儀を守り、責任ある関係を築く',水瓶座:'上下なく、仲間として対等に関わる',魚座:'相手の気持ちに寄り添い、受け入れる'};
+const MONEY = {牡羊座:'ほしいと思ったら、すぐ動く',牡牛座:'質の良いものを選び、じっくり蓄える',双子座:'情報を集めて、身軽に回す',蟹座:'家族や身近な人のために使う',獅子座:'自分を輝かせるもの、人を喜ばせることに使う',乙女座:'無駄を省き、きちんと管理する',天秤座:'美しいものや、人とのつきあいに使う',蠍座:'ひとつのことに集中して投じ、深く育てる',射手座:'学びや旅、経験に使う',山羊座:'計画的に、長い目で積み上げる',水瓶座:'仲間や新しい仕組みに使う',魚座:'人のためや、心が動いたことに使う'};
+const WORK = {牡羊座:'先頭に立って、新しいことを始める',牡牛座:'ひとつのことを、時間をかけて形にする',双子座:'情報を集め、言葉で伝える',蟹座:'人を育て、居場所をつくる',獅子座:'人前に立ち、表現する',乙女座:'細部を整え、質を高める',天秤座:'人と人をつなぎ、バランスをとる',蠍座:'ひとつの分野を深く掘り下げる',射手座:'学び、教え、広い世界へ出ていく',山羊座:'組織や仕組みを築き、責任を担う',水瓶座:'新しい発想で、仕組みを変える',魚座:'人の心に寄り添い、癒す'};
+function renderScenes(pos, ang, myShuku){
+  const P = b => pos.find(x => x.b === b), sg = b => sign(P(b).l);
+  const row = (label, planet, text) => `<div class="sc-row"><span>${label}<small>（${planet}）</small></span>${text}</div>`;
+  const vm = st => st.pairs && st.pairs.some(([x,y]) => (x.b==='Venus'&&y.b==='Mars')||(x.b==='Mars'&&y.b==='Venus'));
+  const card = (title, sum, body) => `<details class="scene"><summary><b>${title}</b><small>${sum}</small></summary><div class="sc-body">${body}</div></details>`;
+  const rel = card('人との関わり・恋愛', REL[sg('Moon')],
+    row('素の自分の出し方', '月・' + sg('Moon'), REL[sg('Moon')]) +
+    row('人との距離の取り方', '金星・' + sg('Venus'), REL[sg('Venus')]) +
+    row('人付き合いの傾向', '宿曜・' + myShuku + '宿', SHUKU_DESC[myShuku]) +
+    row('恋愛', '金星・' + sg('Venus') + '／火星・' + sg('Mars'), `愛し方は「${first(SIGN_K[sg('Venus')])}」、求め方は「${first(SIGN_K[sg('Mars')])}」の色。${vm(window.__stat||{}) ? '金星と火星が重なっていて、愛と情熱が混ざりやすい配置です。' : ''}`) +
+    '<p class="note"><a href="aishou.html">ふたりの相性を見る →</a></p>');
+  const money = card('お金', MONEY[sg('Venus')],
+    row('価値を感じるもの・使い方', '金星・' + sg('Venus'), MONEY[sg('Venus')]) +
+    row('豊かさが広がる道', '木星・' + sg('Jupiter'), MONEY[sg('Jupiter')] + 'ことで、豊かさが広がりやすい') +
+    row('守り方・貯め方', '土星・' + sg('Saturn'), MONEY[sg('Saturn')] + 'ことを、時間をかけて身につけていく') +
+    '<p class="note">お金の増減を言い当てるものではなく、お金との付き合い方の傾向です。</p>');
+  const mc = ang ? row('社会での役割', '天頂・' + sign(ang.mc), WORK[sign(ang.mc)]) : '<p class="note">生まれた時刻と場所を入れると、社会での役割（天頂）も出ます。</p>';
+  const work = card('仕事・人生のテーマ', WORK[sg('Sun')],
+    row('向いている働き方', '太陽・' + sg('Sun'), WORK[sg('Sun')]) + mc +
+    row('動き方', '火星・' + sg('Mars'), WORK[sg('Mars')]) +
+    row('人生のテーマ', '土星・' + sg('Saturn'), `「${WORK[sg('Saturn')]}」力を、時間をかけて鍛えていく`) +
+    '<p class="note">ケイシーは、占星術のいちばんの使いみちを、仕事の向き不向きを知ることだと考えていました。</p>');
+  $('scenes').innerHTML = rel + money + work;
+}
+const first = t => t.split('、')[0];
+const SIGN_K = {牡羊座:'始める、勇気',牡牛座:'じっくり着実、五感',双子座:'知る、伝える',蟹座:'守る、家庭的',獅子座:'表現する、誇り',乙女座:'整える、分析する',天秤座:'調和、美しさ',蠍座:'深める、集中',射手座:'探求、自由',山羊座:'築く、責任',水瓶座:'新しさ、仲間',魚座:'共感、夢'};
+
 let currentKey = null;
 function run(){
   $('msg').innerHTML = '';
@@ -762,7 +894,7 @@ function run(){
   let lat, lon;
   if (pv === 'custom'){ lat = parseFloat($('lat').value); lon = parseFloat($('lon').value); }
   else { const pl = PLACES[+pv]; lat = pl[1]; lon = pl[2]; }
-  store('sora:last', JSON.stringify({ds, ts: $('time').value, noTime, pv, lat: $('lat').value, lon: $('lon').value, tz: $('tz').value}));
+  store('sora:last', JSON.stringify({ds, nm: $('nm').value, ts: $('time').value, noTime, pv, lat: $('lat').value, lon: $('lon').value, tz: $('tz').value}));
 
   const pos = BODIES.map(x => ({...x, l: sid(x.b, birth)}));
   const moon = pos[1];
@@ -781,6 +913,13 @@ function run(){
   $('honmeiKey').textContent = keys.join(' ／ ');
   const ang = (!noTime && isFinite(lat) && isFinite(lon)) ? angles(birth, lat, lon) : null;
   window.__fig = { pos, ang, birth, moonL: moon.l, moonNak: nak(moon.l) };
+  {
+    const sk = nak(moon.l), sg = sign(pos[0].l), nm = ($('nm').value || '').trim();
+    const unsure = noTime && moonText.includes('・');
+    $('headline').innerHTML = `${nm ? `<p class="hl-name">${nm.replace(/[<>&]/g,'')} さんの空</p>` : ''}
+      <p class="hl-main">${SHUKU_HEAD[sk]}、<br>${SIGN_HEAD[sg]}人</p>
+      <p class="hl-sub">月の宿「${sk}宿」と、太陽の星座「${sg}」から${unsure ? '（月の宿は時刻で変わることがあります）' : ''}</p>`;
+  }
   drawFig();
   if (!ang){
     $('angles').innerHTML = '<p class="note">「時刻がわからない」のチェックを外し、生まれた時刻と場所を入れると出ます。アセンダントは4分ほどで1度動くので、時刻はできるだけ正確に。</p>';
@@ -790,9 +929,7 @@ function run(){
       const ps = near(k);
       let h = `<p><b style="font-family:var(--mincho)">${label}</b>　${sign(ang[k])}・${nak(ang[k])}宿<br><span class="note">${desc}</span></p>`;
       if (ps.length){
-        h += '<div class="scroll"><table><tr><th>近くにいた天体</th><th>腺</th><th>良く出ると</th><th>悪く出ると</th></tr>';
-        ps.forEach(p => { const g = GLAND[p.b] || ['','','']; h += `<tr><td class="k">${p.n}（${sep(p.l, ang[k]).toFixed(1)}度）</td><td>${g[0]}</td><td>${g[1]}</td><td class="e">${g[2]}</td></tr>`; });
-        h += '</table></div>';
+        h += '<div class="pcards">' + ps.map(p => { const g = GLAND[p.b] || ['']; return `<div class="pcard"><div class="ph"><span class="pn">${p.n}</span><span class="pt">${sep(p.l, ang[k]).toFixed(1)}度・${g[0]}</span></div>${stateBoxes(p.b) || '<p class="pc">太陽は自分らしさの中心、月は心の動きとして、強く出やすいとされます。</p>'}</div>`; }).join('') + '</div>';
       } else {
         h += `<p class="note">前後${ORB}度以内に天体はありませんでした。</p>`;
       }
@@ -803,7 +940,7 @@ function run(){
       `<p class="note">ケイシーの考えでは、東か南に来ている惑星が、魂が滞在していた手がかりになりやすいとされます。ここでは前後${ORB}度以内を「近く」としています。腺の対応は光田秀さんの解説によるものです。</p>`;
   }
 
-  const THEME = {Sun:['その人の芯','その人の芯'],Moon:['感情、素の自分','感情や素の自分'],Mercury:['考え方、話し方','考え方'],Venus:['愛し方、好きなもの','愛し方'],Mars:['行動のしかた、怒り方','行動のしかた'],Jupiter:['伸びていくところ','伸びていくところ'],Saturn:['試練、忍耐が求められるところ','試練の出方'],Uranus:['世代の色：変革、直感','世代としての変革の力'],Neptune:['世代の色：夢、見えないもの','世代としての夢見る力'],Pluto:['世代の色：深い変容','世代としての変容の力']};
+  const THEME = {Sun:['自分らしさの中心、生きる方向','自分らしさ'],Moon:['心の動き、素の自分','心の動きや素の自分'],Mercury:['考え方、言葉の使い方','考え方や言葉'],Venus:['人の愛し方、好きになるもの','愛し方や好み'],Mars:['動き出し方、怒り方','動き出し方'],Jupiter:['自然と伸びていく分野、心の広さ','伸びていくところ'],Saturn:['人生の課題、時間をかけて鍛えられるところ','課題との向き合い方'],Uranus:['（世代の色）ひらめき、古いものを変えていく力','世代としてのひらめき'],Neptune:['（世代の色）夢、見えないものを感じる力','世代としての夢見る力'],Pluto:['（世代の色）根本から生まれ変わる力','世代としての生まれ変わる力']};
   const SIGN_K = {牡羊座:'始める、勇気',牡牛座:'じっくり着実、五感',双子座:'知る、伝える',蟹座:'守る、家庭的',獅子座:'表現する、誇り',乙女座:'整える、分析する',天秤座:'調和、美しさ',蠍座:'深める、集中',射手座:'探求、自由',山羊座:'築く、責任',水瓶座:'新しさ、仲間',魚座:'共感、夢'};
   const first = t => t.split('、')[0];
   let cards = '';
@@ -842,9 +979,9 @@ function run(){
     'Venus-Neptune':'リーディングでは、人付き合いや関わる人のタイプに独特さが出る（640-1）とされます。',
     'Mars-Saturn':'リーディングでは、由来の定かでない突然の変化を、生まれつき抱える（699-1）とされます。'
   };
-  const PC = p => p.b === 'Sun' ? 'その人の芯' : p.b === 'Moon' ? '感情、素の自分' : p.c.replace(/[（）]/g,'');
+  const PC = p => p.b === 'Sun' ? '自分らしさ' : p.b === 'Moon' ? '心の動き、素の自分' : p.c.replace(/[（）]/g,'');
   const PAIR_R = {
-    'Sun-Moon':['芯と感情が一致していて、迷いが少ない','融通がききにくい'],
+    'Sun-Moon':['自分らしさと気持ちが一致していて、迷いが少ない','融通がききにくい'],
     'Sun-Mercury':['自分の考えをはっきり言える','思い込みが強くなる'],
     'Sun-Venus':['人に好かれやすく、美しいものを大切にする','人に甘えやすい'],
     'Sun-Mars':['情熱的で、自分から動ける','短気になる'],
@@ -879,7 +1016,7 @@ function run(){
         ${gb[0] ? `<p class="pc"><b>良く出ると</b>　${gb[0]}</p>` : ''}${gb[1] ? `<p class="pc"><b>悪く出ると</b>　${gb[1]}</p>` : ''}
         ${CONJ_NOTE[key] ? `<p class="pc">${CONJ_NOTE[key]}</p>` : ''}${moonWarn}
       </div>`;
-    }).join('') + '</div><p class="note">太陽と重なる組は金色の枠で示します。太陽はその人の芯なので、重なった天体の性質が強く出やすいとされます。</p>';
+    }).join('') + '</div><p class="note">太陽と重なる組は金色の枠で示します。太陽は自分らしさの中心なので、重なった天体の性質が強く出やすいとされます。</p>';
   }
 
   const sr = saturnReturns(birth); window.__sr = sr;
@@ -897,10 +1034,11 @@ function run(){
   $('soul').innerHTML = srows;
 
   const DUAL_ORDER = ['Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune','Pluto'];
-  $('dual').innerHTML = '<div class="scroll"><table><tr><th>天体</th><th>生まれた日の場所</th><th>良く出ると</th><th>悪く出ると</th></tr>' +
-    DUAL_ORDER.map(b => { const p = pos.find(x => x.b === b), g = GLAND[b]; return `<tr><td class="k">${p.n}</td><td class="e">${sign(p.l)}・${nak(p.l)}宿</td><td>${g[1]}</td><td class="e">${g[2]}</td></tr>`; }).join('') + '</table></div>';
+  $('dual').innerHTML = DUAL_ORDER.map(b => { const p = pos.find(x => x.b === b); return `<div class="pcard"><div class="ph"><span class="pn">${p.n}</span><span class="pt">${THEME[b][0]}・${sign(p.l)}・${nak(p.l)}宿</span></div>${stateBoxes(b)}</div>`; }).join('') +
+    '<p class="note">人はみな、すべての惑星の力を持っています。どの力も良い悪いではなく、出方のちがいです。軌道に戻すかどうかは、意志しだいです。</p>';
 
   window.__stat = { pos, ang, pairs, noTime, birth, moonText };
+  renderScenes(pos, ang, nak(moon.l));
   renderShuku();
   {
     const nowD = new Date(), nextSr = window.__sr.find(d => d > nowD);
@@ -926,7 +1064,7 @@ function run(){
   currentKey = 'sora:will:' + ds;
   $('will').value = load(currentKey) || '';
   $('saved').textContent = '';
-  ['honmei','compare','honmeiKey','planets','conj','angles','numero','shichu','sanmei','dual','soul','saturn','fSummary','fNum','fTen','fEto'].forEach(id => rubyify($(id)));
+  ['scenes','honmei','compare','honmeiKey','planets','conj','angles','numero','shichu','sanmei','dual','soul','saturn','fSummary','fNum','fTen','fEto'].forEach(id => rubyify($(id)));
   const r = $('result'); r.style.display = 'block'; r.classList.remove('show'); void r.offsetWidth; r.classList.add('show');
 }
 
@@ -945,7 +1083,7 @@ const togglePlace = () => { const c = $('place').value === 'custom'; $('custom')
 $('place').addEventListener('change', togglePlace);
 try {
   const last = JSON.parse(load('sora:last') || 'null');
-  if (last){ $('date').value = last.ds; if (last.ts) $('time').value = last.ts; $('notime').checked = !!last.noTime;
+  if (last){ $('date').value = last.ds; if (last.nm) $('nm').value = last.nm; if (last.ts) $('time').value = last.ts; $('notime').checked = !!last.noTime;
     if (last.pv) $('place').value = last.pv; if (last.lat) $('lat').value = last.lat; if (last.lon) $('lon').value = last.lon; if (last.tz) $('tz').value = last.tz; }
 } catch(e){}
 $('time').disabled = $('notime').checked;
